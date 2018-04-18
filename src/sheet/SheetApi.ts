@@ -8,17 +8,9 @@ export default interface SheetApi {
 }
 
 export class MockSheetApi implements SheetApi {
+    private timeout = 1500;
 
-    timeout = 1500;
-
-    uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
-    sheets: Model.Sheet[] = [
+    private sheets: Model.Sheet[] = [
         {
             identifier: 'some guid',
             name: 'Roland of Gilead',
@@ -86,7 +78,7 @@ export class MockSheetApi implements SheetApi {
     createSheet(sheet: Model.Sheet): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             setTimeout(() => {
-                var newSheet = Object.assign({}, {identifier: this.uuidv4()}, sheet);
+                var newSheet = Object.assign({}, { identifier: this.uuidv4() }, sheet);
                 this.sheets = [...this.sheets, newSheet];
                 resolve(newSheet.identifier);
             }, this.timeout);
@@ -96,7 +88,7 @@ export class MockSheetApi implements SheetApi {
     updateSheet(sheet: Model.Sheet): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
-                this.sheets = [...this.sheets.filter(sheet => sheet.identifier !== sheet.identifier), sheet];
+                this.sheets = [...this.sheets.filter(s => s.identifier !== sheet.identifier), sheet];
                 resolve();
             }, this.timeout);
         });
@@ -110,6 +102,13 @@ export class MockSheetApi implements SheetApi {
             }, this.timeout);
         });
     }
+
+    private uuidv4() {
+        /* tslint:disable */
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+        /* tslint:enable */
+    }
 }
-
-

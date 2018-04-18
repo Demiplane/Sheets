@@ -8,17 +8,17 @@ export function calculateValue(sheet: Sheet, statistic: Statistic): number {
         if (statistic.cachedValue) {
             return statistic.cachedValue;
         }
-    
+
         if (!statistic.name || statistic.name === 'unknown') {
             return 0;
         }
-    
+
         let formulaeTotal = (statistic.modifiers || [])
             .filter(modifier => modifier.formula)
             .map(formula => calculateFormula(sheet, formula.formula!))
             .map(formula => Math.floor(formula))
             .reduce((l, r) => l + r, 0);
-    
+
         return formulaeTotal;
     }) : 0;
 }
@@ -82,7 +82,7 @@ export type Statistic = {
 export type Modifier = {
     formula?: string,
     source?: string
-}
+};
 
 export type Resource = {
     name?: string;
@@ -93,6 +93,6 @@ export type Resource = {
 export type Recharge = {
     name?: string;
     restorationFormulae?: string[];
-}
+};
 
 export default Sheet;

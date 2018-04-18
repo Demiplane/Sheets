@@ -11,22 +11,22 @@ export const DELETE_SHEET_SUCCESS = 'DELETE' + SHEET_SUCCESS_SUFFIX;
 export type CreateSheetAction = {
     type: string,
     sheet: Model.Sheet
-}
+};
 
 export type UpdateSheetAction = {
     type: string,
     sheet: Model.Sheet
-}
+};
 
 export type DeleteSheetAction = {
     type: string,
     sheetIdentifier: string
-}
+};
 
 export type LoadSheetsAction = {
     type: string,
     sheets: Model.Sheet[]
-}
+};
 
 function createSheetSuccess(sheet: Model.Sheet) {
     return { type: CREATE_SHEET_SUCCESS, sheet };
@@ -53,18 +53,18 @@ export function saveSheet(sheet: Model.Sheet): (dispatch: Dispatch) => Promise<C
                     : dispatch(createSheetSuccess(sheet));
             });
     };
-};
+}
 
 export function deleteSheet(sheetIdentifier: string): (dispatch: Dispatch) => Promise<DeleteSheetAction> {
     return function (dispatch: Dispatch) {
         return Promise.resolve()
             .then(() => dispatch(deleteSheetSuccess(sheetIdentifier)));
     };
-};
+}
 
 export function loadSheets(): (dispatch: Dispatch) => Promise<LoadSheetsAction> {
     return function (dispatch: Dispatch) {
         return Promise.resolve()
             .then(() => dispatch(loadSheetsSuccess([])));
-    }
+    };
 }
