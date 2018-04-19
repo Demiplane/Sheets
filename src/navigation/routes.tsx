@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Route } from 'react-router';
-import App from './App';
-import AboutPage from './about/AboutPage';
-import SheetsPage from './sheet/SheetsPage';
+import App from '../App';
+import AboutPage from '../about/AboutPage';
+import SheetsPage from '../sheet/SheetsPage';
 
 export default (
     <Route path="/" component={App}>
