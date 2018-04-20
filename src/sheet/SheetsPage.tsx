@@ -1,141 +1,33 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import RootState from '../core/RootState';
+import * as Model from './SheetModel';
 
-export default class SheetsPage extends React.Component {
+type SheetsPageProps = {
+  sheets: Model.Sheet[];
+};
+
+export class SheetsPage extends React.Component<SheetsPageProps> {
+  constructor(props: SheetsPageProps) {
+    super(props);
+  }
+
   render() {
     return (
       <div>
         <header>
           <h1>Your Sheets</h1>
         </header>
-
-        <div className="container-fluid main-column">
-          <div className="row">
-            <div className="col">
-              <h1>table one</h1>
-              <table>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-              </table>
-            </div>
-
-            <div className="col">
-
-              <h1>Resources</h1>
-              <table>
-                <tr>
-                  <td>name</td>
-                  <td>value</td>
-                </tr>
-              </table>
-            </div>
-
-          </div>
-        </div>
-
-        <div className="container-fluid main-column">
-          <div className="row">
-            <div className="col">
-              <div className="col-12 card statistic-panel">
-                <h1>table one</h1>
-                <table>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                </table>
-              </div>
-              <div className="col-12 card statistic-panel">
-                <h1>table two</h1>
-                <table>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div className="col-6">
-              <div className="col-12 card statistic-panel">
-                <h1>Resources</h1>
-                <table>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                </table>
-              </div>
-              <div className="col-12 card statistic-panel">
-                <h1>Actions</h1>
-                <table>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                </table>
-              </div>
-              <div className="col-12 card statistic-panel">
-                <h1>Abilities</h1>
-                <table>
-                  <tr>
-                    <td>name</td>
-                    <td>value</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ul>
+          {this.props.sheets.map(sheet => <li key={sheet.identifier}>{sheet.name}</li>)} 
+        </ul>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: RootState) => ({
+  sheets: state.sheetState.sheets
+});
+
+export default connect(mapStateToProps)(SheetsPage);
