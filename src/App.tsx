@@ -13,10 +13,10 @@ interface AppProps {
 class App extends React.Component<AppProps, AppState> {
   render() {
     return (
-      <div className="main">
+      <div className="sheet-main">
         <NavBar />
         {this.props.children}
-        <footer>
+        <footer className="sheet-footer pt-4">
           <p>Footer Stuff Goes Here™</p>
         </footer>
       </div>

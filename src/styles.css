@@ -1,3 +1,25 @@
 .card {
     padding-bottom: 10px;
 }
+
+.sheet-row {
+    cursor: pointer;
+}
+
+.sheet-page {
+    width: 900px;
+    background-color: #EEEEEE;
+}
+
+.sheets-body, .sheet-footer {
+    background-color: #343a40;
+}
+
+.sheet-main {
+    background-color: #777777;
+}
+
+.sheet-footer {
+    color: #fff;
+    text-align: center;
+}

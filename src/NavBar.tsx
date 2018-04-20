@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const NavBar: React.StatelessComponent<{}> = () => {
     return (
-        <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <nav className="main-navigation navbar navbar-expand-md navbar-dark bg-dark">
             <Link to="/" className="navbar-brand">Sheets</Link>
             <button
                 className="navbar-toggler"
