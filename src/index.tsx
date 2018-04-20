@@ -3,15 +3,15 @@ import * as ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
-import { MemoryRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import configureStore from './core/configureStore';
 import { Provider } from 'react-redux';
 import { loadSheets } from './sheet/sheetActions';
-import { Route } from 'react-router';
 import App from './App';
-import AboutPage from './about/AboutPage';
-import SheetsPage from './sheet/SheetsPage';
 import { SheetApi, MockSheetApi } from './sheet/SheetApi';
+import { Switch, Route } from 'react-router';
+import SheetsPage from './sheet/SheetsPage';
+import AboutPage from './about/AboutPage';
 
 const sheetApi: SheetApi = new MockSheetApi();
 const store = configureStore();
@@ -23,12 +23,15 @@ sheetApi.getAllSheets()
 
 ReactDOM.render(
   <Provider store={store}>
-    <MemoryRouter>
-      <Route path="/" component={App}>
-        <Route exact={true} path="/" component={SheetsPage} />
-        <Route path="about" component={AboutPage} />
-      </Route>
-    </MemoryRouter>
+    <BrowserRouter>
+      <App>
+        <Switch>
+          <Route exact={true} path="/" component={SheetsPage} />
+          <Route path="/about" component={AboutPage} />
+        </Switch>
+      </App>
+
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root') as HTMLElement
 );
