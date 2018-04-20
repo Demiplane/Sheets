@@ -1,5 +1,5 @@
-import * as Model from '../sheet/sheetModel';
-import { Dispatch } from 'redux';
+import * as Model from '../sheet/SheetModel';
+// import { Dispatch } from 'redux';
 
 export const SHEET_SUCCESS_SUFFIX = '_SHEET_SUCCESS';
 
@@ -28,43 +28,61 @@ export type LoadSheetsAction = {
     sheets: Model.Sheet[]
 };
 
-function createSheetSuccess(sheet: Model.Sheet) {
+export function createSheet(sheet: Model.Sheet): CreateSheetAction {
     return { type: CREATE_SHEET_SUCCESS, sheet };
 }
 
-function updateSheetSuccess(sheet: Model.Sheet) {
+export function updateSheet(sheet: Model.Sheet): UpdateSheetAction {
     return { type: UPDATE_SHEET_SUCCESS, sheet };
 }
 
-function deleteSheetSuccess(sheetIdentifier: string) {
+export function deleteSheet(sheetIdentifier: string): DeleteSheetAction {
     return { type: DELETE_SHEET_SUCCESS, sheetIdentifier };
 }
 
-function loadSheetsSuccess(sheets: Model.Sheet[]) {
+export function loadSheets(sheets: Model.Sheet[]): LoadSheetsAction {
     return { type: LOAD_SHEET_SUCCESS, sheets };
 }
 
-export function saveSheet(sheet: Model.Sheet): (dispatch: Dispatch) => Promise<CreateSheetAction | UpdateSheetAction> {
-    return function (dispatch: Dispatch) {
-        return Promise.resolve()
-            .then(() => {
-                return true
-                    ? dispatch(updateSheetSuccess(sheet))
-                    : dispatch(createSheetSuccess(sheet));
-            });
-    };
-}
+// function createSheetSuccess(sheet: Model.Sheet): CreateSheetAction {
+//     return { type: CREATE_SHEET_SUCCESS, sheet };
+// }
 
-export function deleteSheet(sheetIdentifier: string): (dispatch: Dispatch) => Promise<DeleteSheetAction> {
-    return function (dispatch: Dispatch) {
-        return Promise.resolve()
-            .then(() => dispatch(deleteSheetSuccess(sheetIdentifier)));
-    };
-}
+// function updateSheetSuccess(sheet: Model.Sheet): UpdateSheetAction {
+//     return { type: UPDATE_SHEET_SUCCESS, sheet };
+// }
 
-export function loadSheets(): (dispatch: Dispatch) => Promise<LoadSheetsAction> {
-    return function (dispatch: Dispatch) {
-        return Promise.resolve()
-            .then(() => dispatch(loadSheetsSuccess([])));
-    };
-}
+// function deleteSheetSuccess(sheetIdentifier: string): DeleteSheetAction {
+//     return { type: DELETE_SHEET_SUCCESS, sheetIdentifier };
+// }
+
+// function loadSheetsSuccess(sheets: Model.Sheet[]): LoadSheetsAction {
+//     return { type: LOAD_SHEET_SUCCESS, sheets };
+// }
+
+// export function saveSheet(sheet: Model.Sheet): (dispatch: Dispatch) => 
+// Promise<CreateSheetAction | UpdateSheetAction> {
+//     return function (dispatch: Dispatch) {
+//         return Promise.resolve()
+//             .then(() => {
+//                 return true
+//                     ? dispatch(updateSheetSuccess(sheet))
+//                     : dispatch(createSheetSuccess(sheet));
+//             });
+//     };
+// }
+
+// export function deleteSheet(sheetIdentifier: string): (dispatch: Dispatch) 
+// => Promise<DeleteSheetAction> {
+//     return function (dispatch: Dispatch) {
+//         return Promise.resolve()
+//             .then(() => dispatch(deleteSheetSuccess(sheetIdentifier)));
+//     };
+// }
+
+// export function loadSheets(): (dispatch: Dispatch) => Promise<LoadSheetsAction> {
+//     return function (dispatch: Dispatch) {
+//         return Promise.resolve()
+//             .then(() => dispatch(loadSheetsSuccess([])));
+//     };
+// }

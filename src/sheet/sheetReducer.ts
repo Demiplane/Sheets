@@ -3,7 +3,7 @@ import SheetState from './SheetState';
 import RootAction from '../core/RootAction';
 import * as Actions from './sheetActions';
 import * as SheetActions from './sheetActions';
-import { statisticValueCache } from './sheetModel';
+import { statisticValueCache } from './SheetModel';
 
 export default function sheetReducer(state: SheetState = initialState.sheetState, action: RootAction): SheetState {
     if (action.type.endsWith(SheetActions.SHEET_SUCCESS_SUFFIX)) {

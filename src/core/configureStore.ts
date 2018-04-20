@@ -1,13 +1,11 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore } from 'redux';
 import rootReducer from './rootReducer';
-import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
-import thunk from 'redux-thunk';
 import initialState from './initialState';
+import RootState from './RootState';
 
-export default function configureStore(initialState) {
+export default function configureStore(state: RootState = initialState) {
     return createStore(
         rootReducer,
-        initialState,
-        applyMiddleware(thunk, reduxImmutableStateInvariant)
+        initialState
     );
 }

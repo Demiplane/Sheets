@@ -1,6 +1,6 @@
-import * as Model from './sheetModel';
+import * as Model from './SheetModel';
 
-export default interface SheetApi {
+export interface SheetApi {
     createSheet(sheet: Model.Sheet): Promise<string>;
     getAllSheets(): Promise<Model.Sheet[]>;
     updateSheet(sheet: Model.Sheet): Promise<void>;
@@ -112,3 +112,5 @@ export class MockSheetApi implements SheetApi {
         /* tslint:enable */
     }
 }
+
+export default SheetApi;
