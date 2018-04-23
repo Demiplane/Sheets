@@ -1,12 +1,12 @@
-export function act<T>(this: T, actor: (acted: T) => void): T {
-    actor(this);
-    return this;
-}
+// export function act<T>(this: T, actor: (acted: T) => void): T {
+//     actor(this);
+//     return this;
+// }
 
-declare global {
-    interface Object {
-        act<T>(this: T, actor: (acted: T) => void): T;
-    }
-}
+// declare global {
+//     interface Object {
+//         act<T>(this: T, actor: (acted: T) => void): T;
+//     }
+// }
 
-Object.prototype.act = act;
+// Object.prototype.act = act;

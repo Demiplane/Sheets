@@ -1,17 +1,20 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import registerServiceWorker from './registerServiceWorker';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import { BrowserRouter } from 'react-router-dom';
-import configureStore from './core/configureStore';
-import { Provider } from 'react-redux';
 import { loadSheets } from './sheet/sheetActions';
-import App from './App';
+import ManageSheetPage from './sheet/ManageSheetPage';
+import { Provider } from 'react-redux';
 import { SheetApi, MockSheetApi } from './sheet/SheetApi';
-import { Switch, Route } from 'react-router';
-import SheetsPage from './sheet/SheetsPage';
+import { Switch, Route, Redirect } from 'react-router';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import AboutPage from './about/AboutPage';
+import App from './App';
+import configureStore from './core/configureStore';
+import HomePage from './home/HomePage';
+import NotFoundPage from './error/NotFoundPage';
+import registerServiceWorker from './registerServiceWorker';
+import SheetsPage from './sheet/SheetsPage';
 
 const sheetApi: SheetApi = new MockSheetApi();
 const store = configureStore();
@@ -26,8 +29,12 @@ ReactDOM.render(
     <BrowserRouter>
       <App>
         <Switch>
-          <Route exact={true} path="/" component={SheetsPage} />
+          <Route exact={true} path="/" component={HomePage} />
           <Route path="/about" component={AboutPage} />
+          <Route path="/sheets" component={SheetsPage} />
+          <Route path="/sheet/:id" component={ManageSheetPage} />
+          <Route path="/notfound" component={NotFoundPage} />
+          <Redirect to="/notfound" />
         </Switch>
       </App>
 

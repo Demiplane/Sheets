@@ -16,7 +16,7 @@ class App extends React.Component<AppProps, AppState> {
       <div className="sheet-main">
         <NavBar />
         {this.props.children}
-        <footer className="sheet-footer pt-4">
+        <footer className="sheet-footer pt-4 footer">
           <p>Footer Stuff Goes Here™</p>
         </footer>
       </div>

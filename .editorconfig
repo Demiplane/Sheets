@@ -1,0 +1,4 @@
+root = true
+[*.ts,*.tsx,*.css]
+indent_style = space
+indent_size = 2

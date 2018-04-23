@@ -1,35 +1,44 @@
-import * as React from 'react';
 import { connect } from 'react-redux';
-import RootState from '../core/RootState';
+import { History } from 'history';
 import * as Model from './SheetModel';
+import * as React from 'react';
+import RootState from '../core/RootState';
 import SheetRow from './SheetRow';
+import Page from '../controls/Page';
 
 type SheetsPageProps = {
   sheets: Model.Sheet[];
+  history: History;
 };
 
 export class SheetsPage extends React.Component<SheetsPageProps> {
   constructor(props: SheetsPageProps) {
     super(props);
+
+    this.onSelect = this.onSelect.bind(this);
   }
+
+  onSelect = (identifier: string) => this.props.history.push('sheet/' + identifier);
 
   render() {
     return (
-      <div className="container-fluid sheet-page pb-4 pt-4 pl-4 pr-4">
+      <Page>
         <header>
           <h1>Your Sheets</h1>
         </header>
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th>Name</th>
             </tr>
           </thead>
           <tbody>
-            {this.props.sheets.map(sheet => <SheetRow key={sheet.identifier} sheet={sheet} />)}
+            {this.props.sheets.map(sheet => (
+              <SheetRow key={sheet.identifier} sheet={sheet} onSelected={this.onSelect} />
+            ))}
           </tbody>
         </table>
-      </div>
+      </Page>
     );
   }
 }

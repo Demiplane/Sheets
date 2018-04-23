@@ -17,6 +17,9 @@ const NavBar: React.StatelessComponent<{}> = () => {
             </button>
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <ul className="navbar-nav mr-auto">
+                <li className="nav-item">
+                        <Link to="/sheets" className="nav-link">Your Sheets</Link>
+                    </li>
                     <li className="nav-item">
                         <Link to="/about" className="nav-link">About</Link>
                     </li>
