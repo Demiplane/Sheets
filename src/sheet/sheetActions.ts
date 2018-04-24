@@ -9,39 +9,39 @@ export const LOAD_SHEET_SUCCESS = 'LOAD' + SHEET_SUCCESS_SUFFIX;
 export const DELETE_SHEET_SUCCESS = 'DELETE' + SHEET_SUCCESS_SUFFIX;
 
 export type CreateSheetAction = {
-    type: string,
-    sheet: Model.Sheet
+  type: string,
+  sheet: Model.Sheet
 };
 
 export type UpdateSheetAction = {
-    type: string,
-    sheet: Model.Sheet
+  type: string,
+  sheet: Model.Sheet
 };
 
 export type DeleteSheetAction = {
-    type: string,
-    sheetIdentifier: string
+  type: string,
+  sheetIdentifier: string
 };
 
 export type LoadSheetsAction = {
-    type: string,
-    sheets: Model.Sheet[]
+  type: string,
+  sheets: Model.Sheet[]
 };
 
 export function createSheet(sheet: Model.Sheet): CreateSheetAction {
-    return { type: CREATE_SHEET_SUCCESS, sheet };
+  return { type: CREATE_SHEET_SUCCESS, sheet };
 }
 
 export function updateSheet(sheet: Model.Sheet): UpdateSheetAction {
-    return { type: UPDATE_SHEET_SUCCESS, sheet };
+  return { type: UPDATE_SHEET_SUCCESS, sheet };
 }
 
 export function deleteSheet(sheetIdentifier: string): DeleteSheetAction {
-    return { type: DELETE_SHEET_SUCCESS, sheetIdentifier };
+  return { type: DELETE_SHEET_SUCCESS, sheetIdentifier };
 }
 
 export function loadSheets(sheets: Model.Sheet[]): LoadSheetsAction {
-    return { type: LOAD_SHEET_SUCCESS, sheets };
+  return { type: LOAD_SHEET_SUCCESS, sheets };
 }
 
 // function createSheetSuccess(sheet: Model.Sheet): CreateSheetAction {

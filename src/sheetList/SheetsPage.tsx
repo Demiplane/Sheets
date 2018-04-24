@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { History } from 'history';
-import * as Model from './SheetModel';
+import * as Model from '../sheet/SheetModel';
 import * as React from 'react';
 import RootState from '../core/RootState';
 import SheetRow from './SheetRow';

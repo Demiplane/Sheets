@@ -1,9 +1,9 @@
 import RootState from '../core/RootState';
 
 const initialState: RootState = {
-    sheetState: {
-        sheets: []
-    }
+  sheetState: {
+    sheets: []
+  }
 };
 
 export default initialState;

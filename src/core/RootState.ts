@@ -1,7 +1,7 @@
 import SheetState from '../sheet/SheetState';
 
 type RootState = {
-    sheetState: SheetState
+  sheetState: SheetState
 };
 
 export default RootState;

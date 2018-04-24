@@ -12,8 +12,8 @@ const HomePage: React.StatelessComponent<HomePageProps> = (props) => {
       <header>
         <h1 className="text-center">WELCOME TO SHEETS</h1>
       </header>
-      <button 
-        className="btn btn-primary btn-lg btn-block" 
+      <button
+        className="btn btn-primary btn-lg btn-block"
         onClick={() => props.history.push('/sheets')}>Go to your sheets</button>
     </Page>
   );

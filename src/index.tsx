@@ -2,7 +2,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import { BrowserRouter } from 'react-router-dom';
 import { loadSheets } from './sheet/sheetActions';
-import ManageSheetPage from './sheet/ManageSheetPage';
+import ManageSheetPage from './sheetManage/ManageSheetPage';
 import { Provider } from 'react-redux';
 import { SheetApi, MockSheetApi } from './sheet/SheetApi';
 import { Switch, Route, Redirect } from 'react-router';
@@ -14,7 +14,7 @@ import configureStore from './core/configureStore';
 import HomePage from './home/HomePage';
 import NotFoundPage from './error/NotFoundPage';
 import registerServiceWorker from './registerServiceWorker';
-import SheetsPage from './sheet/SheetsPage';
+import SheetsPage from './sheetList/SheetsPage';
 
 const sheetApi: SheetApi = new MockSheetApi();
 const store = configureStore();

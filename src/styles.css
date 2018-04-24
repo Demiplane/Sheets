@@ -1,24 +1,20 @@
-.card {
-    padding-bottom: 10px;
-}
-
 .sheet-row {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .sheet-page {
-    background-color: #EEEEEE;
+  background-color: #EEEEEE;
 }
 
 .sheets-body, .sheet-footer {
-    background-color: #343a40;
+  background-color: #343a40;
 }
 
 .sheet-main {
-    background-color: #777777;
+  background-color: #777777;
 }
 
 .sheet-footer {
-    color: #fff;
-    text-align: center;
+  color: #fff;
+  text-align: center;
 }
