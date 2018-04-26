@@ -14,7 +14,8 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
 
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
-    this.setState({ collapsed: true });
+
+    this.state = { collapsed: true };
   }
 
   needsCollapse(): boolean {
@@ -92,7 +93,7 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
   render() {
     const needsCollapse = this.needsCollapse();
     const description = this.props.description || '';
-    const collapsed = this.state ? this.state.collapsed : true;
+    const collapsed = this.state.collapsed;
 
     return needsCollapse ? collapsed
       ? this.renderCollapsed(description)

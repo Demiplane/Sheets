@@ -29,7 +29,7 @@ export class SheetsPage extends React.Component<SheetsPageProps> {
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>Name</th>
+              <th scope="col">Name</th>
             </tr>
           </thead>
           <tbody>

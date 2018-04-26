@@ -12,7 +12,7 @@ const renderAction = (item: { name?: string, description?: string }) => {
 
 const toActionTable = (group: { key: string, items: { name?: string, description?: string }[] }) => {
   return (
-    <div>
+    <div key={group.key}>
       <h2>{group.key}</h2>
       <table className="table table-bordered table-hover">
         <tbody>

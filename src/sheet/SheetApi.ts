@@ -17,7 +17,7 @@ export class MockSheetApi implements SheetApi {
       statistics: [
         { name: 'fighter level', modifiers: [{ formula: '5' }] },
         { name: 'wizard level', modifiers: [{ formula: '3' }] },
-        { name: 'favored class bonus', modifiers: [{ formula: '[fighter level]' }] },
+        { name: 'favored class bonus', modifiers: [{ source: 'race', formula: '[fighter level]' }] },
         { name: 'total level', modifiers: [{ formula: '[fighter level] + [wizard level]' }] },
         {
           name: 'base attack bonus', modifiers: [
@@ -28,7 +28,7 @@ export class MockSheetApi implements SheetApi {
         {
           name: 'hit point maximum',
           modifiers: [
-            { formula: '[constitution modifier] * [total level]' },
+            { source: 'constitution', formula: '[constitution modifier] * [total level]' },
             { formula: '([fighter level] - 1) * 5.5 + 10' },
             { formula: '[wizard level] * 3.5' },
             { formula: '[favored class bonus]' },
@@ -40,7 +40,23 @@ export class MockSheetApi implements SheetApi {
           }
         },
         { name: 'constitution', modifiers: [{ formula: '14' }] },
-        { name: 'constitution modifier', modifiers: [{ formula: '([constitution] - 10) / 2' }] },
+        {
+          name: 'constitution modifier', modifiers: [
+            { source: 'constitution', formula: '([constitution] - 10) / 2' }]
+        },
+        { name: 'dexterity', modifiers: [{ formula: '14' }] },
+        { name: 'dexterity modifier', modifiers: [{ source: 'dexterity', formula: '([dexterity] - 10) / 2' }] },
+        {
+          name: 'gun attack bonus', modifiers: [
+            { source: 'weapon focus', formula: '1' },
+            { formula: '[base attack bonus]' },
+            { formula: '[dexterity modifier]' }
+          ],
+          conditionals: [
+            { source: 'point blank shot', condition: 'target is within 30ft.', formula: '1' },
+            { condition: 'target is behind cover', formula: '-2' }
+          ]
+        }
       ],
       inventory: [
         {

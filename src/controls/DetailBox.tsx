@@ -13,7 +13,8 @@ export class DetailBox extends React.Component<DetailBoxProps, { collapsed: bool
 
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
-    this.setState({ collapsed: true });
+
+    this.state = { collapsed: true };
   }
 
   needsCollapse(): boolean {
@@ -47,7 +48,7 @@ export class DetailBox extends React.Component<DetailBoxProps, { collapsed: bool
 
     return (
       <div className={classes}>
-        <button className="btn btn-light btn-sm pt-0 pb-0" onClick={this.hide}>{name}</button>
+        <button className="btn btn-light pt-0 pb-0" onClick={this.hide}>{name}</button>
         <p>{description}</p>
       </div>
     );
@@ -63,7 +64,7 @@ export class DetailBox extends React.Component<DetailBoxProps, { collapsed: bool
     const needsCollapse = this.needsCollapse();
     const description = this.props.description || '';
     const name = this.props.name;
-    const collapsed = this.state ? this.state.collapsed : true;
+    const collapsed = this.state.collapsed;
 
     return needsCollapse ? collapsed
       ? this.renderCollapsed(name)

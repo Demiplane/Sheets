@@ -1,4 +1,4 @@
-.sheet-row {
+.clickable {
   cursor: pointer;
 }
 
@@ -17,4 +17,15 @@
 .sheet-footer {
   color: #fff;
   text-align: center;
+}
+
+.table-no-hover tbody tr:hover {
+  background-color: inherit !important;
+}
+
+.selected {
+  border-top-width: 5px;
+  border-top-style: solid;
+  border-top-color: lightskyblue;
+  font-weight: bold;
 }

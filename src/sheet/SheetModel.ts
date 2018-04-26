@@ -31,10 +31,6 @@ export function selectResources(sheet: Sheet): { resource: Resource, maximum: nu
 
 export function calculateValue(sheet: Sheet, statistic: Statistic): number {
   return statistic.name ? statisticValueCache.getFromCache(statistic.name!, key => {
-    if (statistic.cachedValue) {
-      return statistic.cachedValue;
-    }
-
     if (!statistic.name || statistic.name === 'unknown') {
       return 0;
     }
@@ -49,7 +45,11 @@ export function calculateValue(sheet: Sheet, statistic: Statistic): number {
   }) : 0;
 }
 
-function calculateFormula(sheet: Sheet, formula: string): number {
+export function calculateFormula(sheet: Sheet, formula?: string): number {
+  if (!formula) {
+    return 0;
+  }
+
   let regex = /\[[a-zA-z ]+\]/g;
   let matches = formula.match(regex) || [];
 
@@ -93,23 +93,27 @@ export type Action = {
 };
 
 export type Item = {
-  name?: string;
+  name: string;
   description?: string;
   stock?: number;
 };
 
 export type Ability = {
-  name?: string;
+  name: string;
   source?: string;
   description?: string;
   actionCost?: string[];
 };
 
 export type Statistic = {
-  name?: string;
+  name: string;
   modifiers?: Modifier[];
-  cachedValue?: number;
   resource?: Resource;
+  conditionals?: Conditional[];
+};
+
+export type Conditional = Modifier & {
+  condition?: string;
 };
 
 export type Modifier = {
