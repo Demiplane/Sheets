@@ -52,7 +52,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           {hasConditionals && <h6 className="m-2">conditionals</h6>}
           {hasConditionals && <ConditionalTable sheet={sheet} conditionals={statistic.conditionals!} />}
           {hasModifiers && <h6 className="m-2">modifiers</h6>}
-          {hasModifiers && <ModifierTable modifiers={statistic.modifiers!} />}
+          {hasModifiers && <ModifierTable sheet={sheet} modifiers={statistic.modifiers!} />}
 
           <button className="btn btn-outline-danger float-right btn-small d-inline">Delete</button>
           <button className="btn btn-outline-primary float-right btn-small d-inline">Add Modifier</button>

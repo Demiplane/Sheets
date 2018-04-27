@@ -8,10 +8,15 @@ const toRow = (key: string, conditional: Conditional, sheet: Sheet) => {
   return (
     <tr key={key}>
       <td>{conditional.condition}</td>
-      <td colSpan={conditional.source ? 1 : 2}>
-        {conditional.formula === calculatedValue ? conditional.formula : `${conditional.formula} (${calculatedValue})`}
+      <td className="text-center">
+        {conditional.formula === calculatedValue 
+          ? conditional.formula 
+          : `"${conditional.formula}" => ${calculatedValue}`}
       </td>
-      {conditional.source && <td>{conditional.source}</td>}
+      <td>{conditional.source}</td>
+      <td>
+        <button className="fill-cell m-0 btn btn-light">...</button>
+      </td>
     </tr>
   );
 };

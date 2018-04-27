@@ -44,6 +44,7 @@ export class MockSheetApi implements SheetApi {
           name: 'constitution modifier', modifiers: [
             { source: 'constitution', formula: '([constitution] - 10) / 2' }]
         },
+        { name: 'example', modifiers: [{ formula: 'min(-1, 1)' }] },
         { name: 'dexterity', modifiers: [{ formula: '14' }] },
         { name: 'dexterity modifier', modifiers: [{ source: 'dexterity', formula: '([dexterity] - 10) / 2' }] },
         {

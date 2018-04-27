@@ -27,5 +27,11 @@
   border-top-width: 5px;
   border-top-style: solid;
   border-top-color: lightskyblue;
+  background-color:lightgray;
   font-weight: bold;
+}
+
+.fill-cell {
+  height:100%;
+  width:100%;
 }
