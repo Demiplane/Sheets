@@ -22,7 +22,7 @@ const TextInput: React.StatelessComponent<TextInputProps> =
 
     return (
       <div className={classes}>
-        <label className="mr-2" htmlFor={name}>{label}</label>
+        {label && <label className="mr-2" htmlFor={name}>{label}</label>}
         <div className="field">
           <input
             type="text"

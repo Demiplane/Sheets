@@ -10,11 +10,13 @@ import TextInput from '../controls/TextInput';
 
 type SheetFormProps = {
   sheet: Sheet;
+  showModal: (modalElement: JSX.Element) => void;
+  closeModal: () => void;
   onSave: (event: React.FormEvent<HTMLInputElement>) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
-  const sheet = props.sheet;
+  const { sheet, showModal, closeModal } = props;
 
   return sheet ?
     (
@@ -34,7 +36,12 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
             </div>
 
             <div className="row">
-              <StatisticsPanel className="col-4" sheet={sheet} />
+              <StatisticsPanel
+                className="col-4"
+                sheet={sheet}
+                showModal={showModal}
+                closeModal={closeModal}
+              />
               <ResourcesPanel className="col-4" sheet={sheet} />
               <ActionsPanel className="col-4" sheet={sheet} />
             </div>

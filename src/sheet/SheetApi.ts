@@ -16,6 +16,13 @@ export class MockSheetApi implements SheetApi {
       name: 'Roland of Gilead',
       statistics: [
         { name: 'fighter level', modifiers: [{ formula: '5' }] },
+        {
+          name: 'example base with conditional',
+          modifiers: [
+            { formula: '5' },
+            { source: 'example', condition: 'long is kranky', formula: '5' }
+          ]
+        },
         { name: 'wizard level', modifiers: [{ formula: '3' }] },
         { name: 'favored class bonus', modifiers: [{ source: 'race', formula: '[fighter level]' }] },
         { name: 'total level', modifiers: [{ formula: '[fighter level] + [wizard level]' }] },
@@ -51,9 +58,7 @@ export class MockSheetApi implements SheetApi {
           name: 'gun attack bonus', modifiers: [
             { source: 'weapon focus', formula: '1' },
             { formula: '[base attack bonus]' },
-            { formula: '[dexterity modifier]' }
-          ],
-          conditionals: [
+            { formula: '[dexterity modifier]' },
             { source: 'point blank shot', condition: 'target is within 30ft.', formula: '1' },
             { condition: 'target is behind cover', formula: '-2' }
           ]

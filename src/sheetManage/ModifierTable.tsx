@@ -1,20 +1,19 @@
 import * as React from 'react';
-import Sheet, { Modifier, calculateFormula } from '../sheet/SheetModel';
+import Sheet, { Modifier, calculateFormula, modifierIsBase } from '../sheet/SheetModel';
 import combineClasses from '../controls/combineClasses';
 
 const toRow = (key: string, sheet: Sheet, modifier: Modifier) => {
-  var calculatedValue = calculateFormula(sheet, modifier.formula).toString();
+  let calculatedValue = calculateFormula(sheet, modifier.formula).toString();
+  let isBase = modifierIsBase(modifier);
 
   return (
     <tr key={key}>
-      <td>{modifier.source}</td>
+      <td>{modifier.source ? modifier.source : isBase ? 'base' : ''}</td>
       <td className="text-center">
-        {modifier.formula === calculatedValue 
-          ? modifier.formula 
+        {isBase
+          ? modifier.formula
           : `"${modifier.formula}" => ${calculatedValue}`}</td>
-      <td>
-        <button className="fill-cell m-0 btn btn-light">...</button>
-      </td>
+      <td>{modifier.condition}</td>
     </tr>
   );
 };

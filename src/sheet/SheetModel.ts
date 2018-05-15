@@ -29,6 +29,27 @@ export function selectResources(sheet: Sheet): { resource: Resource, maximum: nu
   return resources;
 }
 
+export function modifierIsBase(modifier: Modifier) {
+  return !isNaN(Number(modifier.formula)) && (modifier.condition ? modifier.condition === '' : true);
+}
+
+export function statisticIsBase(sheet: Sheet, statistic: Statistic) {
+  const onlyHasBaseModifiers = statistic.modifiers && statistic
+    .modifiers
+    .map(modifierIsBase)
+    .reduce((l, r) => l && r) || false;
+
+  return onlyHasBaseModifiers;
+}
+
+export function statisticHasConditionals(statistic: Statistic) {
+  return statistic.modifiers && statistic.modifiers.filter(isConditional).length > 0;
+}
+
+export function isConditional(modifier: Modifier) {
+  return modifier.condition ? modifier.condition !== '' : false;
+}
+
 export function calculateValue(sheet: Sheet, statistic: Statistic): number {
   return statistic.name ? statisticValueCache.getFromCache(statistic.name!, key => {
     if (!statistic.name || statistic.name === 'unknown') {
@@ -109,14 +130,10 @@ export type Statistic = {
   name: string;
   modifiers?: Modifier[];
   resource?: Resource;
-  conditionals?: Conditional[];
-};
-
-export type Conditional = Modifier & {
-  condition?: string;
 };
 
 export type Modifier = {
+  condition?: string,
   formula?: string,
   source?: string
 };

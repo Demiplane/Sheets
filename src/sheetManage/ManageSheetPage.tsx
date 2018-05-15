@@ -4,20 +4,43 @@ import * as React from 'react';
 import RootState from '../core/RootState';
 import { RouteComponentProps } from 'react-router-dom';
 import SheetForm from './SheetForm';
+import Modal from '../controls/Modal';
 
 type ManageSheetPageProps = {
   sheet: Sheet;
 } & RouteComponentProps<{ id: string }>;
 
-export class ManageSheetPage extends React.Component<ManageSheetPageProps> {
+type ManageSheetPageState = {
+  modal?: JSX.Element;
+};
+
+export class ManageSheetPage extends React.Component<ManageSheetPageProps, ManageSheetPageState> {
   constructor(props: ManageSheetPageProps) {
     super(props);
 
     this.onSave = this.onSave.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+
+    this.state = {};
   }
 
   goBack() {
     this.props.history.push('/sheets');
+  }
+
+  openModal(modalElement: JSX.Element) {
+    this.setState({
+      modal: (
+        <Modal>
+          {modalElement}
+        </Modal>
+      )
+    });
+  }
+
+  closeModal() {
+    this.setState({ modal: undefined });
   }
 
   onSave(event: React.FormEvent<HTMLInputElement>) {
@@ -25,7 +48,16 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps> {
   }
 
   render() {
-    return <SheetForm sheet={this.props.sheet} onSave={this.onSave} />;
+    return (
+      <div>
+        <SheetForm
+          sheet={this.props.sheet}
+          onSave={this.onSave}
+          showModal={this.openModal}
+          closeModal={this.closeModal} />
+        {this.state.modal}
+      </div>
+    );
   }
 }
 

@@ -11,6 +11,7 @@ interface AppProps {
 }
 
 class App extends React.Component<AppProps, AppState> {
+  modal: HTMLElement;
   render() {
     return (
       <div className="sheet-main">

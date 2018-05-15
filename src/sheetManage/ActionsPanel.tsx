@@ -28,7 +28,7 @@ const ActionsPanel: React.StatelessComponent<{ className?: string, sheet: Sheet 
     const actions = selectActions(sheet);
     const flattenedByCost = actions
       .map(a => a.actionCost!.map(c => ({ cost: c, name: a.name, description: a.description })))
-      .reduce((l, r) => l.concat(r));
+      .reduce((l, r) => l.concat(r), []);
     const costGroups = groupBy(flattenedByCost, a => a.cost);
 
     return (
