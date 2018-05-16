@@ -1,9 +1,10 @@
-import { Statistic, Modifier } from '../sheet/SheetModel';
+import Sheet, { Statistic, Modifier } from '../sheet/SheetModel';
 import * as React from 'react';
 import TextInput from '../controls/TextInput';
 import EditForm from '../controls/EditForm';
 
 type StatisticFormProps = {
+  sheet: Sheet;
   statistic?: Statistic;
   saveStatistic: (statistic: Statistic) => void;
   cancel: () => void;

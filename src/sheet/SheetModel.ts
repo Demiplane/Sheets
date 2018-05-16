@@ -1,7 +1,12 @@
 var math = require('mathjs');
 import Cache from '../core/Cache';
+import { distinct } from '../core/distinct';
 
 export const statisticValueCache: Cache<number> = new Cache<number>();
+
+export function conditionIsActive(sheet: Sheet, condition: string) {
+  return sheet.conditions.filter(c => c === condition).length > 0;
+}
 
 export function selectActions(sheet: Sheet): Action[] {
   const actions = sheet.actions || [];
@@ -13,6 +18,22 @@ export function selectActions(sheet: Sheet): Action[] {
   const combined = actions.concat(abilityActions);
 
   return combined;
+}
+
+export function getConditions(sheet: Sheet) {
+  const statistics = sheet.statistics || [];
+  const modifiers = statistics
+    .filter(statistic => statistic.modifiers)
+    .map(statistic => statistic.modifiers!)
+    .reduce((l, r) => l.concat(r), []);
+  const conditions = modifiers
+    .filter(modifier => modifier.condition)
+    .map(modifier => modifier.condition!);
+  const sortedDistinctConditions =
+    distinct(conditions)
+    .sort();
+    
+  return sortedDistinctConditions;
 }
 
 export function selectResources(sheet: Sheet): { resource: Resource, maximum: number }[] {
@@ -29,8 +50,12 @@ export function selectResources(sheet: Sheet): { resource: Resource, maximum: nu
   return resources;
 }
 
+export function modifierIsSimple(modifier: Modifier) {
+  return !isNaN(Number(modifier.formula));
+}
+
 export function modifierIsBase(modifier: Modifier) {
-  return !isNaN(Number(modifier.formula)) && (modifier.condition ? modifier.condition === '' : true);
+  return modifierIsSimple(modifier) && (modifier.condition ? modifier.condition === '' : true);
 }
 
 export function statisticIsBase(sheet: Sheet, statistic: Statistic) {
@@ -50,19 +75,30 @@ export function isConditional(modifier: Modifier) {
   return modifier.condition ? modifier.condition !== '' : false;
 }
 
+export function isUnderCondition(sheet: Sheet, modifier: Modifier) {
+  if (!modifier.condition || modifier.condition === '') {
+    return true;
+  }
+  if (!sheet.conditions) {
+    return false;
+  }
+
+  return conditionIsActive(sheet, modifier.condition);
+}
+
 export function calculateValue(sheet: Sheet, statistic: Statistic): number {
   return statistic.name ? statisticValueCache.getFromCache(statistic.name!, key => {
     if (!statistic.name || statistic.name === 'unknown') {
       return 0;
     }
 
-    let formulaeTotal = (statistic.modifiers || [])
+    const formulaeTotal = (statistic.modifiers || [])
       .filter(modifier => modifier.formula)
+      .filter(modifier => !isConditional(modifier) || isUnderCondition(sheet, modifier))
       .map(formula => calculateFormula(sheet, formula.formula!))
-      .map(formula => Math.floor(formula))
       .reduce((l, r) => l + r, 0);
 
-    return formulaeTotal;
+    return Math.floor(formulaeTotal);
   }) : 0;
 }
 
@@ -71,27 +107,27 @@ export function calculateFormula(sheet: Sheet, formula?: string): number {
     return 0;
   }
 
-  let regex = /\[[a-zA-z ]+\]/g;
-  let matches = formula.match(regex) || [];
+  const regex = /\[[a-zA-z ]+\]/g;
+  const matches = formula.match(regex) || [];
 
   let expression = formula;
 
   matches.forEach(m => {
-    let statisticName = m.replace('[', '').replace(']', '');
-    let statistic = findStatistic(sheet, statisticName);
+    const statisticName = m.replace('[', '').replace(']', '');
+    const statistic = findStatistic(sheet, statisticName);
     var statisticValue = statistic ? calculateValue(sheet, statistic) : 0;
 
     expression = expression.replace(m, statisticValue.toString());
   });
 
-  let final = math.eval(expression);
+  const final = math.eval(expression);
 
-  return final;
+  return Math.floor(final);
 }
 
 function findStatistic(sheet: Sheet, statisticName: string): Statistic | null {
-  let statistics = sheet.statistics || [];
-  let candidates = statistics.filter(s => s.name === statisticName);
+  const statistics = sheet.statistics || [];
+  const candidates = statistics.filter(s => s.name === statisticName);
 
   return candidates.length > 0
     ? candidates[0]
@@ -105,6 +141,7 @@ export type Sheet = {
   abilities?: Ability[];
   inventory?: Item[];
   actions?: Action[];
+  conditions: string[];
 };
 
 export type Action = {

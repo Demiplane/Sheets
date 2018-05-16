@@ -7,6 +7,7 @@ import ResourcesPanel from './ResourcesPanel';
 import StatisticsPanel from './StatisticsPanel';
 import ActionsPanel from './ActionsPanel';
 import TextInput from '../controls/TextInput';
+import ConditionsPanel from './ConditionsPanel';
 
 type SheetFormProps = {
   sheet: Sheet;
@@ -23,7 +24,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
       <div>
         <form className="form-inline" >
           <FluidPage>
-            <div className="row justify-content-between pl-4 pr-4">
+            <div className="row justify-content-between pl-4 pr-4 pb-2">
               <TextInput
                 name="sheetName"
                 label="Name"
@@ -37,13 +38,18 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
 
             <div className="row">
               <StatisticsPanel
-                className="col-4"
+                className="col-6"
                 sheet={sheet}
                 showModal={showModal}
                 closeModal={closeModal}
               />
-              <ResourcesPanel className="col-4" sheet={sheet} />
-              <ActionsPanel className="col-4" sheet={sheet} />
+              <ConditionsPanel
+                className="col-6"
+                sheet={sheet} />
+            </div>
+            <div className="row">
+              <ResourcesPanel className="col-6" sheet={sheet} />
+              <ActionsPanel className="col-6" sheet={sheet} />
             </div>
             <div className="row">
               <InventoryPanel className="col-6" sheet={sheet} />

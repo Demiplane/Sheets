@@ -1,32 +1,48 @@
-import * as Model from '../sheet/SheetModel';
-// import { Dispatch } from 'redux';
+import Sheet, * as Model from '../sheet/SheetModel';
+import { BaseAction } from '../core/BaseAction';
+import { Dispatch, AnyAction } from 'redux';
 
 export const SHEET_SUCCESS_SUFFIX = '_SHEET_SUCCESS';
+
+export const ACTIVATE_CONDITION_SHEET_SUCCESS = 'ACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
+export const INACTIVATE_CONDITION_SHEET_SUCCESS = 'INACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
 
 export const CREATE_SHEET_SUCCESS = 'SAVE' + SHEET_SUCCESS_SUFFIX;
 export const UPDATE_SHEET_SUCCESS = 'UPDATE' + SHEET_SUCCESS_SUFFIX;
 export const LOAD_SHEET_SUCCESS = 'LOAD' + SHEET_SUCCESS_SUFFIX;
 export const DELETE_SHEET_SUCCESS = 'DELETE' + SHEET_SUCCESS_SUFFIX;
 
-export type CreateSheetAction = {
-  type: string,
+export type CreateSheetAction = BaseAction & {
   sheet: Model.Sheet
 };
 
-export type UpdateSheetAction = {
-  type: string,
+export type UpdateSheetAction = BaseAction & {
   sheet: Model.Sheet
 };
 
-export type DeleteSheetAction = {
-  type: string,
+export type DeleteSheetAction = BaseAction & {
   sheetIdentifier: string
 };
 
-export type LoadSheetsAction = {
-  type: string,
+export type LoadSheetsAction = BaseAction & {
   sheets: Model.Sheet[]
 };
+
+export type ConnectedSheetProps = {
+  createSheet?: (sheet: Model.Sheet) => void;
+  updateSheet?: (sheet: Model.Sheet) => void;
+  deleteSheet?: (sheetIdentifier: string) => void;
+  loadSheets?: (sheets: Model.Sheet[]) => void;
+};
+
+export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetProps {
+  return {
+    createSheet: (sheet: Sheet) => dispatch(createSheet(sheet)),
+    updateSheet: (sheet: Sheet) => dispatch(updateSheet(sheet)),
+    deleteSheet: (sheetIdentifier: string) => dispatch(deleteSheet(sheetIdentifier)),
+    loadSheets: (sheets: Sheet[]) => dispatch(loadSheets(sheets))
+  };
+}
 
 export function createSheet(sheet: Model.Sheet): CreateSheetAction {
   return { type: CREATE_SHEET_SUCCESS, sheet };

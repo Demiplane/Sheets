@@ -1,7 +1,6 @@
 import initialState from '../core/initialState';
 import SheetState from './SheetState';
 import RootAction from '../core/RootAction';
-import * as Actions from './sheetActions';
 import * as SheetActions from './sheetActions';
 import { statisticValueCache } from './SheetModel';
 
@@ -11,15 +10,16 @@ export default function sheetReducer(state: SheetState = initialState.sheetState
   }
 
   switch (action.type) {
+
     case SheetActions.CREATE_SHEET_SUCCESS:
-      var createAction = <Actions.CreateSheetAction>action;
+      const createAction = <SheetActions.CreateSheetAction>action;
       return {
         sheets: [...state.sheets,
         Object.assign({}, createAction.sheet)
         ]
       };
     case SheetActions.UPDATE_SHEET_SUCCESS:
-      var updateAction = <Actions.UpdateSheetAction>action;
+      const updateAction = <SheetActions.UpdateSheetAction>action;
       return {
         sheets: [
           ...state.sheets.filter(sheet => sheet.identifier !== updateAction.sheet.identifier),
@@ -27,14 +27,14 @@ export default function sheetReducer(state: SheetState = initialState.sheetState
         ]
       };
     case SheetActions.DELETE_SHEET_SUCCESS:
-      var deleteAction = <Actions.DeleteSheetAction>action;
+      const deleteAction = <SheetActions.DeleteSheetAction>action;
       return {
         sheets: [
           ...state.sheets.filter(sheet => sheet.identifier !== deleteAction.sheetIdentifier)
         ]
       };
     case SheetActions.LOAD_SHEET_SUCCESS:
-      var loadAction = <Actions.LoadSheetsAction>action;
+      const loadAction = <SheetActions.LoadSheetsAction>action;
       return { sheets: loadAction.sheets };
     default:
       return state;

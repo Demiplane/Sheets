@@ -67,8 +67,8 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           {hasModifiers && <h6 className="m-2">modifiers</h6>}
           {hasModifiers && <ModifierTable sheet={sheet} modifiers={statistic.modifiers!} />}
 
-          <button className="btn btn-outline-danger float-right btn-small d-inline">Delete</button>
-          <button className="btn btn-outline-primary float-right btn-small d-inline">Edit</button>
+          <button className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
+          <button className="btn btn-outline-primary float-right btn-small d-inline mt-2">Edit</button>
         </td>
       </tr>
     )];
@@ -84,7 +84,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
   addStatistic() {
     this.props.showModal((
-      <StatisticForm saveStatistic={this.saveStatistic} cancel={this.cancel} />
+      <StatisticForm sheet={this.props.sheet} saveStatistic={this.saveStatistic} cancel={this.cancel} />
     ));
   }
 

@@ -23,6 +23,13 @@ export class MockSheetApi implements SheetApi {
             { source: 'example', condition: 'long is kranky', formula: '5' }
           ]
         },
+        {
+          name: 'example base with conditional two',
+          modifiers: [
+            { formula: '7' },
+            { source: 'example', condition: 'long is kranky', formula: '5' }
+          ]
+        },
         { name: 'wizard level', modifiers: [{ formula: '3' }] },
         { name: 'favored class bonus', modifiers: [{ source: 'race', formula: '[fighter level]' }] },
         { name: 'total level', modifiers: [{ formula: '[fighter level] + [wizard level]' }] },
@@ -53,7 +60,10 @@ export class MockSheetApi implements SheetApi {
         },
         { name: 'example', modifiers: [{ formula: 'min(-1, 1)' }] },
         { name: 'dexterity', modifiers: [{ formula: '14' }] },
-        { name: 'dexterity modifier', modifiers: [{ source: 'dexterity', formula: '([dexterity] - 10) / 2' }] },
+        {
+          name: 'dexterity modifier',
+          modifiers: [{ source: 'dexterity', formula: '([dexterity] - 10) / 2' }]
+        },
         {
           name: 'gun attack bonus', modifiers: [
             { source: 'weapon focus', formula: '1' },
@@ -103,9 +113,16 @@ export class MockSheetApi implements SheetApi {
         { name: 'Dodge', actionCost: ['action'] },
         { name: 'Disengage', actionCost: ['action'] },
         { name: 'Help', actionCost: ['action'] }
-      ]
+      ],
+      conditions: ['long is kranky']
     },
-    { identifier: 'some other guid', name: 'Steven Deschain', statistics: [], inventory: [], abilities: [] }
+    {
+      identifier: 'some other guid', name: 'Steven Deschain',
+      statistics: [],
+      inventory: [],
+      abilities: [],
+      conditions: []
+    }
   ];
 
   getAllSheets() {
