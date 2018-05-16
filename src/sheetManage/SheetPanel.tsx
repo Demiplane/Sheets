@@ -1,12 +1,12 @@
 import * as React from 'react';
-import combineClasses from '../controls/combineClasses';
 
 const SheetPanel: React.StatelessComponent<{ title: string, className?: string, onAdd?: () => void }> =
   ({ title, className, children, onAdd }) => {
-    const classes = combineClasses(className, 'sheet-panel card pt-4');
-
+    
     return (
-      <div className={classes}><h2>
+      <div className={className}>
+      <div className="sheet-panel card p-4 mt-4">
+        <h2>
         {title}
         {onAdd
           ? (
@@ -17,6 +17,7 @@ const SheetPanel: React.StatelessComponent<{ title: string, className?: string, 
           )
           : null}</h2>
         {children}
+      </div>
       </div>
     );
   };

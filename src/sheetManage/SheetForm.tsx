@@ -36,24 +36,23 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               <button className="btn btn-primary">Save and Close</button>
             </div>
 
-            <div className="row">
-              <StatisticsPanel
-                className="col-6"
-                sheet={sheet}
-                showModal={showModal}
-                closeModal={closeModal}
-              />
-              <ConditionsPanel
-                className="col-6"
-                sheet={sheet} />
-            </div>
-            <div className="row">
-              <ResourcesPanel className="col-6" sheet={sheet} />
-              <ActionsPanel className="col-6" sheet={sheet} />
-            </div>
-            <div className="row">
-              <InventoryPanel className="col-6" sheet={sheet} />
-              <AbilitiesPanel className="col-6" sheet={sheet} />
+            <div className="row mb-4">
+              <div className="col-6">
+                <StatisticsPanel
+                  sheet={sheet}
+                  showModal={showModal}
+                  closeModal={closeModal}
+                />
+                <InventoryPanel sheet={sheet} />
+              </div>
+
+              <div className="col-6">
+                <ResourcesPanel sheet={sheet} />
+                <ConditionsPanel
+                  sheet={sheet} />
+                <ActionsPanel sheet={sheet} />
+                <AbilitiesPanel sheet={sheet} />
+              </div>
             </div>
           </FluidPage>
         </form>
