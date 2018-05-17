@@ -11,31 +11,19 @@ export default function sheetReducer(state: SheetState = initialState.sheetState
 
   switch (action.type) {
 
+    case SheetActions.ACTIVATE_CONDITION_SHEET_SUCCESS:
+      return SheetActions.handleActivateCondition(<SheetActions.ActivateConditionAction>action, state);
+    case SheetActions.INACTIVATE_CONDITION_SHEET_SUCCESS:
+      return SheetActions.handleInactivateCondition(<SheetActions.InactivateConditionAction>action, state);
     case SheetActions.CREATE_SHEET_SUCCESS:
-      const createAction = <SheetActions.CreateSheetAction>action;
-      return {
-        sheets: [...state.sheets,
-        Object.assign({}, createAction.sheet)
-        ]
-      };
+      return SheetActions.handleCreateSheet(<SheetActions.CreateSheetAction>action, state);
     case SheetActions.UPDATE_SHEET_SUCCESS:
-      const updateAction = <SheetActions.UpdateSheetAction>action;
-      return {
-        sheets: [
-          ...state.sheets.filter(sheet => sheet.identifier !== updateAction.sheet.identifier),
-          Object.assign({}, updateAction.sheet)
-        ]
-      };
+      return SheetActions.handleUpdateSheet(<SheetActions.UpdateSheetAction>action, state);
     case SheetActions.DELETE_SHEET_SUCCESS:
-      const deleteAction = <SheetActions.DeleteSheetAction>action;
-      return {
-        sheets: [
-          ...state.sheets.filter(sheet => sheet.identifier !== deleteAction.sheetIdentifier)
-        ]
-      };
+      return SheetActions.handleDeleteSheet(<SheetActions.DeleteSheetAction>action, state);
     case SheetActions.LOAD_SHEET_SUCCESS:
-      const loadAction = <SheetActions.LoadSheetsAction>action;
-      return { sheets: loadAction.sheets };
+      return SheetActions.handleLoadSheets(<SheetActions.LoadSheetsAction>action);
+
     default:
       return state;
   }

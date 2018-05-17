@@ -5,8 +5,11 @@ import ModifierTable from './ModifierTable';
 import { FormEvent } from 'react';
 import StatisticForm from './StatisticForm';
 import Flashy from '../controls/Flashy';
+import RootState from '../core/RootState';
+import { connect } from 'react-redux';
+import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetActions';
 
-type StatisticsPanelProps = {
+type StatisticsPanelProps = ConnectedSheetProps & {
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
   className?: string,
@@ -23,6 +26,8 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.onStatisticExpandCollapseClick = this.onStatisticExpandCollapseClick.bind(this);
     this.addStatistic = this.addStatistic.bind(this);
     this.saveStatistic = this.saveStatistic.bind(this);
+    this.openEditStatistic = this.openEditStatistic.bind(this);
+    this.deleteStatistic = this.deleteStatistic.bind(this);
   }
 
   statisticIsExpanded(statisticName: string) {
@@ -38,6 +43,42 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
       // this.setState({ expanded: this.state.expanded.concat(statisticName) });
       this.setState({ expanded: [statisticName] });
     }
+  }
+
+  openEditStatistic(statistic: Statistic) {
+    this.props.showModal((
+      <StatisticForm
+        statistic={statistic}
+        sheet={this.props.sheet}
+        saveStatistic={this.saveStatistic}
+        cancel={this.cancel}
+      />
+    ));
+  }
+
+  deleteStatistic(statistic: Statistic) {
+    const oldStatistics = this.props.sheet.statistics || [];
+    const updatedSheet = Object.assign(
+      {},
+      this.props.sheet,
+      {
+        statistics: oldStatistics.filter(s => s.name !== statistic.name)
+      });
+    this.props.updateSheet!(updatedSheet);
+  }
+
+  saveStatistic(statistic: Statistic) {
+    this.props.closeModal();
+  }
+
+  cancel() {
+    this.props.closeModal();
+  }
+
+  addStatistic() {
+    this.props.showModal((
+      <StatisticForm sheet={this.props.sheet} saveStatistic={this.saveStatistic} cancel={this.cancel} />
+    ));
   }
 
   toRowPair = (sheet: Sheet, statistic: Statistic) => {
@@ -70,25 +111,15 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           {hasModifiers && <h6 className="m-2">modifiers</h6>}
           {hasModifiers && <ModifierTable sheet={sheet} modifiers={statistic.modifiers!} />}
 
-          <button className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
-          <button className="btn btn-outline-primary float-right btn-small d-inline mt-2">Edit</button>
+          <button
+            onClick={event => { event.preventDefault(); this.openEditStatistic(statistic); }}
+            className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
+          <button
+            onClick={event => { event.preventDefault(); this.deleteStatistic(statistic); }}
+            className="btn btn-outline-primary float-right btn-small d-inline mt-2">Edit</button>
         </td>
       </tr>
     )];
-  }
-
-  saveStatistic(statistic: Statistic) {
-    this.props.closeModal();
-  }
-
-  cancel() {
-    this.props.closeModal();
-  }
-
-  addStatistic() {
-    this.props.showModal((
-      <StatisticForm sheet={this.props.sheet} saveStatistic={this.saveStatistic} cancel={this.cancel} />
-    ));
   }
 
   render() {
@@ -120,4 +151,8 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   }
 }
 
-export default StatisticsPanel;
+function mapStateToProps(state: RootState, ownProps: StatisticsPanelProps) {
+  return ownProps;
+}
+
+export default connect(mapStateToProps, mapSheetActions)(StatisticsPanel);
