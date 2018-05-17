@@ -24,7 +24,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
       <div>
         <form className="form-inline" >
           <FluidPage>
-            <div className="row justify-content-between pl-4 pr-4 pb-2">
+            <div className="row justify-content-between pl-4 pr-4">
               <TextInput
                 name="sheetName"
                 label="Name"

@@ -55,7 +55,7 @@ export function modifierIsSimple(modifier: Modifier) {
 }
 
 export function modifierIsBase(modifier: Modifier) {
-  return modifierIsSimple(modifier) && (modifier.condition ? modifier.condition === '' : true);
+  return modifierIsSimple(modifier);
 }
 
 export function statisticIsBase(sheet: Sheet, statistic: Statistic) {

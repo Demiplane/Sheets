@@ -59,3 +59,13 @@
   align-items: center;
   justify-content: center;
 }
+
+@keyframes refreshStatistic {
+  from {background-color: lightgreen;}
+  to {background-color: white;}
+}
+
+.flash-when-updated {
+  animation-name: refreshStatistic;
+  animation-duration: 1s;
+}

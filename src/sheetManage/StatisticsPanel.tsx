@@ -4,6 +4,7 @@ import SheetPanel from './SheetPanel';
 import ModifierTable from './ModifierTable';
 import { FormEvent } from 'react';
 import StatisticForm from './StatisticForm';
+import Flashy from '../controls/Flashy';
 
 type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
@@ -58,7 +59,9 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           {isBase && <small className="text-muted pl-2 float-right">(base)</small>}
           {hasConditionals && <small className="text-muted pl-2 float-right">(conditional)</small>}
         </td>
-        <td className="text-center">{calculated}</td>
+        <td className="text-center">
+          <Flashy display={calculated.toString()} />
+        </td>
       </tr>
     ),
     showDetail && (
