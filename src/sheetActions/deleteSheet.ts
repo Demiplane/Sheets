@@ -1,7 +1,7 @@
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
-import ActionRegistry from '../core/ActionRegistry';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
+import { add } from '../sheet/sheetReducer';
 
 // DELETE
 export const DELETE_SHEET_SUCCESS = 'DELETE' + SHEET_SUCCESS_SUFFIX;
@@ -19,7 +19,7 @@ export function handleDeleteSheet(deleteAction: DeleteSheetAction, state: SheetS
   };
 }
 
-export const deleteSheetHandler = new ActionRegistry<DeleteSheetAction, SheetState>(
+add(
   DELETE_SHEET_SUCCESS,
   handleDeleteSheet
-  );
+);

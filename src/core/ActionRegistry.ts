@@ -1,21 +1,20 @@
-import RootAction from './RootAction';
-
-export interface ActionHandler<TAction, TState> {
+export interface ActionHandler<TRootAction, TState> {
   type: string;
-  handle(action: TAction, state: TState): TState;
+  handle(action: TRootAction, state: TState): TState;
 }
 
-export class ActionRegistry<T extends RootAction, TState> implements ActionHandler<RootAction, TState> {
+export class ActionRegistry<TRootAction, TAction extends TRootAction, TState> 
+  implements ActionHandler<TRootAction, TState> {
   type: string;
-  actionFunction: (activateAction: T, state: TState) => TState;
+  actionFunction: (activateAction: TAction, state: TState) => TState;
 
-  constructor(type: string, actionFunction: (activateAction: T, state: TState) => TState) {
+  constructor(type: string, actionFunction: (activateAction: TAction, state: TState) => TState) {
     this.type = type;
     this.actionFunction = actionFunction;
   }
 
-  handle(action: RootAction, state: TState): TState {
-    const specificAction = <T>action;
+  handle(action: TRootAction, state: TState): TState {
+    const specificAction = <TAction>action;
     return this.actionFunction(specificAction, state);
   }
 }

@@ -2,7 +2,7 @@ import { Statistic } from '../sheet/SheetModel';
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import ActionRegistry from '../core/ActionRegistry';
+import { add } from '../sheet/sheetReducer';
 
 // UPDATE STATISTIC
 export const UPDATE_STATISTIC_SUCCESS = 'UPDATE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
@@ -27,7 +27,7 @@ export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticActi
   }
 
   sheetToUpdate.statistics = oldStatistics;
-  
+
   return {
     sheets: [
       ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
@@ -36,7 +36,7 @@ export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticActi
   };
 }
 
-export const updateStatisticHandler = new ActionRegistry<UpdateStatisticAction, SheetState>(
+add(
   UPDATE_STATISTIC_SUCCESS,
   handleUpdateStatistic
-  );
+);

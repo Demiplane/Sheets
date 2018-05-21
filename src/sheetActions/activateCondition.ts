@@ -1,8 +1,8 @@
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { distinct } from '../core/distinct';
-import { ActionRegistry } from '../core/ActionRegistry';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
+import { add } from '../sheet/sheetReducer';
 
 // ACTIVATE CONDITION
 export const ACTIVATE_CONDITION_SHEET_SUCCESS = 'ACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
@@ -25,7 +25,4 @@ export function handleActivateCondition(activateAction: ActivateConditionAction,
   };
 }
 
-export const activateConditionHandler = new ActionRegistry<ActivateConditionAction, SheetState>(
-  ACTIVATE_CONDITION_SHEET_SUCCESS,
-  handleActivateCondition
-  );
+add(ACTIVATE_CONDITION_SHEET_SUCCESS, handleActivateCondition);

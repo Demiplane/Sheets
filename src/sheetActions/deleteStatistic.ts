@@ -1,7 +1,7 @@
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
-import ActionRegistry from '../core/ActionRegistry';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
+import { add } from '../sheet/sheetReducer';
 
 // DELETE STATISTIC
 export const DELETE_STATISTIC_SUCCESS = 'DELETE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
@@ -17,9 +17,9 @@ export function handleDeleteStatistic(deleteStatisticAction: DeleteStatisticActi
   const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.identifier === sheetIdentifier));
 
   let oldStatistics = sheetToUpdate.statistics || [];
-  
+
   sheetToUpdate.statistics = oldStatistics.filter(o => o.name !== statisticName);
-  
+
   return {
     sheets: [
       ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
@@ -28,7 +28,7 @@ export function handleDeleteStatistic(deleteStatisticAction: DeleteStatisticActi
   };
 }
 
-export const deleteStatisticHandler = new ActionRegistry<DeleteStatisticAction, SheetState>(
+add(
   DELETE_STATISTIC_SUCCESS,
   handleDeleteStatistic
-  );
+);

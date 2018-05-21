@@ -1,8 +1,8 @@
 import { Statistic } from '../sheet/SheetModel';
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
-import ActionRegistry from '../core/ActionRegistry';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
+import { add } from '../sheet/sheetReducer';
 
 // ADD STATISTIC
 export const ADD_STATISTIC_SUCCESS = 'ADD_STATISTIC' + SHEET_SUCCESS_SUFFIX;
@@ -18,9 +18,9 @@ export function handleAddStatistic(addStatisticAction: AddStatisticAction, state
   const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.identifier === sheetIdentifier));
 
   let oldStatistics = sheetToUpdate.statistics || [];
-  
+
   sheetToUpdate.statistics = [...oldStatistics, statistic];
-  
+
   return {
     sheets: [
       ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
@@ -29,7 +29,7 @@ export function handleAddStatistic(addStatisticAction: AddStatisticAction, state
   };
 }
 
-export const addStatisticHandler = new ActionRegistry<AddStatisticAction, SheetState>(
+add(
   ADD_STATISTIC_SUCCESS,
   handleAddStatistic
-  );
+);

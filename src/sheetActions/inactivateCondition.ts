@@ -1,7 +1,7 @@
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import ActionRegistry from '../core/ActionRegistry';
+import { add } from '../sheet/sheetReducer';
 
 // INACTIVATE CONDITION
 export const INACTIVATE_CONDITION_SHEET_SUCCESS = 'INACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
@@ -24,7 +24,7 @@ export function handleInactivateCondition(inactivateAction: InactivateConditionA
   };
 }
 
-export const inactivateConditionHandler = new ActionRegistry<InactivateConditionAction, SheetState>(
+add(
   INACTIVATE_CONDITION_SHEET_SUCCESS,
   handleInactivateCondition
-  );
+);

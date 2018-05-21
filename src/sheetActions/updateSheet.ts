@@ -1,8 +1,8 @@
 import { BaseAction } from '../core/BaseAction';
 import Sheet from '../sheet/SheetModel';
 import SheetState from '../sheet/SheetState';
-import ActionRegistry from '../core/ActionRegistry';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
+import { add } from '../sheet/sheetReducer';
 
 // UPDATE
 export const UPDATE_SHEET_SUCCESS = 'UPDATE' + SHEET_SUCCESS_SUFFIX;
@@ -21,7 +21,7 @@ export function handleUpdateSheet(updateAction: UpdateSheetAction, state: SheetS
   };
 }
 
-export const updateSheetHandler = new ActionRegistry<UpdateSheetAction, SheetState>(
+add(
   UPDATE_SHEET_SUCCESS,
   handleUpdateSheet
-  );
+);

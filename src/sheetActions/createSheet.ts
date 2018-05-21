@@ -2,7 +2,7 @@ import Sheet from '../sheet/SheetModel';
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import ActionRegistry from '../core/ActionRegistry';
+import { add } from '../sheet/sheetReducer';
 
 // CREATE
 export const CREATE_SHEET_SUCCESS = 'CREATE' + SHEET_SUCCESS_SUFFIX;
@@ -20,7 +20,7 @@ export function handleCreateSheet(createAction: CreateSheetAction, state: SheetS
   };
 }
 
-export const createSheetHandler = new ActionRegistry<CreateSheetAction, SheetState>(
+add(
   CREATE_SHEET_SUCCESS,
   handleCreateSheet
-  );
+);
