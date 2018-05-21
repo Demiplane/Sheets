@@ -13,12 +13,12 @@ type TextInputProps = {
 
 const TextInput: React.StatelessComponent<TextInputProps> =
   ({ name, label, onChange, placeholder, value, error, className }) => {
-    let wrapperClass = 'form-group';
+    let wrapperClass = label ? 'form-group' : '';
     if (error && error.length > 0) {
       wrapperClass += ' ' + 'has-error';
     }
 
-    let classes = combineClasses(wrapperClass, className);
+    const classes = combineClasses(wrapperClass, className);
 
     return (
       <div className={classes}>

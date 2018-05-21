@@ -9,7 +9,7 @@ const EditForm: React.StatelessComponent<{
   return (
     <div className="sheet-panel card p-4">
       <h1>{header}</h1>
-      <form className="form-inline">
+      <form className="form">
         {children}
       </form>
       <div>

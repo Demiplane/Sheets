@@ -24,8 +24,9 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     this.cancel = this.cancel.bind(this);
     this.onStatisticExpandCollapseClick = this.onStatisticExpandCollapseClick.bind(this);
+    this.openAddStatistic = this.openAddStatistic.bind(this);
     this.addStatistic = this.addStatistic.bind(this);
-    this.saveStatistic = this.saveStatistic.bind(this);
+    this.updateStatistic = this.updateStatistic.bind(this);
     this.openEditStatistic = this.openEditStatistic.bind(this);
     this.deleteStatistic = this.deleteStatistic.bind(this);
   }
@@ -50,7 +51,8 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
       <StatisticForm
         statistic={statistic}
         sheet={this.props.sheet}
-        saveStatistic={this.saveStatistic}
+        addStatistic={this.addStatistic}
+        updateStatistic={this.updateStatistic}
         cancel={this.cancel}
       />
     ));
@@ -67,7 +69,13 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.updateSheet!(updatedSheet);
   }
 
-  saveStatistic(statistic: Statistic) {
+  addStatistic(statistic: Statistic) {
+    this.props.addStatistic!(this.props.sheet.identifier, statistic);
+    this.props.closeModal();
+  }
+  
+  updateStatistic(statistic: Statistic) {
+    this.props.updateStatistic!(this.props.sheet.identifier, statistic);
     this.props.closeModal();
   }
 
@@ -75,9 +83,13 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.closeModal();
   }
 
-  addStatistic() {
+  openAddStatistic() {
     this.props.showModal((
-      <StatisticForm sheet={this.props.sheet} saveStatistic={this.saveStatistic} cancel={this.cancel} />
+      <StatisticForm 
+        sheet={this.props.sheet} 
+        addStatistic={this.addStatistic} 
+        updateStatistic={this.updateStatistic} 
+        cancel={this.cancel} />
     ));
   }
 
@@ -112,10 +124,10 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           {hasModifiers && <ModifierTable sheet={sheet} modifiers={statistic.modifiers!} />}
 
           <button
-            onClick={event => { event.preventDefault(); this.openEditStatistic(statistic); }}
+            onClick={event => { event.preventDefault(); this.deleteStatistic(statistic); }}
             className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
           <button
-            onClick={event => { event.preventDefault(); this.deleteStatistic(statistic); }}
+            onClick={event => { event.preventDefault(); this.openEditStatistic(statistic); }}
             className="btn btn-outline-primary float-right btn-small d-inline mt-2">Edit</button>
         </td>
       </tr>
@@ -127,7 +139,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     return (
       <SheetPanel
-        onAdd={this.addStatistic}
+        onAdd={this.openAddStatistic}
         title="Statistics"
         className={className}>
 

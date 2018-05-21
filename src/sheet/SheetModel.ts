@@ -170,6 +170,7 @@ export type Statistic = {
 };
 
 export type Modifier = {
+  id: number,
   condition?: string,
   formula?: string,
   source?: string

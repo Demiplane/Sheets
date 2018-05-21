@@ -6,22 +6,30 @@ import EditForm from '../controls/EditForm';
 type StatisticFormProps = {
   sheet: Sheet;
   statistic?: Statistic;
-  saveStatistic: (statistic: Statistic) => void;
+  addStatistic: (statistic: Statistic) => void;
+  updateStatistic: (statistic: Statistic) => void;
   cancel: () => void;
 };
 
 type StatisticFormState = {
   statistic: Statistic;
+  add: boolean;
 };
 
 export class StatisticForm extends React.Component<StatisticFormProps, StatisticFormState> {
+
   constructor(props: StatisticFormProps) {
     super(props);
 
-    this.state = { statistic: Object.assign({}, props.statistic || this.newStatistic()) };
+    const add = !props.statistic;
+
+    this.state = { add, statistic: Object.assign({}, add ? this.newStatistic() : props.statistic) };
 
     this.onChangeName = this.onChangeName.bind(this);
+    this.toModifierRow = this.toModifierRow.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.render = this.render.bind(this);
+    this.onDelete = this.onDelete.bind(this);
   }
 
   newStatistic(): Statistic {
@@ -35,7 +43,20 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
   }
 
   onSave() {
-    this.props.saveStatistic(this.state.statistic);
+    this.state.add
+    ? this.props.addStatistic(this.state.statistic)
+    : this.props.updateStatistic(this.state.statistic);
+  }
+
+  onDelete(modifier: Modifier) {
+    const { statistic } = this.state;
+    const oldModifiers = statistic.modifiers || [];
+    const newModifiers = oldModifiers.filter(old => old.id !== modifier.id);
+    this.setState({
+      statistic: Object.assign(
+        this.state.statistic,
+        { modifiers: newModifiers })
+    });
   }
 
   toModifierRow(modifier: Modifier) {
@@ -68,8 +89,26 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
             placeholder="Enter a formula"
           />
         </td>
+        <td>
+          <button
+            onClick={event => { event.preventDefault(); this.onDelete(modifier); }}
+            className="btn btn-small btn-outline-danger">X</button>
+        </td>
       </tr>
     );
+  }
+
+  onAddNew() {
+    const { statistic } = this.state;
+    const oldModifiers = statistic.modifiers || [];
+    const maxId = Math.max(...oldModifiers.map(old => old.id));
+    const newId = maxId + 1;
+    const newModifiers = [...oldModifiers, { id: newId }];
+    this.setState({
+      statistic: Object.assign(
+        this.state.statistic,
+        { modifiers: newModifiers })
+    });
   }
 
   render() {
@@ -89,18 +128,22 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
           onChange={this.onChangeName}
           placeholder="Enter a name"
         />
-        <table>
+        <table className="table">
           <thead>
             <tr>
               <th>Condition</th>
               <th>Source</th>
               <th>Formula</th>
+              <th />
             </tr>
           </thead>
           <tbody>
             {statistic.modifiers && statistic.modifiers.map(this.toModifierRow)}
           </tbody>
         </table>
+        <button
+          onClick={event => { event.preventDefault(); this.onAddNew(); }}
+          className="btn btn-small btn-outline-primary btn-block mt-2 mb-2">+</button>
       </EditForm>
     );
   }

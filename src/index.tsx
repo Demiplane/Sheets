@@ -1,7 +1,6 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import { BrowserRouter } from 'react-router-dom';
-import { loadSheets } from './sheet/sheetActions';
 import ManageSheetPage from './sheetManage/ManageSheetPage';
 import { Provider } from 'react-redux';
 import { SheetApi, MockSheetApi } from './sheet/SheetApi';
@@ -15,6 +14,7 @@ import HomePage from './home/HomePage';
 import NotFoundPage from './error/NotFoundPage';
 import registerServiceWorker from './registerServiceWorker';
 import SheetsPage from './sheetList/SheetsPage';
+import { loadSheets } from './sheetActions/loadSheets';
 
 const sheetApi: SheetApi = new MockSheetApi();
 const store = configureStore();

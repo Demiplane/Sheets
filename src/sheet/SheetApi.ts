@@ -15,37 +15,37 @@ export class MockSheetApi implements SheetApi {
       identifier: 'some guid',
       name: 'Roland of Gilead',
       statistics: [
-        { name: 'fighter level', modifiers: [{ formula: '5' }] },
+        { name: 'fighter level', modifiers: [{ id: 1, formula: '5' }] },
         {
           name: 'example base with conditional',
           modifiers: [
-            { formula: '5' },
-            { source: 'example', condition: 'long is kranky', formula: '5' }
+            { id: 1, formula: '5' },
+            { id: 2, source: 'example', condition: 'long is kranky', formula: '5' }
           ]
         },
         {
           name: 'example base with conditional two',
           modifiers: [
-            { formula: '7' },
-            { source: 'example', condition: 'long is kranky', formula: '5' }
+            { id: 1, formula: '7' },
+            { id: 2, source: 'example', condition: 'long is kranky', formula: '5' }
           ]
         },
-        { name: 'wizard level', modifiers: [{ formula: '3' }] },
-        { name: 'favored class bonus', modifiers: [{ source: 'race', formula: '[fighter level]' }] },
-        { name: 'total level', modifiers: [{ formula: '[fighter level] + [wizard level]' }] },
+        { name: 'wizard level', modifiers: [{ id: 1, formula: '3' }] },
+        { name: 'favored class bonus', modifiers: [{ id: 1, source: 'race', formula: '[fighter level]' }] },
+        { name: 'total level', modifiers: [{ id: 1, formula: '[fighter level] + [wizard level]' }] },
         {
           name: 'base attack bonus', modifiers: [
-            { formula: '[fighter level]' },
-            { formula: '[wizard level] / 2' }
+            { id: 1, formula: '[fighter level]' },
+            { id: 2, formula: '[wizard level] / 2' }
           ]
         },
         {
           name: 'hit point maximum',
           modifiers: [
-            { source: 'constitution', formula: '[constitution modifier] * [total level]' },
-            { formula: '([fighter level] - 1) * 5.5 + 10' },
-            { formula: '[wizard level] * 3.5' },
-            { formula: '[favored class bonus]' },
+            { id: 1, source: 'constitution', formula: '[constitution modifier] * [total level]' },
+            { id: 2, formula: '([fighter level] - 1) * 5.5 + 10' },
+            { id: 3, formula: '[wizard level] * 3.5' },
+            { id: 4, formula: '[favored class bonus]' },
           ],
           resource: {
             name: 'hit points',
@@ -53,24 +53,24 @@ export class MockSheetApi implements SheetApi {
             recharge: [{ name: 'rest', restorationFormulae: ['[hit point maximum]'] }]
           }
         },
-        { name: 'constitution', modifiers: [{ formula: '14' }] },
+        { name: 'constitution', modifiers: [{ id: 1, formula: '14' }] },
         {
           name: 'constitution modifier', modifiers: [
-            { source: 'constitution', formula: '([constitution] - 10) / 2' }]
+            { id: 1, source: 'constitution', formula: '([constitution] - 10) / 2' }]
         },
-        { name: 'example', modifiers: [{ formula: 'min(-1, 1)' }] },
-        { name: 'dexterity', modifiers: [{ formula: '14' }] },
+        { name: 'example', modifiers: [{ id: 1, formula: 'min(-1, 1)' }] },
+        { name: 'dexterity', modifiers: [{ id: 1, formula: '14' }] },
         {
           name: 'dexterity modifier',
-          modifiers: [{ source: 'dexterity', formula: '([dexterity] - 10) / 2' }]
+          modifiers: [{ id: 1, source: 'dexterity', formula: '([dexterity] - 10) / 2' }]
         },
         {
           name: 'gun attack bonus', modifiers: [
-            { source: 'weapon focus', formula: '1' },
-            { formula: '[base attack bonus]' },
-            { formula: '[dexterity modifier]' },
-            { source: 'point blank shot', condition: 'target is within 30ft.', formula: '1' },
-            { condition: 'target is behind cover', formula: '-2' }
+            { id: 1, source: 'weapon focus', formula: '1' },
+            { id: 2, formula: '[base attack bonus]' },
+            { id: 3, formula: '[dexterity modifier]' },
+            { id: 4, source: 'point blank shot', condition: 'target is within 30ft.', formula: '1' },
+            { id: 5, condition: 'target is behind cover', formula: '-2' }
           ]
         }
       ],
