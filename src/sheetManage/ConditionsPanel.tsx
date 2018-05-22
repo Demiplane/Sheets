@@ -1,35 +1,17 @@
 import * as React from 'react';
 import Sheet, { getConditions, conditionIsActive } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
-import { connect } from 'react-redux';
-import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
-import { distinct } from '../core/distinct';
-import RootState from '../core/RootState';
 
-type ConditionsPanelProps = ConnectedSheetProps & {
+type ConditionsPanelProps = {
   className?: string,
-  sheet: Sheet
+  sheet: Sheet,
+  activateCondition: (condition: string) => void;
+  inactivateCondition: (condition: string) => void;
 };
 
 class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: string[] }> {
   constructor(props: ConditionsPanelProps) {
     super(props);
-  }
-
-  activateCondition(condition: string) {
-    const sheet = Object.assign({}, this.props.sheet);
-
-    sheet.conditions = distinct(sheet.conditions.concat(condition));
-
-    this.props.updateSheet!(sheet);
-  }
-
-  inactivateCondition(condition: string) {
-    const sheet = Object.assign({}, this.props.sheet);
-
-    sheet.conditions = sheet.conditions.filter(c => c !== condition);
-
-    this.props.updateSheet!(sheet);
   }
 
   toRowPair = (sheet: Sheet, condition: string) => {
@@ -43,7 +25,7 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
             className={'btn btn-small ' + (isActive ? 'btn-primary' : '')}
             onClick={event => {
               event.preventDefault();
-              isActive ? this.inactivateCondition(condition) : this.activateCondition(condition);
+              isActive ? this.props.inactivateCondition(condition) : this.props.activateCondition(condition);
             }}>
             {isActive ? 'ACTIVE' : 'INACTIVE'}
           </button>
@@ -73,8 +55,4 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
   }
 }
 
-function mapStateToProps(state: RootState, ownProps: ConditionsPanelProps): ConditionsPanelProps {
-  return ownProps;
-}
-
-export default connect(mapStateToProps, mapSheetActions)(ConditionsPanel);
+export default ConditionsPanel;

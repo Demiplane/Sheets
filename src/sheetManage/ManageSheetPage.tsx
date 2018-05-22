@@ -5,8 +5,9 @@ import RootState from '../core/RootState';
 import { RouteComponentProps } from 'react-router-dom';
 import SheetForm from './SheetForm';
 import Modal from '../controls/Modal';
+import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
 
-type ManageSheetPageProps = {
+type ManageSheetPageProps = ConnectedSheetProps & {
   sheet: Sheet;
 } & RouteComponentProps<{ id: string }>;
 
@@ -43,9 +44,18 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
   }
 
   render() {
+    const { sheet } = this.props;
+
     return (
       <div>
         <SheetForm
+          addStatistic={s => this.props.addStatistic!(sheet.identifier, s)}
+          updateStatistic={s => this.props.updateStatistic!(sheet.identifier, s)}
+          deleteStatistic={s => this.props.deleteStatistic!(sheet.identifier, s)}
+
+          activateCondition={c => this.props.activateCondition!(sheet.identifier, c)}
+          inactivateCondition={c => this.props.inactivateCondition!(sheet.identifier, c)}
+
           sheet={this.props.sheet}
           showModal={this.openModal}
           closeModal={this.closeModal} />
@@ -62,4 +72,4 @@ const mapStateToProps = (state: RootState, ownProps: ManageSheetPageProps): Mana
   return Object.assign({}, ownProps, { sheet: sheets.length > 0 ? sheets[0] : undefined });
 };
 
-export default connect(mapStateToProps)(ManageSheetPage);
+export default connect(mapStateToProps, mapSheetActions)(ManageSheetPage);

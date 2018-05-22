@@ -1,4 +1,4 @@
-import { Sheet } from '../sheet/SheetModel';
+import { Sheet, Statistic } from '../sheet/SheetModel';
 import * as React from 'react';
 import AbilitiesPanel from './AbilitiesPanel';
 import FluidPage from '../controls/FluidPage';
@@ -12,10 +12,19 @@ type SheetFormProps = {
   sheet: Sheet;
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
+
+  activateCondition: (condition: string) => void;
+  inactivateCondition: (condition: string) => void;
+
+  updateStatistic: (statistic: Statistic) => void;
+  addStatistic: (statistic: Statistic) => void;
+  deleteStatistic: (statistic: Statistic) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
-  const { sheet, showModal, closeModal } = props;
+  const { sheet, showModal, closeModal,
+    addStatistic, updateStatistic, deleteStatistic,
+    activateCondition, inactivateCondition } = props;
 
   return sheet ?
     (
@@ -34,6 +43,9 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
           <div className="row mb-4">
             <div className="col-6">
               <StatisticsPanel
+                addStatistic={addStatistic}
+                updateStatistic={updateStatistic}
+                deleteStatistic={deleteStatistic}
                 sheet={sheet}
                 showModal={showModal}
                 closeModal={closeModal}
@@ -44,6 +56,8 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
             <div className="col-6">
               <ResourcesPanel sheet={sheet} />
               <ConditionsPanel
+                activateCondition={activateCondition}
+                inactivateCondition={inactivateCondition}
                 sheet={sheet} />
               <ActionsPanel sheet={sheet} />
               <AbilitiesPanel sheet={sheet} />

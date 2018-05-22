@@ -2,14 +2,16 @@ import * as React from 'react';
 import Sheet, { Statistic } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import StatisticForm from './StatisticForm';
-import RootState from '../core/RootState';
-import { connect } from 'react-redux';
-import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
 import StatisticsPanelRow from './StatisticsPanelRow';
 
-type StatisticsPanelProps = ConnectedSheetProps & {
+type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
+
+  updateStatistic: (statistic: Statistic) => void;
+  addStatistic: (statistic: Statistic) => void;
+  deleteStatistic: (statistic: Statistic) => void;
+
   className?: string,
   sheet: Sheet
 };
@@ -22,10 +24,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     this.cancel = this.cancel.bind(this);
     this.openAddStatistic = this.openAddStatistic.bind(this);
-    this.addStatistic = this.addStatistic.bind(this);
-    this.updateStatistic = this.updateStatistic.bind(this);
     this.openEditStatistic = this.openEditStatistic.bind(this);
-    this.deleteStatistic = this.deleteStatistic.bind(this);
     this.onExpand = this.onExpand.bind(this);
   }
 
@@ -34,32 +33,11 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
       <StatisticForm
         statistic={statistic}
         sheet={this.props.sheet}
-        addStatistic={this.addStatistic}
-        updateStatistic={this.updateStatistic}
+        addStatistic={this.props.addStatistic}
+        updateStatistic={this.props.updateStatistic}
         cancel={this.cancel}
       />
     ));
-  }
-
-  deleteStatistic(statistic: Statistic) {
-    const oldStatistics = this.props.sheet.statistics || [];
-    const updatedSheet = Object.assign(
-      {},
-      this.props.sheet,
-      {
-        statistics: oldStatistics.filter(s => s.name !== statistic.name)
-      });
-    this.props.updateSheet!(updatedSheet);
-  }
-
-  addStatistic(statistic: Statistic) {
-    this.props.addStatistic!(this.props.sheet.identifier, statistic);
-    this.props.closeModal();
-  }
-
-  updateStatistic(statistic: Statistic) {
-    this.props.updateStatistic!(this.props.sheet.identifier, statistic);
-    this.props.closeModal();
   }
 
   cancel() {
@@ -70,8 +48,8 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.showModal((
       <StatisticForm
         sheet={this.props.sheet}
-        addStatistic={this.addStatistic}
-        updateStatistic={this.updateStatistic}
+        addStatistic={this.props.addStatistic}
+        updateStatistic={this.props.updateStatistic}
         cancel={this.cancel} />
     ));
   }
@@ -104,7 +82,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
                 statistic={s}
                 sheet={sheet}
                 editStatistic={this.openEditStatistic}
-                deleteStatistic={this.deleteStatistic}
+                deleteStatistic={this.props.deleteStatistic}
                 expand={this.onExpand}
                 expanded={this.state.expandedStatistic === s.name} />
             ))}
@@ -117,8 +95,4 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   }
 }
 
-function mapStateToProps(state: RootState, ownProps: StatisticsPanelProps) {
-  return ownProps;
-}
-
-export default connect(mapStateToProps, mapSheetActions)(StatisticsPanel);
+export default StatisticsPanel;
