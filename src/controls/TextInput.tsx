@@ -4,7 +4,7 @@ import combineClasses from './combineClasses';
 type TextInputProps = {
   name?: string,
   label?: string,
-  onChange?: (event: React.FormEvent<HTMLInputElement>) => void,
+  onChange: (newValue: string) => void,
   placeholder?: string,
   value?: string,
   error?: string,
@@ -30,7 +30,7 @@ const TextInput: React.StatelessComponent<TextInputProps> =
             className="form-control"
             placeholder={placeholder}
             value={value}
-            onChange={onChange} />
+            onChange={event => { event.preventDefault(); onChange(event.currentTarget.value); }} />
           {error && <div className="alert alert-danger">{error}</div>}
         </div>
       </div>

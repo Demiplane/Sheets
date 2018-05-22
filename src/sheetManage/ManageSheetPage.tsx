@@ -18,7 +18,6 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
   constructor(props: ManageSheetPageProps) {
     super(props);
 
-    this.onSave = this.onSave.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
 
@@ -43,16 +42,11 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
     this.setState({ modal: undefined });
   }
 
-  onSave(event: React.FormEvent<HTMLInputElement>) {
-    alert('saved!');
-  }
-
   render() {
     return (
       <div>
         <SheetForm
           sheet={this.props.sheet}
-          onSave={this.onSave}
           showModal={this.openModal}
           closeModal={this.closeModal} />
         {this.state.modal}

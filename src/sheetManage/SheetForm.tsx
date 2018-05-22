@@ -6,14 +6,12 @@ import InventoryPanel from './InventoryPanel';
 import ResourcesPanel from './ResourcesPanel';
 import StatisticsPanel from './StatisticsPanel';
 import ActionsPanel from './ActionsPanel';
-import TextInput from '../controls/TextInput';
 import ConditionsPanel from './ConditionsPanel';
 
 type SheetFormProps = {
   sheet: Sheet;
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
-  onSave: (event: React.FormEvent<HTMLInputElement>) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
@@ -22,40 +20,36 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
   return sheet ?
     (
       <div>
-        <form className="form-inline" >
-          <FluidPage>
-            <div className="row justify-content-between pl-4 pr-4">
-              <TextInput
-                name="sheetName"
-                label="Name"
-                value={sheet.name}
-                error=""
-                onChange={props.onSave}
-                placeholder="Enter a name"
+        <FluidPage>
+          <div className="pl-2 pr-2 d-flex align-items-center">
+            <h1>{sheet.name}</h1>
+            <button className="btn btn-link btn-small text-muted mr-auto"
+            >(rename)</button>
+            <div className="align-middle">
+              <button className="btn btn-small btn-primary"
+              >Save and Close</button>
+            </div>
+          </div>
+
+          <div className="row mb-4">
+            <div className="col-6">
+              <StatisticsPanel
+                sheet={sheet}
+                showModal={showModal}
+                closeModal={closeModal}
               />
-              <button className="btn btn-primary">Save and Close</button>
+              <InventoryPanel sheet={sheet} />
             </div>
 
-            <div className="row mb-4">
-              <div className="col-6">
-                <StatisticsPanel
-                  sheet={sheet}
-                  showModal={showModal}
-                  closeModal={closeModal}
-                />
-                <InventoryPanel sheet={sheet} />
-              </div>
-
-              <div className="col-6">
-                <ResourcesPanel sheet={sheet} />
-                <ConditionsPanel
-                  sheet={sheet} />
-                <ActionsPanel sheet={sheet} />
-                <AbilitiesPanel sheet={sheet} />
-              </div>
+            <div className="col-6">
+              <ResourcesPanel sheet={sheet} />
+              <ConditionsPanel
+                sheet={sheet} />
+              <ActionsPanel sheet={sheet} />
+              <AbilitiesPanel sheet={sheet} />
             </div>
-          </FluidPage>
-        </form>
+          </div>
+        </FluidPage>
       </div >
     )
     : <FluidPage><p className="text-center">Loading...</p></FluidPage>;

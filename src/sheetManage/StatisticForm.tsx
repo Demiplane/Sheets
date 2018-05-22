@@ -38,14 +38,14 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
     };
   }
 
-  onChangeName(event: React.FormEvent<HTMLInputElement>) {
-    this.setState(Object.assign(this.state, { name: event.currentTarget.value }));
+  onChangeName(newValue: string) {
+    this.setState(Object.assign(this.state, { name: newValue }));
   }
 
   onSave() {
     this.state.add
-    ? this.props.addStatistic(this.state.statistic)
-    : this.props.updateStatistic(this.state.statistic);
+      ? this.props.addStatistic(this.state.statistic)
+      : this.props.updateStatistic(this.state.statistic);
   }
 
   onDelete(modifier: Modifier) {

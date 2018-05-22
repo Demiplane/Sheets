@@ -1,7 +1,7 @@
 import * as React from 'react';
 import combineClasses from './combineClasses';
 
-const tooBigDescriptionLimit = 50;
+const tooBigDescriptionLimit = 30;
 
 type DescriptionBoxProps = {
   className?: string,
@@ -45,10 +45,24 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
         }
       }
 
+      if (cache.length >= limit) {
+        small += cache;
+        break;
+      }
+
       cache += character;
     }
 
-    small += small.length > 0 ? small.endsWith('.') ? '..' : '...' : '';
+    small += 
+      small.length > 0 
+      ? small.endsWith('...') 
+        ? '' 
+        : small.endsWith('..') 
+          ? '.' 
+          : small.endsWith('.') 
+            ? '..' 
+          : '...' 
+        : '';
 
     return small;
   }
@@ -71,7 +85,7 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
   renderCollapsed(description: string) {
     return (
       <div className={combineClasses(this.props.className, '')}>
-        <p className="d-inline pr-2">{this.smallify(tooBigDescriptionLimit, description)}</p>
+        <p className="d-inline pr-2 d-inline">{this.smallify(tooBigDescriptionLimit, description)}</p>
         <button className="btn btn-link d-inline float-right" onClick={this.show}>Show</button>
       </div>
     );
