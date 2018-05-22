@@ -60,12 +60,22 @@
   justify-content: center;
 }
 
-@keyframes refreshStatistic {
+@keyframes refreshPositiveStatistic {
   from {background-color: lightgreen;}
   to {background-color: white;}
 }
 
-.flash-when-updated {
-  animation-name: refreshStatistic;
+.flash-positive-when-updated {
+  animation-name: refreshPositiveStatistic;
+  animation-duration: 1s;
+}
+
+@keyframes refreshNegativeStatistic {
+  from {background-color: pink;}
+  to {background-color: white;}
+}
+
+.flash-negative-when-updated {
+  animation-name: refreshNegativeStatistic;
   animation-duration: 1s;
 }

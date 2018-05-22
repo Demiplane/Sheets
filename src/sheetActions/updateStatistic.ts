@@ -2,7 +2,7 @@ import { Statistic } from '../sheet/SheetModel';
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import { add } from '../sheet/sheetReducer';
+import { add } from '../sheet/sheetActions';
 
 // UPDATE STATISTIC
 export const UPDATE_STATISTIC_SUCCESS = 'UPDATE_STATISTIC' + SHEET_SUCCESS_SUFFIX;

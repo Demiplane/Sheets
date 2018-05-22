@@ -2,7 +2,7 @@ import Sheet from '../sheet/SheetModel';
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import { add } from '../sheet/sheetReducer';
+import { add } from '../sheet/sheetActions';
 
 // CREATE
 export const CREATE_SHEET_SUCCESS = 'CREATE' + SHEET_SUCCESS_SUFFIX;

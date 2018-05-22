@@ -7,7 +7,7 @@ import StatisticForm from './StatisticForm';
 import Flashy from '../controls/Flashy';
 import RootState from '../core/RootState';
 import { connect } from 'react-redux';
-import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetActions';
+import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
 
 type StatisticsPanelProps = ConnectedSheetProps & {
   showModal: (modalElement: JSX.Element) => void;
@@ -113,7 +113,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           {hasConditionals && <small className="text-muted pl-2 float-right">(conditional)</small>}
         </td>
         <td className="text-center">
-          <Flashy display={calculated.toString()} />
+          <Flashy value={calculated} />
         </td>
       </tr>
     ),

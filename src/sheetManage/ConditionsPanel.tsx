@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sheet, { getConditions, conditionIsActive } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import { connect } from 'react-redux';
-import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetActions';
+import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
 import { distinct } from '../core/distinct';
 import RootState from '../core/RootState';
 
@@ -36,7 +36,7 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
     const isActive = conditionIsActive(sheet, condition);
 
     return (
-      <tr>
+      <tr key="condition">
         <td>{condition}</td>
         <td className="text-center">
           <button

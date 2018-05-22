@@ -1,7 +1,7 @@
 import { BaseAction } from '../core/BaseAction';
 import Sheet from '../sheet/SheetModel';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import { add } from '../sheet/sheetReducer';
+import { add } from '../sheet/sheetActions';
 
 // LOAD
 export const LOAD_SHEET_SUCCESS = 'LOAD' + SHEET_SUCCESS_SUFFIX;

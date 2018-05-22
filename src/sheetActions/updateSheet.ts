@@ -2,7 +2,7 @@ import { BaseAction } from '../core/BaseAction';
 import Sheet from '../sheet/SheetModel';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import { add } from '../sheet/sheetReducer';
+import { add } from '../sheet/sheetActions';
 
 // UPDATE
 export const UPDATE_SHEET_SUCCESS = 'UPDATE' + SHEET_SUCCESS_SUFFIX;
