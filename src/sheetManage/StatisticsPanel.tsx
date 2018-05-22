@@ -1,13 +1,11 @@
 import * as React from 'react';
-import Sheet, { calculateValue, Statistic, statisticIsBase, statisticHasConditionals } from '../sheet/SheetModel';
+import Sheet, { Statistic } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
-import ModifierTable from './ModifierTable';
-import { FormEvent } from 'react';
 import StatisticForm from './StatisticForm';
-import Flashy from '../controls/Flashy';
 import RootState from '../core/RootState';
 import { connect } from 'react-redux';
 import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
+import StatisticsPanelRow from './StatisticsPanelRow';
 
 type StatisticsPanelProps = ConnectedSheetProps & {
   showModal: (modalElement: JSX.Element) => void;
@@ -16,34 +14,19 @@ type StatisticsPanelProps = ConnectedSheetProps & {
   sheet: Sheet
 };
 
-export class StatisticsPanel extends React.Component<StatisticsPanelProps, { expanded: string[] }> {
+export class StatisticsPanel extends React.Component<StatisticsPanelProps, { expandedStatistic: string }> {
   constructor(props: StatisticsPanelProps) {
     super(props);
 
-    this.state = { expanded: [] };
+    this.state = { expandedStatistic: '' };
 
     this.cancel = this.cancel.bind(this);
-    this.onStatisticExpandCollapseClick = this.onStatisticExpandCollapseClick.bind(this);
     this.openAddStatistic = this.openAddStatistic.bind(this);
     this.addStatistic = this.addStatistic.bind(this);
     this.updateStatistic = this.updateStatistic.bind(this);
     this.openEditStatistic = this.openEditStatistic.bind(this);
     this.deleteStatistic = this.deleteStatistic.bind(this);
-  }
-
-  statisticIsExpanded(statisticName: string) {
-    return this.state.expanded.indexOf(statisticName) >= 0;
-  }
-
-  onStatisticExpandCollapseClick(event: FormEvent<Element>, statisticName: string) {
-    event.preventDefault();
-
-    if (this.statisticIsExpanded(statisticName)) {
-      this.setState({ expanded: this.state.expanded.filter(e => e !== statisticName) });
-    } else {
-      // this.setState({ expanded: this.state.expanded.concat(statisticName) });
-      this.setState({ expanded: [statisticName] });
-    }
+    this.onExpand = this.onExpand.bind(this);
   }
 
   openEditStatistic(statistic: Statistic) {
@@ -73,7 +56,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.addStatistic!(this.props.sheet.identifier, statistic);
     this.props.closeModal();
   }
-  
+
   updateStatistic(statistic: Statistic) {
     this.props.updateStatistic!(this.props.sheet.identifier, statistic);
     this.props.closeModal();
@@ -85,53 +68,16 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
   openAddStatistic() {
     this.props.showModal((
-      <StatisticForm 
-        sheet={this.props.sheet} 
-        addStatistic={this.addStatistic} 
-        updateStatistic={this.updateStatistic} 
+      <StatisticForm
+        sheet={this.props.sheet}
+        addStatistic={this.addStatistic}
+        updateStatistic={this.updateStatistic}
         cancel={this.cancel} />
     ));
   }
 
-  toRowPair = (sheet: Sheet, statistic: Statistic) => {
-    const hasModifiers = statistic.modifiers && statistic.modifiers.length > 0;
-    const detailRowName = statistic.name.replace(' ', '-') + '-detail-row';
-
-    const hasConditionals = statisticHasConditionals(statistic);
-    const showDetail = this.statisticIsExpanded(statistic.name);
-    const calculated = calculateValue(sheet, statistic);
-    const isBase = statisticIsBase(sheet, statistic);
-
-    return [(
-      <tr
-        className={'clickable' + (showDetail ? ' selected' : '')}
-        key={statistic.name}
-        onClick={event => this.onStatisticExpandCollapseClick(event, statistic.name)}>
-        <td>
-          {statistic.name}
-          {isBase && <small className="text-muted pl-2 float-right">(base)</small>}
-          {hasConditionals && <small className="text-muted pl-2 float-right">(conditional)</small>}
-        </td>
-        <td className="text-center">
-          <Flashy value={calculated} />
-        </td>
-      </tr>
-    ),
-    showDetail && (
-      <tr key={statistic.name + 'detail'} id={detailRowName} className="statistics-detail">
-        <td colSpan={2} className="p-2 pb-4">
-          {hasModifiers && <h6 className="m-2">modifiers</h6>}
-          {hasModifiers && <ModifierTable sheet={sheet} modifiers={statistic.modifiers!} />}
-
-          <button
-            onClick={event => { event.preventDefault(); this.deleteStatistic(statistic); }}
-            className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
-          <button
-            onClick={event => { event.preventDefault(); this.openEditStatistic(statistic); }}
-            className="btn btn-outline-primary float-right btn-small d-inline mt-2">Edit</button>
-        </td>
-      </tr>
-    )];
+  onExpand(statistic: Statistic) {
+    this.setState({ expandedStatistic: statistic.name });
   }
 
   render() {
@@ -153,7 +99,15 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           </thead>
 
           <tbody>
-            {sheet.statistics && sheet.statistics.map(s => this.toRowPair(sheet, s))}
+            {sheet.statistics && sheet.statistics.map(s => (
+              <StatisticsPanelRow
+                statistic={s}
+                sheet={sheet}
+                editStatistic={this.openEditStatistic}
+                deleteStatistic={this.deleteStatistic}
+                expand={this.onExpand}
+                expanded={this.state.expandedStatistic === s.name} />
+            ))}
           </tbody>
 
         </table>
