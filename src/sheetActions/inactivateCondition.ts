@@ -3,7 +3,6 @@ import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
 import { add } from '../sheet/sheetActions';
 
-// INACTIVATE CONDITION
 export const INACTIVATE_CONDITION_SHEET_SUCCESS = 'INACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
 export type InactivateConditionAction = BaseAction & {
   sheetIdentifier: number,

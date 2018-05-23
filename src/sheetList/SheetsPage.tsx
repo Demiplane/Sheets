@@ -33,9 +33,11 @@ export class SheetsPage extends React.Component<SheetsPageProps> {
             </tr>
           </thead>
           <tbody>
-            {this.props.sheets.map(sheet => (
-              <SheetRow key={sheet.id} sheet={sheet} onSelected={this.onSelect} />
-            ))}
+            {this.props.sheets
+              .sort((l, r) => l.name.toLowerCase() > r.name.toLowerCase() ? 1 : -1)
+              .map(sheet => (
+                <SheetRow key={sheet.id} sheet={sheet} onSelected={this.onSelect} />
+              ))}
           </tbody>
         </table>
       </Page>

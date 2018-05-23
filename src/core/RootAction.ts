@@ -8,6 +8,9 @@ import { DeleteStatisticAction } from '../sheetActions/deleteStatistic';
 import { AddStatisticAction } from '../sheetActions/addStatistic';
 import { UpdateStatisticAction } from '../sheetActions/updateStatistic';
 import { RenameSheetAction } from '../sheetActions/renameSheet';
+import { UpdateItemAction } from '../sheetActions/updateItem';
+import { AddItemAction } from '../sheetActions/addItem';
+import { DeleteItemAction } from '../sheetActions/deleteItem';
 
 type RootAction =
   CreateSheetAction |
@@ -18,6 +21,10 @@ type RootAction =
 
   ActivateConditionAction |
   InactivateConditionAction |
+
+  UpdateItemAction |
+  AddItemAction |
+  DeleteItemAction |
 
   DeleteStatisticAction |
   UpdateStatisticAction |

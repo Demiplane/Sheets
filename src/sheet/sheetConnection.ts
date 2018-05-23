@@ -1,5 +1,5 @@
 import { Dispatch, AnyAction } from 'redux';
-import Sheet, { Statistic } from '../sheet/SheetModel';
+import Sheet, { Statistic, Item } from '../sheet/SheetModel';
 import { activateCondition } from '../sheetActions/activateCondition';
 import { inactivateCondition } from '../sheetActions/inactivateCondition';
 import { updateStatistic } from '../sheetActions/updateStatistic';
@@ -10,13 +10,22 @@ import { updateSheet } from '../sheetActions/updateSheet';
 import { deleteSheet } from '../sheetActions/deleteSheet';
 import { loadSheets } from '../sheetActions/loadSheets';
 import { renameSheet } from '../sheetActions/renameSheet';
+import { addItem } from '../sheetActions/addItem';
+import { updateItem } from '../sheetActions/updateItem';
+import { deleteItem } from '../sheetActions/deleteItem';
 
 export type ConnectedSheetProps = {
   activateCondition?: (sheetIdentifier: number, condition: string) => void;
   inactivateCondition?: (sheetIdentifier: number, condition: string) => void;
+
   updateStatistic?: (sheetIdentifier: number, statistic: Statistic) => void;
   addStatistic?: (sheetIdentifier: number, statistic: Statistic) => void;
   deleteStatistic?: (sheetIdentifier: number, statistic: Statistic) => void;
+
+  addItem?: (sheetIdentifier: number, item: Item) => void;
+  updateItem?: (sheetIdentifier: number, item: Item) => void;
+  deleteItem?: (sheetIdentifier: number, itemIdentifier: number) => void;
+
   createSheet?: (sheet: Sheet) => void;
   updateSheet?: (sheet: Sheet) => void;
   deleteSheet?: (sheetIdentifier: number) => void;
@@ -30,17 +39,31 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
       dispatch(activateCondition(sheetIdentifier, condition)),
     inactivateCondition: (sheetIdentifier: number, condition: string) =>
       dispatch(inactivateCondition(sheetIdentifier, condition)),
+
     updateStatistic: (sheetIdentifier: number, statistic: Statistic) =>
       dispatch(updateStatistic(sheetIdentifier, statistic)),
     addStatistic: (sheetIdentifier: number, statistic: Statistic) =>
       dispatch(addStatistic(sheetIdentifier, statistic)),
     deleteStatistic: (sheetIdentifier: number, statistic: Statistic) =>
       dispatch(deleteStatistic(sheetIdentifier, statistic)),
-    createSheet: (sheet: Sheet) => dispatch(createSheet(sheet)),
-    updateSheet: (sheet: Sheet) => dispatch(updateSheet(sheet)),
-    deleteSheet: (sheetIdentifier: number) => dispatch(deleteSheet(sheetIdentifier)),
-    loadSheets: (sheets: Sheet[]) => dispatch(loadSheets(sheets)),
-    renameSheet: (sheetIdentifier: number, name: string) => dispatch(renameSheet(sheetIdentifier, name))
+
+    createSheet: (sheet: Sheet) =>
+      dispatch(createSheet(sheet)),
+    updateSheet: (sheet: Sheet) =>
+      dispatch(updateSheet(sheet)),
+    deleteSheet: (sheetIdentifier: number) =>
+      dispatch(deleteSheet(sheetIdentifier)),
+    loadSheets: (sheets: Sheet[]) =>
+      dispatch(loadSheets(sheets)),
+    renameSheet: (sheetIdentifier: number, name: string) =>
+      dispatch(renameSheet(sheetIdentifier, name)),
+
+    addItem: (sheetIdentifier: number, item: Item) =>
+      dispatch(addItem(sheetIdentifier, item)),
+    updateItem: (sheetIdentifier: number, item: Item) =>
+      dispatch(updateItem(sheetIdentifier, item)),
+    deleteItem: (sheetIdentifier: number, itemIdentifier: number) =>
+      dispatch(deleteItem(sheetIdentifier, itemIdentifier))
   };
 }
 

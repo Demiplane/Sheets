@@ -4,7 +4,6 @@ import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
 import { add } from '../sheet/sheetActions';
 import { Statistic } from '../sheet/SheetModel';
 
-// DELETE STATISTIC
 export const DELETE_STATISTIC_SUCCESS = 'DELETE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
 export type DeleteStatisticAction = BaseAction & {
   sheetIdentifier: number,

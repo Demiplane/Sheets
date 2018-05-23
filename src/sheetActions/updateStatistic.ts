@@ -4,7 +4,6 @@ import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
 import { add } from '../sheet/sheetActions';
 
-// UPDATE STATISTIC
 export const UPDATE_STATISTIC_SUCCESS = 'UPDATE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
 export type UpdateStatisticAction = BaseAction & {
   sheetIdentifier: number,
@@ -15,6 +14,7 @@ export function updateStatistic(sheetIdentifier: number, statistic: Statistic): 
 }
 export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticAction, state: SheetState) {
   const { sheetIdentifier, statistic } = updateStatisticAction;
+  
   const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.id === sheetIdentifier));
   let oldStatistics = sheetToUpdate.statistics || [];
   const oldStatistic = oldStatistics.find(o => o.id === statistic.id);

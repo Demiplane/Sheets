@@ -168,7 +168,7 @@ export type Item = {
   id: number;
   name: string;
   description?: string;
-  stock?: number;
+  stock: number;
 };
 
 export type Ability = {

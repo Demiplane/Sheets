@@ -4,7 +4,6 @@ import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
 import { add } from '../sheet/sheetActions';
 
-// UPDATE
 export const UPDATE_SHEET_SUCCESS = 'UPDATE' + SHEET_SUCCESS_SUFFIX;
 export type UpdateSheetAction = BaseAction & {
   sheet: Sheet

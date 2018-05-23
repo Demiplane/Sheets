@@ -4,7 +4,6 @@ import { distinct } from '../core/distinct';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
 import { add } from '../sheet/sheetActions';
 
-// ACTIVATE CONDITION
 export const ACTIVATE_CONDITION_SHEET_SUCCESS = 'ACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
 export type ActivateConditionAction = BaseAction & {
   sheetIdentifier: number,

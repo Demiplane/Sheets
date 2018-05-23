@@ -3,7 +3,6 @@ import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
 import { add } from '../sheet/sheetActions';
 
-// DELETE
 export const DELETE_SHEET_SUCCESS = 'DELETE' + SHEET_SUCCESS_SUFFIX;
 export type DeleteSheetAction = BaseAction & {
   sheetIdentifier: number
