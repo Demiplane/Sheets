@@ -7,12 +7,14 @@ import { InactivateConditionAction } from '../sheetActions/inactivateCondition';
 import { DeleteStatisticAction } from '../sheetActions/deleteStatistic';
 import { AddStatisticAction } from '../sheetActions/addStatistic';
 import { UpdateStatisticAction } from '../sheetActions/updateStatistic';
+import { RenameSheetAction } from '../sheetActions/renameSheet';
 
 type RootAction =
   CreateSheetAction |
   DeleteSheetAction |
   UpdateSheetAction |
   LoadSheetsAction |
+  RenameSheetAction |
 
   ActivateConditionAction |
   InactivateConditionAction |

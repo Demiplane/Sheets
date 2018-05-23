@@ -50,9 +50,12 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
       ? (
         <div>
           <SheetForm
+
             addStatistic={s => this.props.addStatistic!(sheet.id, s)}
             updateStatistic={s => this.props.updateStatistic!(sheet.id, s)}
             deleteStatistic={s => this.props.deleteStatistic!(sheet.id, s)}
+
+            updateSheetName={n => this.props.renameSheet!(sheet.id, n)}
 
             activateCondition={c => this.props.activateCondition!(sheet.id, c)}
             inactivateCondition={c => this.props.inactivateCondition!(sheet.id, c)}
@@ -60,6 +63,7 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
             sheet={sheet}
             showModal={this.openModal}
             closeModal={this.closeModal} />
+            
           {this.state.modal}
         </div>
       )

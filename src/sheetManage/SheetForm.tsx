@@ -7,6 +7,7 @@ import ResourcesPanel from './ResourcesPanel';
 import StatisticsPanel from './StatisticsPanel';
 import ActionsPanel from './ActionsPanel';
 import ConditionsPanel from './ConditionsPanel';
+import { RenameForm } from './RenameForm';
 
 type SheetFormProps = {
   sheet: Sheet;
@@ -16,6 +17,8 @@ type SheetFormProps = {
   activateCondition: (condition: string) => void;
   inactivateCondition: (condition: string) => void;
 
+  updateSheetName: (name: string) => void;
+
   updateStatistic: (statistic: Statistic) => void;
   addStatistic: (statistic: Statistic) => void;
   deleteStatistic: (statistic: Statistic) => void;
@@ -24,6 +27,7 @@ type SheetFormProps = {
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
   const { sheet, showModal, closeModal,
     addStatistic, updateStatistic, deleteStatistic,
+    updateSheetName,
     activateCondition, inactivateCondition } = props;
 
   return sheet ?
@@ -32,9 +36,22 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
         <FluidPage>
           <div className="pl-2 pr-2 d-flex align-items-center">
             <h1>{sheet.name}</h1>
-            <button className="btn btn-link btn-small text-muted mr-auto"
+            <button
+              className="btn btn-link btn-small text-muted mr-auto"
+              onClick={event => {
+                event.preventDefault();
+                showModal((
+                  <RenameForm
+                    name={sheet.name}
+                    header="Rename Sheet"
+                    save={s => { updateSheetName(s); closeModal(); }}
+                    cancel={closeModal}
+                  />
+                ));
+              }}
             >(rename)</button>
-            <div className="align-middle">
+            <div
+              className="align-middle">
               <button className="btn btn-small btn-primary"
               >Save and Close</button>
             </div>

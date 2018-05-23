@@ -9,6 +9,7 @@ import { createSheet } from '../sheetActions/createSheet';
 import { updateSheet } from '../sheetActions/updateSheet';
 import { deleteSheet } from '../sheetActions/deleteSheet';
 import { loadSheets } from '../sheetActions/loadSheets';
+import { renameSheet } from '../sheetActions/renameSheet';
 
 export type ConnectedSheetProps = {
   activateCondition?: (sheetIdentifier: number, condition: string) => void;
@@ -20,6 +21,7 @@ export type ConnectedSheetProps = {
   updateSheet?: (sheet: Sheet) => void;
   deleteSheet?: (sheetIdentifier: number) => void;
   loadSheets?: (sheets: Sheet[]) => void;
+  renameSheet?: (sheetIdentifier: number, name: string) => void;
 };
 
 export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetProps {
@@ -37,7 +39,8 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
     createSheet: (sheet: Sheet) => dispatch(createSheet(sheet)),
     updateSheet: (sheet: Sheet) => dispatch(updateSheet(sheet)),
     deleteSheet: (sheetIdentifier: number) => dispatch(deleteSheet(sheetIdentifier)),
-    loadSheets: (sheets: Sheet[]) => dispatch(loadSheets(sheets))
+    loadSheets: (sheets: Sheet[]) => dispatch(loadSheets(sheets)),
+    renameSheet: (sheetIdentifier: number, name: string) => dispatch(renameSheet(sheetIdentifier, name))
   };
 }
 
