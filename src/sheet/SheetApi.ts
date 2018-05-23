@@ -96,7 +96,12 @@ export class MockSheetApi implements SheetApi {
           description: 'These old worn leather boots are made of deerhide. They probably need to be replaced.'
         },
         { id: 4, name: 'Traveler\'s Clothes', stock: 1 },
-        { id: 5, name: 'Gunna', stock: 1, description: 'In his bag he always seems to have what he needs.' },
+        { id: 5, name: 'Gunna', stock: 1, description: `In his bag he always seems to have what he needs.
+        Something something something something something something something something something something 
+        something something something something something something something something something 
+        something something something something something something something something something 
+        something something something something something something something something something 
+        something something something something something something something something something ` },
         {
           id: 6, name: 'Grow Bag', stock: 1, description: `A magical bag that has the ability to generate coins.
                 Given to Roland by his father, Steven Deschain.` },

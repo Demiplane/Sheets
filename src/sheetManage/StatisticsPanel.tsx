@@ -16,11 +16,11 @@ type StatisticsPanelProps = {
   sheet: Sheet
 };
 
-export class StatisticsPanel extends React.Component<StatisticsPanelProps, { expandedStatistic: string }> {
+export class StatisticsPanel extends React.Component<StatisticsPanelProps, { expandedStatistic: number }> {
   constructor(props: StatisticsPanelProps) {
     super(props);
 
-    this.state = { expandedStatistic: '' };
+    this.state = { expandedStatistic: -1 };
 
     this.cancel = this.cancel.bind(this);
     this.openAddStatistic = this.openAddStatistic.bind(this);
@@ -62,7 +62,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   }
 
   onExpand(statistic: Statistic) {
-    const expandedStatistic = statistic.name === this.state.expandedStatistic ? '' : statistic.name;
+    const expandedStatistic = statistic.id === this.state.expandedStatistic ? -1 : statistic.id;
 
     this.setState({ expandedStatistic });
   }
@@ -88,12 +88,13 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           <tbody>
             {sheet.statistics && sheet.statistics.map(s => (
               <StatisticsPanelRow
+                itemKey={s.id.toString()}
                 statistic={s}
                 sheet={sheet}
                 editStatistic={this.openEditStatistic}
                 deleteStatistic={this.props.deleteStatistic}
-                expand={this.onExpand}
-                expanded={this.state.expandedStatistic === s.name} />
+                expand={() => this.onExpand(s)}
+                expanded={this.state.expandedStatistic === s.id} />
             ))}
           </tbody>
 

@@ -30,7 +30,12 @@ const TextInput: React.StatelessComponent<TextInputProps> =
             className="form-control"
             placeholder={placeholder}
             value={value}
-            onChange={event => { event.preventDefault(); onChange(event.currentTarget.value); }} />
+            onClick={event => event.stopPropagation()}
+            onChange={event => {
+              event.preventDefault();
+              onChange(event.currentTarget.value);
+              event.stopPropagation();
+            }} />
           {error && <div className="alert alert-danger">{error}</div>}
         </div>
       </div>

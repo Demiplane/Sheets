@@ -32,7 +32,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
   const { sheet, showModal, closeModal,
     addStatistic, updateStatistic, deleteStatistic,
     updateSheetName,
-    updateItem,
+    updateItem, addItem, deleteItem,
     activateCondition, inactivateCondition } = props;
 
   return (
@@ -67,13 +67,23 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               addStatistic={addStatistic}
               updateStatistic={updateStatistic}
               deleteStatistic={deleteStatistic}
+
               sheet={sheet}
+
               showModal={showModal}
               closeModal={closeModal}
             />
             <InventoryPanel
+              addItem={addItem}
+              deleteItem={deleteItem}
+              updateItem={updateItem}
+
+              showModal={showModal}
+              closeModal={closeModal}
+
               sheet={sheet}
-              updateItem={updateItem} />
+
+            />
           </div>
 
           <div className="col-6">
@@ -81,7 +91,9 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
             <ConditionsPanel
               activateCondition={activateCondition}
               inactivateCondition={inactivateCondition}
-              sheet={sheet} />
+
+              sheet={sheet}
+            />
             <ActionsPanel sheet={sheet} />
             <AbilitiesPanel sheet={sheet} />
           </div>

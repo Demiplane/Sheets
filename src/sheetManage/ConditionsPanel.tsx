@@ -18,7 +18,7 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
     const isActive = conditionIsActive(sheet, condition);
 
     return (
-      <tr key="condition">
+      <tr key={condition}>
         <td>{condition}</td>
         <td className="text-center">
           <button
