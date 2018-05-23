@@ -18,7 +18,7 @@ export class SheetsPage extends React.Component<SheetsPageProps> {
     this.onSelect = this.onSelect.bind(this);
   }
 
-  onSelect = (identifier: string) => this.props.history.push('sheet/' + identifier);
+  onSelect = (identifier: number) => this.props.history.push('sheet/' + identifier);
 
   render() {
     return (
@@ -34,7 +34,7 @@ export class SheetsPage extends React.Component<SheetsPageProps> {
           </thead>
           <tbody>
             {this.props.sheets.map(sheet => (
-              <SheetRow key={sheet.identifier} sheet={sheet} onSelected={this.onSelect} />
+              <SheetRow key={sheet.id} sheet={sheet} onSelected={this.onSelect} />
             ))}
           </tbody>
         </table>

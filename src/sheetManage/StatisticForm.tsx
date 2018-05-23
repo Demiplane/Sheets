@@ -1,51 +1,41 @@
-import Sheet, { Statistic, Modifier } from '../sheet/SheetModel';
+import Sheet, { Statistic, Modifier, nextId } from '../sheet/SheetModel';
 import * as React from 'react';
 import TextInput from '../controls/TextInput';
 import EditForm from '../controls/EditForm';
 
 type StatisticFormProps = {
   sheet: Sheet;
-  statistic?: Statistic;
-  addStatistic: (statistic: Statistic) => void;
-  updateStatistic: (statistic: Statistic) => void;
+  statistic: Statistic;
+  save: (statistic: Statistic) => void;
   cancel: () => void;
 };
 
 type StatisticFormState = {
   statistic: Statistic;
-  add: boolean;
 };
 
 export class StatisticForm extends React.Component<StatisticFormProps, StatisticFormState> {
-
   constructor(props: StatisticFormProps) {
     super(props);
 
-    const add = !props.statistic;
+    const { statistic } = props;
 
-    this.state = { add, statistic: Object.assign({}, add ? this.newStatistic() : props.statistic) };
+    this.state = { statistic: Object.assign({}, statistic) };
 
     this.onChangeName = this.onChangeName.bind(this);
     this.toModifierRow = this.toModifierRow.bind(this);
     this.onSave = this.onSave.bind(this);
     this.render = this.render.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.updateName = this.updateName.bind(this);
   }
 
-  newStatistic(): Statistic {
-    return {
-      name: ''
-    };
-  }
-
-  onChangeName(newValue: string) {
-    this.setState(Object.assign(this.state, { name: newValue }));
+  onChangeName(name: string) {
+    this.setState({ statistic: Object.assign({}, this.state.statistic, { name }) });
   }
 
   onSave() {
-    this.state.add
-      ? this.props.addStatistic(this.state.statistic)
-      : this.props.updateStatistic(this.state.statistic);
+    this.props.save(this.state.statistic);
   }
 
   onDelete(modifier: Modifier) {
@@ -59,6 +49,10 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
     });
   }
 
+  refresh() {
+    this.setState(this.state);
+  }
+
   toModifierRow(modifier: Modifier) {
     return (
       <tr>
@@ -67,7 +61,7 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
             name="modifierCondition"
             value={modifier.condition}
             error=""
-            onChange={this.onChangeName}
+            onChange={s => { modifier.condition = s; this.refresh(); }}
             placeholder="Enter a condition"
           />
         </td>
@@ -76,7 +70,7 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
             name="modifierSource"
             value={modifier.source}
             error=""
-            onChange={this.onChangeName}
+            onChange={s => { modifier.source = s; this.refresh(); }}
             placeholder="Enter a source"
           />
         </td>
@@ -85,7 +79,7 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
             name="modifierFormula"
             value={modifier.formula}
             error=""
-            onChange={this.onChangeName}
+            onChange={s => { modifier.formula = s; this.refresh(); }}
             placeholder="Enter a formula"
           />
         </td>
@@ -99,16 +93,18 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
   }
 
   onAddNew() {
-    const { statistic } = this.state;
-    const oldModifiers = statistic.modifiers || [];
-    const maxId = Math.max(...oldModifiers.map(old => old.id));
-    const newId = maxId + 1;
-    const newModifiers = [...oldModifiers, { id: newId }];
+    const modifiers = this.state.statistic.modifiers || [];
+
+    const newModifiers = [...modifiers, { id: nextId(this.props.sheet.statistics) }];
     this.setState({
       statistic: Object.assign(
         this.state.statistic,
         { modifiers: newModifiers })
     });
+  }
+
+  updateName(name: string) {
+    this.setState({ statistic: Object.assign({}, this.state.statistic, { name }) });
   }
 
   render() {
@@ -125,7 +121,7 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
           label="Name"
           value={statistic.name}
           error=""
-          onChange={this.onChangeName}
+          onChange={this.updateName}
           placeholder="Enter a name"
         />
         <table className="table">

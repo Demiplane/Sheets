@@ -15,7 +15,7 @@ export function updateSheet(sheet: Sheet): UpdateSheetAction {
 export function handleUpdateSheet(updateAction: UpdateSheetAction, state: SheetState) {
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.identifier !== updateAction.sheet.identifier),
+      ...state.sheets.filter(sheet => sheet.id !== updateAction.sheet.id),
       Object.assign({}, updateAction.sheet)
     ]
   };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Sheet from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
-import DescriptionBox from '../controls/DescriptionBox';
+import DetailBox from '../controls/DetailBox';
 
 const InventoryPanel: React.StatelessComponent<{ className?: string, sheet: Sheet }> =
   ({ className, sheet }) => {
@@ -16,16 +16,14 @@ const InventoryPanel: React.StatelessComponent<{ className?: string, sheet: Shee
             <tr>
               <th scope="col">Name</th>
               <th className="text-center" scope="col">Stock</th>
-              <th scope="col">Description</th>
             </tr>
           </thead>
 
           <tbody>
             {sheet.inventory && sheet.inventory.map(i => (
               <tr key={i.name}>
-                <td>{i.name}</td>
+                <td><DetailBox name={i.name} description={i.description} />  </td>
                 <td className="text-center">{i.stock}</td>
-                <td><DescriptionBox description={i.description} /></td>
               </tr>
             ))}
           </tbody>

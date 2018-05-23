@@ -2,14 +2,14 @@ import { connect } from 'react-redux';
 import Sheet from '../sheet/SheetModel';
 import * as React from 'react';
 import RootState from '../core/RootState';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import SheetForm from './SheetForm';
 import Modal from '../controls/Modal';
 import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
 
 type ManageSheetPageProps = ConnectedSheetProps & {
-  sheet: Sheet;
-} & RouteComponentProps<{ id: string }>;
+  sheet?: Sheet;
+} & RouteComponentProps<{ id: number }>;
 
 type ManageSheetPageState = {
   modal?: JSX.Element;
@@ -46,30 +46,32 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
   render() {
     const { sheet } = this.props;
 
-    return (
-      <div>
-        <SheetForm
-          addStatistic={s => this.props.addStatistic!(sheet.identifier, s)}
-          updateStatistic={s => this.props.updateStatistic!(sheet.identifier, s)}
-          deleteStatistic={s => this.props.deleteStatistic!(sheet.identifier, s)}
+    return sheet
+      ? (
+        <div>
+          <SheetForm
+            addStatistic={s => this.props.addStatistic!(sheet.id, s)}
+            updateStatistic={s => this.props.updateStatistic!(sheet.id, s)}
+            deleteStatistic={s => this.props.deleteStatistic!(sheet.id, s)}
 
-          activateCondition={c => this.props.activateCondition!(sheet.identifier, c)}
-          inactivateCondition={c => this.props.inactivateCondition!(sheet.identifier, c)}
+            activateCondition={c => this.props.activateCondition!(sheet.id, c)}
+            inactivateCondition={c => this.props.inactivateCondition!(sheet.id, c)}
 
-          sheet={this.props.sheet}
-          showModal={this.openModal}
-          closeModal={this.closeModal} />
-        {this.state.modal}
-      </div>
-    );
+            sheet={sheet}
+            showModal={this.openModal}
+            closeModal={this.closeModal} />
+          {this.state.modal}
+        </div>
+      )
+      : <Redirect to="/notfound" />;
   }
 }
 
 const mapStateToProps = (state: RootState, ownProps: ManageSheetPageProps): ManageSheetPageProps => {
-  let sheetIdentifier = ownProps.match.params.id;
-  let sheets = state.sheetState.sheets.filter(s => s.identifier === sheetIdentifier);
+  let sheetIdentifier = Number(ownProps.match.params.id);
+  let sheet = state.sheetState.sheets.find(s => s.id === sheetIdentifier);
 
-  return Object.assign({}, ownProps, { sheet: sheets.length > 0 ? sheets[0] : undefined });
+  return Object.assign({}, ownProps, { sheet });
 };
 
 export default connect(mapStateToProps, mapSheetActions)(ManageSheetPage);

@@ -7,17 +7,17 @@ import { add } from '../sheet/sheetActions';
 // UPDATE STATISTIC
 export const UPDATE_STATISTIC_SUCCESS = 'UPDATE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
 export type UpdateStatisticAction = BaseAction & {
-  sheetIdentifier: string,
+  sheetIdentifier: number,
   statistic: Statistic
 };
-export function updateStatistic(sheetIdentifier: string, statistic: Statistic): UpdateStatisticAction {
+export function updateStatistic(sheetIdentifier: number, statistic: Statistic): UpdateStatisticAction {
   return { type: UPDATE_STATISTIC_SUCCESS, sheetIdentifier, statistic };
 }
 export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticAction, state: SheetState) {
   const { sheetIdentifier, statistic } = updateStatisticAction;
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.identifier === sheetIdentifier));
+  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.id === sheetIdentifier));
   let oldStatistics = sheetToUpdate.statistics || [];
-  const oldStatistic = oldStatistics.find(o => o.name === statistic.name);
+  const oldStatistic = oldStatistics.find(o => o.id === statistic.id);
 
   if (oldStatistic) {
     const index = oldStatistics.indexOf(oldStatistic);
@@ -30,7 +30,7 @@ export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticActi
 
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
+      ...state.sheets.filter(sheet => sheet.id !== sheetIdentifier),
       Object.assign({}, sheetToUpdate)
     ]
   };

@@ -13,15 +13,15 @@ const EditForm: React.StatelessComponent<{
         {children}
       </form>
       <div>
-        {onSave ? (
+        {onCancel ? (
           <button
-            onClick={event => { event.preventDefault(); onSave(); }}
+            onClick={event => { event.preventDefault(); onCancel(); }}
             className="btn btn-small btn-secondary d-inline float-right"
           >Cancel</button>
         ) : null}
-        {onCancel ? (
+        {onSave ? (
           <button
-          onClick={event => { event.preventDefault(); onCancel(); }}
+          onClick={event => { event.preventDefault(); onSave(); }}
             className="btn btn-small btn-primary d-inline float-right"
           >Save</button>
         ) : null}

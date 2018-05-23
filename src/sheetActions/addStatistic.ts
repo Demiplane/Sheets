@@ -7,15 +7,15 @@ import { add } from '../sheet/sheetActions';
 // ADD STATISTIC
 export const ADD_STATISTIC_SUCCESS = 'ADD_STATISTIC' + SHEET_SUCCESS_SUFFIX;
 export type AddStatisticAction = BaseAction & {
-  sheetIdentifier: string,
+  sheetIdentifier: number,
   statistic: Statistic
 };
-export function addStatistic(sheetIdentifier: string, statistic: Statistic): AddStatisticAction {
+export function addStatistic(sheetIdentifier: number, statistic: Statistic): AddStatisticAction {
   return { type: ADD_STATISTIC_SUCCESS, sheetIdentifier, statistic };
 }
 export function handleAddStatistic(addStatisticAction: AddStatisticAction, state: SheetState) {
   const { sheetIdentifier, statistic } = addStatisticAction;
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.identifier === sheetIdentifier));
+  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.id === sheetIdentifier));
 
   let oldStatistics = sheetToUpdate.statistics || [];
 
@@ -23,7 +23,7 @@ export function handleAddStatistic(addStatisticAction: AddStatisticAction, state
 
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
+      ...state.sheets.filter(sheet => sheet.id !== sheetIdentifier),
       Object.assign({}, sheetToUpdate)
     ]
   };

@@ -48,14 +48,14 @@ export class DetailBox extends React.Component<DetailBoxProps, { collapsed: bool
 
     return (
       <div className={classes}>
-        <button className="btn btn-light pt-0 pb-0" onClick={this.hide}>{name}</button>
+        <button className="btn btn-light pt-0 pb-0 mb-0 mt-0" onClick={this.hide}>{name}</button>
         <p>{description}</p>
       </div>
     );
   }
 
   renderStandard(name: string) {
-    const classes = combineClasses(this.props.className, 'pb-0 mb-0');
+    const classes = combineClasses(this.props.className, 'pb-0 pt-0 mb-0 mt-0 detail-box');
 
     return <p className={classes}>{name}</p>;
   }

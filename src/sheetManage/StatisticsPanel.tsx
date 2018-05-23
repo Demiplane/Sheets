@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sheet, { Statistic } from '../sheet/SheetModel';
+import Sheet, { Statistic, nextId } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import StatisticForm from './StatisticForm';
 import StatisticsPanelRow from './StatisticsPanelRow';
@@ -26,6 +26,14 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.openAddStatistic = this.openAddStatistic.bind(this);
     this.openEditStatistic = this.openEditStatistic.bind(this);
     this.onExpand = this.onExpand.bind(this);
+    this.newStatistic = this.newStatistic.bind(this);
+  }
+
+  newStatistic(): Statistic {
+    return {
+      id: nextId(this.props.sheet.statistics),
+      name: ''
+    };
   }
 
   openEditStatistic(statistic: Statistic) {
@@ -33,8 +41,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
       <StatisticForm
         statistic={statistic}
         sheet={this.props.sheet}
-        addStatistic={this.props.addStatistic}
-        updateStatistic={this.props.updateStatistic}
+        save={s => { this.props.updateStatistic(s); this.props.closeModal(); }}
         cancel={this.cancel}
       />
     ));
@@ -48,14 +55,16 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.showModal((
       <StatisticForm
         sheet={this.props.sheet}
-        addStatistic={this.props.addStatistic}
-        updateStatistic={this.props.updateStatistic}
+        statistic={this.newStatistic()}
+        save={s => { this.props.addStatistic(s); this.props.closeModal(); }}
         cancel={this.cancel} />
     ));
   }
 
   onExpand(statistic: Statistic) {
-    this.setState({ expandedStatistic: statistic.name });
+    const expandedStatistic = statistic.name === this.state.expandedStatistic ? '' : statistic.name;
+
+    this.setState({ expandedStatistic });
   }
 
   render() {

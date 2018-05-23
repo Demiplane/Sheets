@@ -79,3 +79,7 @@
   animation-name: refreshNegativeStatistic;
   animation-duration: 1s;
 }
+
+.detail-box {
+  padding: .375rem .75rem;
+}

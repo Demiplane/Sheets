@@ -11,32 +11,32 @@ import { deleteSheet } from '../sheetActions/deleteSheet';
 import { loadSheets } from '../sheetActions/loadSheets';
 
 export type ConnectedSheetProps = {
-  activateCondition?: (sheetIdentifier: string, condition: string) => void;
-  inactivateCondition?: (sheetIdentifier: string, condition: string) => void;
-  updateStatistic?: (sheetIdentifier: string, statistic: Statistic) => void;
-  addStatistic?: (sheetIdentifier: string, statistic: Statistic) => void;
-  deleteStatistic?: (sheetIdentifier: string, statistic: Statistic) => void;
+  activateCondition?: (sheetIdentifier: number, condition: string) => void;
+  inactivateCondition?: (sheetIdentifier: number, condition: string) => void;
+  updateStatistic?: (sheetIdentifier: number, statistic: Statistic) => void;
+  addStatistic?: (sheetIdentifier: number, statistic: Statistic) => void;
+  deleteStatistic?: (sheetIdentifier: number, statistic: Statistic) => void;
   createSheet?: (sheet: Sheet) => void;
   updateSheet?: (sheet: Sheet) => void;
-  deleteSheet?: (sheetIdentifier: string) => void;
+  deleteSheet?: (sheetIdentifier: number) => void;
   loadSheets?: (sheets: Sheet[]) => void;
 };
 
 export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetProps {
   return {
-    activateCondition: (sheetIdentifier: string, condition: string) =>
+    activateCondition: (sheetIdentifier: number, condition: string) =>
       dispatch(activateCondition(sheetIdentifier, condition)),
-    inactivateCondition: (sheetIdentifier: string, condition: string) =>
+    inactivateCondition: (sheetIdentifier: number, condition: string) =>
       dispatch(inactivateCondition(sheetIdentifier, condition)),
-    updateStatistic: (sheetIdentifier: string, statistic: Statistic) =>
+    updateStatistic: (sheetIdentifier: number, statistic: Statistic) =>
       dispatch(updateStatistic(sheetIdentifier, statistic)),
-    addStatistic: (sheetIdentifier: string, statistic: Statistic) =>
+    addStatistic: (sheetIdentifier: number, statistic: Statistic) =>
       dispatch(addStatistic(sheetIdentifier, statistic)),
-    deleteStatistic: (sheetIdentifier: string, statistic: Statistic) =>
+    deleteStatistic: (sheetIdentifier: number, statistic: Statistic) =>
       dispatch(deleteStatistic(sheetIdentifier, statistic)),
     createSheet: (sheet: Sheet) => dispatch(createSheet(sheet)),
     updateSheet: (sheet: Sheet) => dispatch(updateSheet(sheet)),
-    deleteSheet: (sheetIdentifier: string) => dispatch(deleteSheet(sheetIdentifier)),
+    deleteSheet: (sheetIdentifier: number) => dispatch(deleteSheet(sheetIdentifier)),
     loadSheets: (sheets: Sheet[]) => dispatch(loadSheets(sheets))
   };
 }
@@ -49,7 +49,7 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
 //     return { type: UPDATE_SHEET_SUCCESS, sheet };
 // }
 
-// function deleteSheetSuccess(sheetIdentifier: string): DeleteSheetAction {
+// function deleteSheetSuccess(sheetIdentifier: number): DeleteSheetAction {
 //     return { type: DELETE_SHEET_SUCCESS, sheetIdentifier };
 // }
 
@@ -69,7 +69,7 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
 //     };
 // }
 
-// export function deleteSheet(sheetIdentifier: string): (dispatch: Dispatch) 
+// export function deleteSheet(sheetIdentifier: number): (dispatch: Dispatch) 
 // => Promise<DeleteSheetAction> {
 //     return function (dispatch: Dispatch) {
 //         return Promise.resolve()

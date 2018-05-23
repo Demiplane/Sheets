@@ -3,13 +3,13 @@ import { Sheet } from '../sheet/SheetModel';
 
 type SheetRowProps = {
   sheet: Sheet;
-  onSelected?: (identifier: string) => void;
+  onSelected?: (identifier: number) => void;
 };
 
 const SheetRow: React.StatelessComponent<SheetRowProps> = (props) => {
-  let sheet = props.sheet || { identifier: '0', name: 'Unknown' };
+  let sheet = props.sheet || { id: '0', name: 'Unknown' };
   let onClick = (props.sheet && props.onSelected)
-    ? () => props.onSelected!(sheet.identifier)
+    ? () => props.onSelected!(sheet.id)
     : () => undefined;
 
   return (

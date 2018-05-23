@@ -8,8 +8,8 @@ export function conditionIsActive(sheet: Sheet, condition: string) {
   return sheet.conditions.filter(c => c === condition).length > 0;
 }
 
-export function selectActions(sheet: Sheet): Action[] {
-  const actions = sheet.actions || [];
+export function selectActions(sheet: Sheet): ActionDefinition[] {
+  const actions: ActionDefinition[] = sheet.actions || [];
   const abilityActions = (sheet.abilities || [])
     .filter(a => a.actionCost)
     .filter(a => a.actionCost!.length > 0)
@@ -31,9 +31,19 @@ export function getConditions(sheet: Sheet) {
     .map(modifier => modifier.condition!);
   const sortedDistinctConditions =
     distinct(conditions)
-    .sort();
-    
+      .sort();
+
   return sortedDistinctConditions;
+}
+
+export function nextId(identifiables?: { id: number }[]) {
+  const resolved = identifiables || [];
+  const maxId = resolved.length > 0
+    ? Math.max(...resolved.map(old => old.id))
+    : 1;
+  const newId = maxId + 1;
+
+  return newId;
 }
 
 export function selectResources(sheet: Sheet): { resource: Resource, maximum: number }[] {
@@ -135,8 +145,8 @@ function findStatistic(sheet: Sheet, statisticName: string): Statistic | null {
 }
 
 export type Sheet = {
-  identifier: string;
-  name?: string;
+  id: number;
+  name: string;
   statistics?: Statistic[];
   abilities?: Ability[];
   inventory?: Item[];
@@ -144,19 +154,25 @@ export type Sheet = {
   conditions: string[];
 };
 
-export type Action = {
-  name?: string;
+export type Action = ActionDefinition & {
+  id: number;
+};
+
+export type ActionDefinition = {
+  name: string;
   description?: string;
   actionCost?: string[];
 };
 
 export type Item = {
+  id: number;
   name: string;
   description?: string;
   stock?: number;
 };
 
 export type Ability = {
+  id: number;
   name: string;
   source?: string;
   description?: string;
@@ -164,6 +180,7 @@ export type Ability = {
 };
 
 export type Statistic = {
+  id: number;
   name: string;
   modifiers?: Modifier[];
   resource?: Resource;
@@ -177,7 +194,7 @@ export type Modifier = {
 };
 
 export type Resource = {
-  name?: string;
+  name: string;
   current?: number;
   recharge?: Recharge[];
 };

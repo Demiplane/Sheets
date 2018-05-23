@@ -7,19 +7,19 @@ import { add } from '../sheet/sheetActions';
 // ACTIVATE CONDITION
 export const ACTIVATE_CONDITION_SHEET_SUCCESS = 'ACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
 export type ActivateConditionAction = BaseAction & {
-  sheetIdentifier: string,
+  sheetIdentifier: number,
   condition: string
 };
-export function activateCondition(sheetIdentifier: string, condition: string): ActivateConditionAction {
+export function activateCondition(sheetIdentifier: number, condition: string): ActivateConditionAction {
   return { type: ACTIVATE_CONDITION_SHEET_SUCCESS, sheetIdentifier, condition };
 }
 export function handleActivateCondition(activateAction: ActivateConditionAction, state: SheetState) {
   const { sheetIdentifier, condition } = activateAction;
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.identifier === sheetIdentifier));
+  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.id === sheetIdentifier));
   sheetToUpdate.conditions = distinct(sheetToUpdate.conditions.concat(condition));
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
+      ...state.sheets.filter(sheet => sheet.id !== sheetIdentifier),
       Object.assign({}, sheetToUpdate)
     ]
   };

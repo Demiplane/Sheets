@@ -6,15 +6,15 @@ import { add } from '../sheet/sheetActions';
 // DELETE
 export const DELETE_SHEET_SUCCESS = 'DELETE' + SHEET_SUCCESS_SUFFIX;
 export type DeleteSheetAction = BaseAction & {
-  sheetIdentifier: string
+  sheetIdentifier: number
 };
-export function deleteSheet(sheetIdentifier: string): DeleteSheetAction {
+export function deleteSheet(sheetIdentifier: number): DeleteSheetAction {
   return { type: DELETE_SHEET_SUCCESS, sheetIdentifier };
 }
 export function handleDeleteSheet(deleteAction: DeleteSheetAction, state: SheetState) {
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.identifier !== deleteAction.sheetIdentifier)
+      ...state.sheets.filter(sheet => sheet.id !== deleteAction.sheetIdentifier)
     ]
   };
 }

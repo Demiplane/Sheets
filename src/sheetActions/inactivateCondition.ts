@@ -6,19 +6,19 @@ import { add } from '../sheet/sheetActions';
 // INACTIVATE CONDITION
 export const INACTIVATE_CONDITION_SHEET_SUCCESS = 'INACTIVATE_CONDITION' + SHEET_SUCCESS_SUFFIX;
 export type InactivateConditionAction = BaseAction & {
-  sheetIdentifier: string,
+  sheetIdentifier: number,
   condition: string
 };
-export function inactivateCondition(sheetIdentifier: string, condition: string): InactivateConditionAction {
+export function inactivateCondition(sheetIdentifier: number, condition: string): InactivateConditionAction {
   return { type: INACTIVATE_CONDITION_SHEET_SUCCESS, sheetIdentifier, condition };
 }
 export function handleInactivateCondition(inactivateAction: InactivateConditionAction, state: SheetState) {
   const { sheetIdentifier, condition } = inactivateAction;
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.identifier === sheetIdentifier));
+  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.id === sheetIdentifier));
   sheetToUpdate.conditions = sheetToUpdate.conditions.filter(c => c !== condition);
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.identifier !== sheetIdentifier),
+      ...state.sheets.filter(sheet => sheet.id !== sheetIdentifier),
       Object.assign({}, sheetToUpdate)
     ]
   };
