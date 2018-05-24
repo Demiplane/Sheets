@@ -130,9 +130,12 @@ export function calculateFormula(sheet: Sheet, formula?: string): number {
     expression = expression.replace(m, statisticValue.toString());
   });
 
-  const final = math.eval(expression);
-
-  return Math.floor(final);
+  try {
+    const final = math.eval(expression);
+    return Math.floor(final);
+  } catch {
+    return NaN;
+  }
 }
 
 function findStatistic(sheet: Sheet, statisticName: string): Statistic | null {
@@ -200,8 +203,14 @@ export type Resource = {
 };
 
 export type Recharge = {
-  name?: string;
-  restorationFormulae?: string[];
+  id: number;
+  name: string;
+  restorationFormulae: Formula[];
+};
+
+export type Formula = {
+  id: number;
+  value: string;
 };
 
 export default Sheet;

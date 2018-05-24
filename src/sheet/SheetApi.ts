@@ -17,7 +17,7 @@ export class MockSheetApi implements SheetApi {
       statistics: [
         { id: 1, name: 'fighter level', modifiers: [{ id: 1, formula: '5' }] },
         {
-          id: 2, 
+          id: 2,
           name: 'example base with conditional',
           modifiers: [
             { id: 1, formula: '5' },
@@ -25,7 +25,7 @@ export class MockSheetApi implements SheetApi {
           ]
         },
         {
-          id: 3, 
+          id: 3,
           name: 'example base with conditional two',
           modifiers: [
             { id: 1, formula: '7' },
@@ -42,7 +42,7 @@ export class MockSheetApi implements SheetApi {
           ]
         },
         {
-          id: 8, 
+          id: 8,
           name: 'hit point maximum',
           modifiers: [
             { id: 1, source: 'constitution', formula: '[constitution modifier] * [total level]' },
@@ -53,24 +53,24 @@ export class MockSheetApi implements SheetApi {
           resource: {
             name: 'hit points',
             current: 63,
-            recharge: [{ name: 'rest', restorationFormulae: ['[hit point maximum]'] }]
+            recharge: [{ id: 1, name: 'rest', restorationFormulae: [{ id: 1, value: '[hit point maximum]' }] }]
           }
         },
         { id: 9, name: 'constitution', modifiers: [{ id: 1, formula: '14' }] },
         {
-          id: 10, 
+          id: 10,
           name: 'constitution modifier', modifiers: [
             { id: 1, source: 'constitution', formula: '([constitution] - 10) / 2' }]
         },
         { id: 11, name: 'example', modifiers: [{ id: 1, formula: 'min(-1, 1)' }] },
         { id: 12, name: 'dexterity', modifiers: [{ id: 1, formula: '14' }] },
         {
-          id: 13, 
+          id: 13,
           name: 'dexterity modifier',
           modifiers: [{ id: 1, source: 'dexterity', formula: '([dexterity] - 10) / 2' }]
         },
         {
-          id: 14, 
+          id: 14,
           name: 'gun attack bonus', modifiers: [
             { id: 1, source: 'weapon focus', formula: '1' },
             { id: 2, formula: '[base attack bonus]' },
@@ -82,7 +82,7 @@ export class MockSheetApi implements SheetApi {
       ],
       inventory: [
         {
-          id: 1, 
+          id: 1,
           name: 'Big Irons with the Sandalwood Grips',
           stock: 2,
           description: 'The Sandalwood Guns are the guns of a true gunslinger.'
@@ -91,12 +91,13 @@ export class MockSheetApi implements SheetApi {
           id: 2, name: 'Horn of Eld', stock: 1, description: 'The Horn of Eld is the personal horn of Arthur Eld.'
         },
         {
-          id: 3, 
+          id: 3,
           name: 'Old Cowboy\'s Boots', stock: 2,
           description: 'These old worn leather boots are made of deerhide. They probably need to be replaced.'
         },
         { id: 4, name: 'Traveler\'s Clothes', stock: 1 },
-        { id: 5, name: 'Gunna', stock: 1, description: `In his bag he always seems to have what he needs.
+        {
+          id: 5, name: 'Gunna', stock: 1, description: `In his bag he always seems to have what he needs.
         Something something something something something something something something something something 
         something something something something something something something something something 
         something something something something something something something something something 
@@ -108,13 +109,13 @@ export class MockSheetApi implements SheetApi {
       ],
       abilities: [
         {
-          id: 1, 
+          id: 1,
           name: 'Weapon Training (firearms)',
           source: 'fighter 5',
           description: 'https://www.d20pfsrd.com/classes/core-classes/fighter/#TOC-Weapon-Training'
         },
         {
-          id: 2, 
+          id: 2,
           name: 'Second Wind',
           source: 'fighter 1',
           actionCost: ['bonus action'],
