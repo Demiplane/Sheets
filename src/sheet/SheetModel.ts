@@ -125,7 +125,7 @@ export function calculateFormula(sheet: Sheet, formula?: string): number {
   matches.forEach(m => {
     const statisticName = m.replace('[', '').replace(']', '');
     const statistic = findStatistic(sheet, statisticName);
-    var statisticValue = statistic ? calculateValue(sheet, statistic) : 0;
+    var statisticValue = statistic ? calculateValue(sheet, statistic) : NaN;
 
     expression = expression.replace(m, statisticValue.toString());
   });
