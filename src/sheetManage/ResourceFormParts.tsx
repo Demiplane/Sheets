@@ -23,91 +23,73 @@ export class ResourceFormParts extends React.Component<ResourceFormPartsProps> {
     this.onDeleteFormula = this.onDeleteFormula.bind(this);
     this.onUpdateFormula = this.onUpdateFormula.bind(this);
     this.onAddFormula = this.onAddFormula.bind(this);
-    this.onUpdateRecharge = this.onUpdateRecharge.bind(this);
+    this.refresh = this.refresh.bind(this);
+  }
+
+  refresh() {
+    this.setState(Object.assign({}, this.state));
   }
 
   updateName(name: string) {
-    this.props.update(Object.assign({}, this.props.resource, { name }));
+    this.props.resource.name = name;
+
+    this.refresh();
   }
 
   updateCurrent(current: number) {
-    this.props.update(Object.assign({}, this.props.resource, { current }));
-  }
+    this.props.resource.current = current;
 
-  onUpdateRecharge(recharge: Recharge) {
-    const { resource } = this.props;
-
-    const newRecharge = Object.assign({}, recharge);
-
-    const oldRecharges = resource.recharge || [];
-    const newRecharges = [...oldRecharges];
-    const index = oldRecharges.findIndex(o => o.id === recharge.id);
-    newRecharges[index] = newRecharge;
-
-    this.props.update(Object.assign({}, resource, { recharge: newRecharges }));
+    this.refresh();
   }
 
   onUpdateRechargeName(name: string, recharge: Recharge) {
-    const { resource } = this.props;
+    recharge.name = name;
 
-    const newRecharge = Object.assign({}, recharge, { name });
-
-    const oldRecharges = resource.recharge || [];
-    const recharges = [...oldRecharges.filter(old => old.id !== recharge.id), newRecharge];
-
-    this.props.update(Object.assign({}, resource, { recharge: recharges }));
+    this.refresh();
   }
 
   onAddRecharge() {
     const { resource } = this.props;
-    const oldRecharges = resource.recharge || [];
 
-    const newId = nextId(oldRecharges);
+    const recharge = resource.recharge || [];
 
-    const recharges = [...oldRecharges, { id: newId }];
+    const newId = nextId(recharge);
+    const newRecharge = { id: newId, name: '', restorationFormulae: [] };
 
-    this.props.update(Object.assign({}, resource, { recharge: recharges }));
+    resource.recharge = [...recharge, newRecharge];
+
+    this.refresh();
   }
 
   onDeleteRecharge(recharge: Recharge) {
     const { resource } = this.props;
 
-    const oldRecharges = resource.recharge || [];
-    const recharges = oldRecharges.filter(old => old.id !== recharge.id);
+    const recharges = resource.recharge || [];
+    resource.recharge = recharges.filter(old => old.id !== recharge.id);
 
-    this.props.update(Object.assign({}, resource, { recharge: recharges }));
+    this.refresh();
   }
 
   onDeleteFormula(recharge: Recharge, formula: Formula) {
-    const oldFormulae = recharge.restorationFormulae;
-    const newFormulae = oldFormulae.filter(o => o.id !== formula.id);
-    const newRecharge = Object.assign({}, recharge, { restorationFormulae: newFormulae });
+    recharge.restorationFormulae =
+      recharge.restorationFormulae.filter(old => old.id !== formula.id);
 
-    this.onUpdateRecharge(newRecharge);
+    this.refresh();
   }
 
   onUpdateFormula(value: string, recharge: Recharge, formula: Formula) {
-    const newFormula: Formula = Object.assign({}, formula, { value });
-    const oldFormulae = recharge.restorationFormulae;
+    formula.value = value;
 
-    const newFormulae = [...oldFormulae];
-    const replaceIndex = newFormulae.findIndex(f => f.id === formula.id);
-    newFormulae[replaceIndex] = newFormula;
-
-    const newRecharge = Object.assign({}, recharge, { restorationFormulae: newFormulae });
-
-    this.onUpdateRecharge(newRecharge);
+    this.refresh();
   }
 
   onAddFormula(recharge: Recharge) {
-    const newId = nextId(recharge.restorationFormulae);
 
-    const newFormula = { id: newId, value: '' };
-    const oldFormulae = recharge.restorationFormulae;
-    const newFormulae: Formula[] = [...oldFormulae, newFormula];
-    const newRecharge = Object.assign({}, recharge, { restorationFormulae: newFormulae });
+    recharge.restorationFormulae = [
+      ...recharge.restorationFormulae,
+      { id: nextId(recharge.restorationFormulae), value: '' }];
 
-    this.onUpdateRecharge(newRecharge);
+    this.refresh();
   }
 
   toRechargeRow(recharge: Recharge) {

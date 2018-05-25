@@ -4,6 +4,7 @@ import TextInput from '../controls/TextInput';
 import EditForm from '../controls/EditForm';
 import ResourceFormParts from './ResourceFormParts';
 import CheckBoxInput from '../controls/CheckBoxInput';
+import deepCopy from '../core/deepCopy';
 
 type StatisticFormProps = {
   sheet: Sheet;
@@ -24,7 +25,7 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
     const { statistic } = props;
 
     this.state = {
-      statistic: Object.assign({}, statistic),
+      statistic: deepCopy(statistic),
       showResourceForm: statistic.resource ? true : false
     };
 
@@ -33,7 +34,6 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
     this.onSave = this.onSave.bind(this);
     this.render = this.render.bind(this);
     this.onDeleteModifier = this.onDeleteModifier.bind(this);
-    this.updateName = this.updateName.bind(this);
     this.updateResourceCheck = this.updateResourceCheck.bind(this);
     this.updateResource = this.updateResource.bind(this);
     this.renderModifierFormParts = this.renderModifierFormParts.bind(this);
@@ -42,7 +42,34 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
   }
 
   onChangeName(name: string) {
-    this.setState({ statistic: Object.assign({}, this.state.statistic, { name }) });
+    const { statistic } = this.state;
+
+    statistic.name = name;
+
+    this.refresh();
+  }
+
+  onAddNew() {
+    const { statistic } = this.state;
+    
+    const modifiers = statistic.modifiers || [];
+
+    statistic.modifiers = [...modifiers, { id: nextId(this.props.sheet.statistics) }];
+
+    this.refresh();
+  }
+
+  updateResourceCheck(checked: boolean) {
+    const { statistic } = this.state;
+
+    if (checked) {
+      statistic.resource = statistic.resource || { name: statistic.name };
+    }
+
+    this.setState({
+      statistic,
+      showResourceForm: checked
+    });
   }
 
   onSave() {
@@ -55,17 +82,22 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
 
   onDeleteModifier(modifier: Modifier) {
     const { statistic } = this.state;
-    const oldModifiers = statistic.modifiers || [];
-    const newModifiers = oldModifiers.filter(old => old.id !== modifier.id);
-    this.setState({
-      statistic: Object.assign(
-        this.state.statistic,
-        { modifiers: newModifiers })
-    });
+    
+    const modifiers = statistic.modifiers || [];
+
+    statistic.modifiers = modifiers.filter(old => old.id !== modifier.id);
+
+    this.refresh();
+  }
+
+  updateResource(resource: Resource) {
+    const statistic = Object.assign({}, this.state.statistic, { resource });
+
+    this.setState(Object.assign({}, this.state, { statistic }));
   }
 
   refresh() {
-    this.setState(this.state);
+    this.setState(Object.assign({}, this.state));
   }
 
   toModifierRow(modifier: Modifier) {
@@ -110,34 +142,6 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
     );
   }
 
-  onAddNew() {
-    const modifiers = this.state.statistic.modifiers || [];
-
-    const newModifiers = [...modifiers, { id: nextId(this.props.sheet.statistics) }];
-    this.setState({
-      statistic: Object.assign(
-        this.state.statistic,
-        { modifiers: newModifiers })
-    });
-  }
-
-  updateName(name: string) {
-    this.setState({ statistic: Object.assign({}, this.state.statistic, { name }) });
-  }
-
-  updateResourceCheck(checked: boolean) {
-    const { statistic } = this.state;
-
-    if (checked) {
-      statistic.resource = statistic.resource || { name: statistic.name };
-    }
-
-    this.setState({
-      statistic,
-      showResourceForm: checked
-    });
-  }
-
   renderModifierFormParts() {
     const { statistic } = this.state;
 
@@ -173,16 +177,10 @@ export class StatisticForm extends React.Component<StatisticFormProps, Statistic
         label="Name"
         value={statistic.name}
         error=""
-        onChange={this.updateName}
+        onChange={this.onChangeName}
         placeholder="Enter a name"
       />
     );
-  }
-
-  updateResource(resource: Resource) {
-    const statistic = Object.assign({}, this.state.statistic, { resource });
-
-    this.setState(Object.assign({}, this.state, { statistic }));
   }
 
   renderResourceFormParts(resource: Resource) {
