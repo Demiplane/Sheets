@@ -16,15 +16,17 @@ export class Sheet {
       .reduce((acc, cur) => acc.concat(cur));
   }
 
-  statisticIsBase(statistic: Statistic) {
-    return !isNaN(Number(statistic.formula));
+  get resolvedResources(): ResolvedResource[] {
+    var cache = new Cache<ResolvedStatistic>();
+
+    return this.resources.map(r => this.resolveResource(cache, r));
   }
 
-  isConditional(statistic: Statistic): boolean {
-    return this.conditions
-      .map(c => c.targets)
-      .reduce((a, c) => a.concat(c))
-      .find(t => t === statistic.name) ? true : false;
+  get resolvedStatistics(): ResolvedStatistic[] {
+    // use lookup cache so we only calculate each statistic once, even if multiple statistics refer to them
+    var cache = new Cache<ResolvedStatistic>();
+
+    return this.statistics.map(statistic => this.innerResolveStatistic(cache, statistic));
   }
 
   findStatistic(statisticName: string): Statistic | undefined {
@@ -36,33 +38,33 @@ export class Sheet {
     return statistic ? this.innerResolveStatistic(new Cache<ResolvedStatistic>(), statistic) : statistic;
   }
 
-  get resolvedResources(): ResolvedResource[] {
-    var cache = new Cache<ResolvedStatistic>();
+  private resolveResource(cache: Cache<ResolvedStatistic>, r: Resource): ResolvedResource {
+    var resource = new ResolvedResource();
 
-    return this.resources.map(r => {
-      var resource = new ResolvedResource();
+    resource.formula = r.formula;
+    resource.current = r.current;
+    resource.name = r.name;
+    resource.value = this.innerCalculateFormula(cache, r.formula);
 
-      resource.formula = r.formula;
-      resource.current = r.current;
-      resource.name = r.name;
-      resource.value = this.innerCalculateFormula(cache, r.formula);
-
-      return resource;
-    });
+    return resource;
   }
 
-  get resolvedStatistics(): ResolvedStatistic[] {
-    // use lookup cache so we only calculate each statistic once, even if multiple statistics refer to them
-    var cache = new Cache<ResolvedStatistic>();
-
-    return this.statistics.map(statistic => this.innerResolveStatistic(cache, statistic));
+  private statisticIsBase(statistic: Statistic) {
+    return !isNaN(Number(statistic.formula));
   }
 
-  innerResolveStatistic(cache: Cache<ResolvedStatistic>, statistic: Statistic): ResolvedStatistic {
+  private isConditional(statistic: Statistic): boolean {
+    return this.conditions
+      .map(c => c.targets)
+      .reduce((a, c) => a.concat(c))
+      .find(t => t === statistic.name) ? true : false;
+  }
+
+  private innerResolveStatistic(cache: Cache<ResolvedStatistic>, statistic: Statistic): ResolvedStatistic {
     return cache.getFromCache(statistic.name, key => {
 
       const value = this.innerCalculateFormula(cache, statistic.formula);
-      const modified = this.conditionsTargetingStatistic(cache, statistic);
+      const modified = this.conditionalModifier(cache, statistic);
       const conditional = this.isConditional(statistic);
       const base = this.statisticIsBase(statistic);
 
@@ -78,14 +80,14 @@ export class Sheet {
     });
   }
 
-  conditionsTargetingStatistic(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
+  private conditionalModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
     return this.conditions
       .filter(c => c.targets.find(t => t === statistic.name))
       .map(c => this.innerCalculateFormula(cache, c.formula))
       .reduce((acc, cur) => acc + cur);
   }
 
-  innerCalculateFormula(cache: Cache<ResolvedStatistic>, formula: string): number {
+  private innerCalculateFormula(cache: Cache<ResolvedStatistic>, formula: string): number {
     const regex = /\[[a-zA-z ]+\]/g;
     const matches = formula.match(regex) || [];
 
