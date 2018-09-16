@@ -24,7 +24,7 @@ const AbilitiesPanel: React.StatelessComponent<{ className?: string, sheet: Shee
             {sheet.abilities && sheet.abilities.map(a => (
               <tr key={a.name}>
                 <td><DetailBox name={a.name} description={a.description} /></td>
-                <td>{a.actionCost && a.actionCost
+                <td>{a.actions && a.actions
                   .sort()
                   .reduce((l, r) => l + ' ' + r)}</td>
                 <td>{a.source}</td>

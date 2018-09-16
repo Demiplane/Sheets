@@ -6,18 +6,18 @@ import { add } from '../sheet/sheetActions';
 
 export const UPDATE_STATISTIC_SUCCESS = 'UPDATE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
 export type UpdateStatisticAction = BaseAction & {
-  sheetIdentifier: number,
+  sheetIdentifier: string,
   statistic: Statistic
 };
-export function updateStatistic(sheetIdentifier: number, statistic: Statistic): UpdateStatisticAction {
+export function updateStatistic(sheetIdentifier: string, statistic: Statistic): UpdateStatisticAction {
   return { type: UPDATE_STATISTIC_SUCCESS, sheetIdentifier, statistic };
 }
 export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticAction, state: SheetState) {
   const { sheetIdentifier, statistic } = updateStatisticAction;
   
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.id === sheetIdentifier));
+  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.name === sheetIdentifier));
   let oldStatistics = sheetToUpdate.statistics || [];
-  const oldStatistic = oldStatistics.find(o => o.id === statistic.id);
+  const oldStatistic = oldStatistics.find(o => o.name === statistic.name);
 
   if (oldStatistic) {
     const index = oldStatistics.indexOf(oldStatistic);
@@ -30,7 +30,7 @@ export function handleUpdateStatistic(updateStatisticAction: UpdateStatisticActi
 
   return {
     sheets: [
-      ...state.sheets.filter(sheet => sheet.id !== sheetIdentifier),
+      ...state.sheets.filter(sheet => sheet.name !== sheetIdentifier),
       Object.assign({}, sheetToUpdate)
     ]
   };

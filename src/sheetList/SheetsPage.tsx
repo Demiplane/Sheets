@@ -18,7 +18,7 @@ export class SheetsPage extends React.Component<SheetsPageProps> {
     this.onSelect = this.onSelect.bind(this);
   }
 
-  onSelect = (identifier: number) => this.props.history.push('sheet/' + identifier);
+  onSelect = (identifier: string) => this.props.history.push('sheet/' + identifier);
 
   render() {
     return (
@@ -36,7 +36,7 @@ export class SheetsPage extends React.Component<SheetsPageProps> {
             {this.props.sheets
               .sort((l, r) => l.name.toLowerCase() > r.name.toLowerCase() ? 1 : -1)
               .map(sheet => (
-                <SheetRow key={sheet.id} sheet={sheet} onSelected={this.onSelect} />
+                <SheetRow key={sheet.name} sheet={sheet} onSelected={this.onSelect} />
               ))}
           </tbody>
         </table>

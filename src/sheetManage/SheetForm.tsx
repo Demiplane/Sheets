@@ -21,7 +21,7 @@ type SheetFormProps = {
 
   addItem: (item: Item) => void;
   updateItem: (item: Item) => void;
-  deleteItem: (itemIdentifier: number) => void;
+  deleteItem: (itemIdentifier: string) => void;
 
   updateStatistic: (statistic: Statistic) => void;
   addStatistic: (statistic: Statistic) => void;

@@ -2,6 +2,19 @@ var math = require('mathjs');
 import Cache from '../core/Cache';
 
 export class Sheet {
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+    this.name = source.name || '';
+    this.statistics = source.statistics ? source.statistics.map((s: any) => new Statistic(s)) : [];
+    this.abilities = source.abilities ? source.abilities.map((s: any) => new  Ability(s)) : [];
+    this.inventory = source.inventory ? source.inventory.map((s: any) => new  Item(s)) : [];
+    this.conditions = source.conditions ? source.conditions.map((s: any) => new  Condition(s)) : [];
+    this.resources = source.resources ? source.resources.map((s: any) => new  Resource(s)) : [];
+    this.logs = source.logs ? source.logs.map((s: any) => new  Log(s)) : [];
+  }
+
   name: string = '';
   statistics: Statistic[] = [];
   abilities: Ability[] = [];
@@ -9,10 +22,10 @@ export class Sheet {
   conditions: Condition[] = [];
   resources: Resource[] = [];
   logs: Log[] = [];
-  
-  get actions(): string[] {
+
+  get actions(): Action[] {
     return this.abilities
-      .map(ability => ability.actionCost)
+      .map(ability => this.getActionsFromAbility(ability))
       .reduce((acc, cur) => acc.concat(cur));
   }
 
@@ -38,8 +51,23 @@ export class Sheet {
     return statistic ? this.innerResolveStatistic(new Cache<ResolvedStatistic>(), statistic) : statistic;
   }
 
+  previewFormulaValue(formula: string) {
+    var cache = new Cache<ResolvedStatistic>();
+
+    return this.innerCalculateFormula(cache, formula);
+  }
+
+  private getActionsFromAbility(ability: Ability) : Action[] {
+    return ability.actions.map(a => {
+      var action = new Action();
+      action.name = ability.name;
+      action.cost = a;
+      return action;
+    });
+  }
+
   private resolveResource(cache: Cache<ResolvedStatistic>, r: Resource): ResolvedResource {
-    var resource = new ResolvedResource();
+    var resource = new ResolvedResource(r);
 
     resource.formula = r.formula;
     resource.current = r.current;
@@ -53,13 +81,6 @@ export class Sheet {
     return !isNaN(Number(statistic.formula));
   }
 
-  private isConditional(statistic: Statistic): boolean {
-    return this.conditions
-      .map(c => c.targets)
-      .reduce((a, c) => a.concat(c))
-      .find(t => t === statistic.name) ? true : false;
-  }
-
   private innerResolveStatistic(cache: Cache<ResolvedStatistic>, statistic: Statistic): ResolvedStatistic {
     return cache.getFromCache(statistic.name, key => {
 
@@ -68,7 +89,7 @@ export class Sheet {
       const conditional = this.isConditional(statistic);
       const base = this.statisticIsBase(statistic);
 
-      var resolvedStatistic = new ResolvedStatistic();
+      var resolvedStatistic = new ResolvedStatistic(statistic);
 
       resolvedStatistic.value = value + modified;
       resolvedStatistic.name = key;
@@ -80,9 +101,19 @@ export class Sheet {
     });
   }
 
-  private conditionalModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
+  private effectsTargetingStatistic(statistic: Statistic): Effect[] {
     return this.conditions
-      .filter(c => c.targets.find(t => t === statistic.name))
+      .map(c => c.effects)
+      .reduce((acc, cur) => acc.concat(cur))
+      .filter(c => c.target === statistic.name);
+  }
+
+  private isConditional(statistic: Statistic): boolean {
+    return this.effectsTargetingStatistic(statistic).length > 0;
+  }
+
+  private conditionalModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
+    return this.effectsTargetingStatistic(statistic)
       .map(c => this.innerCalculateFormula(cache, c.formula))
       .reduce((acc, cur) => acc + cur);
   }
@@ -110,28 +141,117 @@ export class Sheet {
   }
 }
 
-export class Condition {
-  targets: string[] = [];
+export class Effect {
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.target = source.target || '';
+    this.formula = source.formula || '0';
+  }
+
+  target: string = '';
   formula: string = '0';
+}
+
+export class Condition {
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.effects = source.effects ? source.effects.map((s: any) => new  Effect(s)) : [];
+    this.active = source.active || false;
+  }
+
+  name: string = '';
+  effects: Effect[] = [];
   active: boolean = false;
 }
 
 export class Item {
+  constructor (source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.description = source.description || '';
+    this.stock = source.stock || 0;
+  }
+
   name: string = '';
   description: string = '';
   stock: number = 0;
 }
 
 export class Ability {
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.source = source.source || '';
+    this.description = source.description || '';
+    this.actions = source.actions ? source.actions : [];
+  }
+
   name: string = '';
   source: string = '';
   description: string = '';
-  actionCost: string[] = [];
+  actions: string[] = [];
+}
+
+export class Action {
+  name: string = '';
+  cost: string = '';
 }
 
 export class Statistic {
+  constructor (source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.formula = source.formula || '0';
+  }
+
   name: string = '';
   formula: string = '0';
+}
+
+export class Resource {
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.current = source.current || 0;
+    this.formula = source.formula || '0';
+  }
+
+  name: string = '';
+  current: number = 0;
+  formula: string = '0';
+}
+
+export class Log {
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.timestamp = source.timestamp || '';
+    this.text = source.text || '';
+  }
+
+  timestamp: string = '';
+  text: string = '';
 }
 
 export class ResolvedStatistic extends Statistic {
@@ -140,19 +260,8 @@ export class ResolvedStatistic extends Statistic {
   value: number = 0;
 }
 
-export class Resource {
-  name: string = '';
-  current: number = 0;
-  formula: string = '0';
-}
-
 export class ResolvedResource extends Resource {
   value: number = 0;
-}
-
-export class Log {
-  timestamp: string;
-  text: string;
 }
 
 export default Sheet;

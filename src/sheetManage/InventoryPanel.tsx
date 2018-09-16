@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sheet, { Item, nextId } from '../sheet/SheetModel';
+import Sheet, { Item } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import InventoryPanelRow from './InventoryPanelRow';
 import { ItemForm } from './ItemForm';
@@ -11,14 +11,14 @@ type InventoryPanelProps = {
   closeModal: () => void,
   updateItem: (item: Item) => void,
   addItem: (item: Item) => void,
-  deleteItem: (itemIdentifier: number) => void
+  deleteItem: (itemIdentifier: string) => void
 };
 
-export default class InventoryPanel extends React.Component<InventoryPanelProps, { expanded: number }> {
+export default class InventoryPanel extends React.Component<InventoryPanelProps, { expanded: string }> {
   constructor(props: InventoryPanelProps) {
     super(props);
 
-    this.state = { expanded: -1 };
+    this.state = { expanded: '' };
 
     this.showAddModal = this.showAddModal.bind(this);
     this.showEditModal = this.showEditModal.bind(this);
@@ -27,11 +27,9 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
   }
 
   showAddModal() {
-    const { sheet, addItem } = this.props;
+    const { addItem } = this.props;
 
-    var newId = nextId(sheet.inventory);
-
-    this.showModal({ id: newId, name: '', stock: 0 }, addItem);
+    this.showModal(new Item({}), addItem);
   }
 
   showEditModal(item: Item) {
@@ -53,7 +51,7 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
   }
 
   onExpand(item: Item) {
-    const expanded = item.id === this.state.expanded ? -1 : item.id;
+    const expanded = item.name === this.state.expanded ? '' : item.name;
 
     this.setState({ expanded });
   }
@@ -82,11 +80,11 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
                 <InventoryPanelRow
                   deleteItem={deleteItem}
                   expand={() => this.onExpand(i)}
-                  expanded={this.state.expanded === i.id}
+                  expanded={this.state.expanded === i.name}
                   item={i}
                   updateItem={updateItem}
                   showUpdateItem={this.showEditModal}
-                  itemKey={i.id.toString()}
+                  itemKey={i.name}
                 />
               ))}
           </tbody>
