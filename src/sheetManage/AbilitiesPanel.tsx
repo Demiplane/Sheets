@@ -26,7 +26,7 @@ const AbilitiesPanel: React.StatelessComponent<{ className?: string, sheet: Shee
                 <td><DetailBox name={a.name} description={a.description} /></td>
                 <td>{a.actions && a.actions
                   .sort()
-                  .reduce((l, r) => l + ' ' + r)}</td>
+                  .reduce((l, r) => l + ' ' + r, '')}</td>
                 <td>{a.source}</td>
               </tr>
             ))}

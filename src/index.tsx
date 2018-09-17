@@ -26,15 +26,15 @@ sheetApi.getAllSheets()
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename="build">
       <App>
         <Switch>
           <Route exact={true} path="/" component={HomePage} />
-          <Route path="/about" component={AboutPage} />
-          <Route path="/sheets" component={SheetsPage} />
-          <Route path="/sheet/:id" component={ManageSheetPage} />
-          <Route path="/notfound" component={NotFoundPage} />
-          <Redirect to="/notfound" />
+          <Route path={process.env.PUBLIC_URL + '/about'} component={AboutPage} />
+          <Route path={process.env.PUBLIC_URL + '/sheets'} component={SheetsPage} />
+          <Route path={process.env.PUBLIC_URL + '/sheet/:id'} component={ManageSheetPage} />
+          <Route path={process.env.PUBLIC_URL + '/notfound'} component={NotFoundPage} />
+          <Redirect to={process.env.PUBLIC_URL + '/notfound'} />
         </Switch>
       </App>
 

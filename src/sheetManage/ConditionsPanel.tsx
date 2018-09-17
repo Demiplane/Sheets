@@ -19,7 +19,7 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
 
     return (
       <tr key={condition.name}>
-        <td>{condition}</td>
+        <td>{condition.name}</td>
         <td className="text-center">
           <button
             className={'btn btn-small ' + (isActive ? 'btn-primary' : '')}

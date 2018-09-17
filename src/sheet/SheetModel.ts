@@ -1,19 +1,138 @@
 var math = require('mathjs');
 import Cache from '../core/Cache';
 
-export class Sheet {
+/* tslint:disable no-any */
+
+export class Effect {
+  target: string = '';
+  formula: string = '0';
+
   constructor(source: any) {
     if (!source) {
       return;
     }
-    this.name = source.name || '';
-    this.statistics = source.statistics ? source.statistics.map((s: any) => new Statistic(s)) : [];
-    this.abilities = source.abilities ? source.abilities.map((s: any) => new  Ability(s)) : [];
-    this.inventory = source.inventory ? source.inventory.map((s: any) => new  Item(s)) : [];
-    this.conditions = source.conditions ? source.conditions.map((s: any) => new  Condition(s)) : [];
-    this.resources = source.resources ? source.resources.map((s: any) => new  Resource(s)) : [];
-    this.logs = source.logs ? source.logs.map((s: any) => new  Log(s)) : [];
+
+    this.target = source.target || '';
+    this.formula = source.formula || '0';
   }
+}
+
+export class Condition {
+  name: string = '';
+  effects: Effect[] = [];
+  active: boolean = false;
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.active = source.active || false;
+
+    if (source instanceof Condition) {
+      this.effects = source.effects;
+    } else {
+      this.effects = source.effects ? source.effects.map((s: any) => new Effect(s)) : [];
+    }
+  }
+}
+
+export class Item {
+  name: string = '';
+  description: string = '';
+  stock: number = 0;
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.description = source.description || '';
+    this.stock = source.stock || 0;
+  }
+}
+
+export class Ability {
+  name: string = '';
+  source: string = '';
+  description: string = '';
+  actions: string[] = [];
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.source = source.source || '';
+    this.description = source.description || '';
+    this.actions = source.actions ? source.actions : [];
+  }
+}
+
+export class Action {
+  name: string = '';
+  cost: string = '';
+}
+
+export class Statistic {
+  name: string = '';
+  formula: string = '0';
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.formula = source.formula || '0';
+  }
+}
+
+export class Resource {
+  name: string = '';
+  current: number = 0;
+  formula: string = '0';
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.name = source.name || '';
+    this.current = source.current || 0;
+    this.formula = source.formula || '0';
+  }
+}
+
+export class Log {
+  timestamp: string = '';
+  text: string = '';
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+
+    this.timestamp = source.timestamp || '';
+    this.text = source.text || '';
+  }
+}
+
+export class ResolvedStatistic extends Statistic {
+  conditional: boolean = false;
+  base: boolean = false;
+  value: number = 0;
+}
+
+export class ResolvedResource extends Resource {
+  value: number = 0;
+}
+
+export class Sheet {
+  // fields
 
   name: string = '';
   statistics: Statistic[] = [];
@@ -22,6 +141,95 @@ export class Sheet {
   conditions: Condition[] = [];
   resources: Resource[] = [];
   logs: Log[] = [];
+
+  constructor(source: any) {
+    if (!source) {
+      return;
+    }
+    this.name = source.name || '';
+
+    if (source instanceof Sheet) {
+      this.statistics = source.statistics;
+      this.abilities = source.abilities;
+      this.inventory = source.inventory;
+      this.conditions = source.conditions;
+      this.resources = source.resources;
+      this.logs = source.logs;
+    } else {
+      this.statistics = source.statistics ? source.statistics.map((s: any) => new Statistic(s)) : [];
+      this.abilities = source.abilities ? source.abilities.map((s: any) => new Ability(s)) : [];
+      this.inventory = source.inventory ? source.inventory.map((s: any) => new Item(s)) : [];
+      this.conditions = source.conditions ? source.conditions.map((s: any) => new Condition(s)) : [];
+      this.resources = source.resources ? source.resources.map((s: any) => new Resource(s)) : [];
+      this.logs = source.logs ? source.logs.map((s: any) => new Log(s)) : [];
+    }
+  }
+
+  // state transitions
+
+  updateStatisticByIndex(index: number, statistic: Statistic): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.statistics = [...this.statistics];
+    newSheet.statistics[index] = statistic;
+    return newSheet;
+  }
+
+  updateStatistic(statistic: Statistic): Sheet {
+    var index = this.statistics.findIndex(f => f.name === statistic.name);
+    return this.updateStatisticByIndex(index, statistic);
+  }
+
+  updateItemByIndex(index: number, item: Item): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.inventory = [...this.inventory];
+    newSheet.inventory[index] = item;
+    return newSheet;
+  }
+
+  updateItem(item: Item): Sheet {
+    var index = this.inventory.findIndex(f => f.name === item.name);
+    return this.updateItemByIndex(index, item);
+  }
+
+  rename(newName: string): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.name = newName;
+    return newSheet;
+  }
+
+  addItem(item: Item): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.inventory = [...newSheet.inventory, item];
+    return newSheet;
+  }
+
+  addStatistic(statistic: Statistic): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.statistics = [...newSheet.statistics, statistic];
+    return newSheet;
+  }
+
+  deleteItem(name: string) {
+    var newSheet = new Sheet(this);
+    newSheet.inventory = [...newSheet.inventory.filter(i => i.name !== name)];
+    return newSheet;
+  }
+
+  deleteStatistic(name: string) {
+    var newSheet = new Sheet(this);
+    newSheet.statistics = [...newSheet.statistics.filter(i => i.name !== name)];
+    return newSheet;
+  }
+
+  activateCondition(conditionName: string): Sheet {
+    return this.setConditionActive(conditionName, true);
+  }
+
+  inactivateCondition(conditionName: string): Sheet {
+    return this.setConditionActive(conditionName, false);
+  }
+
+  // views / calculated
 
   get actions(): Action[] {
     return this.abilities
@@ -57,7 +265,26 @@ export class Sheet {
     return this.innerCalculateFormula(cache, formula);
   }
 
-  private getActionsFromAbility(ability: Ability) : Action[] {
+  // private methods
+
+  private setConditionActive(conditionName: string, active: boolean): Sheet {
+    const index = this.conditions.findIndex(c => c.name === conditionName);
+    const oldCondition = this.conditions[index];
+    if (oldCondition.active === active) {
+      return this;
+    }
+
+    const newSheet = new Sheet(this);
+    newSheet.conditions = [...newSheet.conditions];
+    const newCondition = new Condition(oldCondition);
+    newCondition.active = active;
+
+    newSheet.conditions[index] = newCondition;
+
+    return newSheet;
+  }
+
+  private getActionsFromAbility(ability: Ability): Action[] {
     return ability.actions.map(a => {
       var action = new Action();
       action.name = ability.name;
@@ -115,7 +342,7 @@ export class Sheet {
   private conditionalModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
     return this.effectsTargetingStatistic(statistic)
       .map(c => this.innerCalculateFormula(cache, c.formula))
-      .reduce((acc, cur) => acc + cur);
+      .reduce((acc, cur) => acc + cur, 0);
   }
 
   private innerCalculateFormula(cache: Cache<ResolvedStatistic>, formula: string): number {
@@ -139,129 +366,6 @@ export class Sheet {
       return NaN;
     }
   }
-}
-
-export class Effect {
-  constructor(source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.target = source.target || '';
-    this.formula = source.formula || '0';
-  }
-
-  target: string = '';
-  formula: string = '0';
-}
-
-export class Condition {
-  constructor(source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.name = source.name || '';
-    this.effects = source.effects ? source.effects.map((s: any) => new  Effect(s)) : [];
-    this.active = source.active || false;
-  }
-
-  name: string = '';
-  effects: Effect[] = [];
-  active: boolean = false;
-}
-
-export class Item {
-  constructor (source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.name = source.name || '';
-    this.description = source.description || '';
-    this.stock = source.stock || 0;
-  }
-
-  name: string = '';
-  description: string = '';
-  stock: number = 0;
-}
-
-export class Ability {
-  constructor(source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.name = source.name || '';
-    this.source = source.source || '';
-    this.description = source.description || '';
-    this.actions = source.actions ? source.actions : [];
-  }
-
-  name: string = '';
-  source: string = '';
-  description: string = '';
-  actions: string[] = [];
-}
-
-export class Action {
-  name: string = '';
-  cost: string = '';
-}
-
-export class Statistic {
-  constructor (source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.name = source.name || '';
-    this.formula = source.formula || '0';
-  }
-
-  name: string = '';
-  formula: string = '0';
-}
-
-export class Resource {
-  constructor(source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.name = source.name || '';
-    this.current = source.current || 0;
-    this.formula = source.formula || '0';
-  }
-
-  name: string = '';
-  current: number = 0;
-  formula: string = '0';
-}
-
-export class Log {
-  constructor(source: any) {
-    if (!source) {
-      return;
-    }
-
-    this.timestamp = source.timestamp || '';
-    this.text = source.text || '';
-  }
-
-  timestamp: string = '';
-  text: string = '';
-}
-
-export class ResolvedStatistic extends Statistic {
-  conditional: boolean = false;
-  base: boolean = false;
-  value: number = 0;
-}
-
-export class ResolvedResource extends Resource {
-  value: number = 0;
 }
 
 export default Sheet;

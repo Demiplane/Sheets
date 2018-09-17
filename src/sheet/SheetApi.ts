@@ -13,29 +13,33 @@ export class MockSheetApi implements SheetApi {
   private sheets: Model.Sheet[] = [
     new Model.Sheet({
       name: 'Roland of Gilead',
-      statistics:[
-        {name:'fighter level', formula:'5'},
-        {name:'wizard level', formula:'3'},
-        {name:'total level', formula:'[wizard level] + [fighter level]'},
-        {name:'constitution', formula:'18'},
-        {name:'constitution modifier', formula:'5'},
-        {name:'favored class bonus', formula:'[fighter level]'},
-        {name:'ranged attack bonus', formula: '[base attack bonus] + [dexterity modifier]'},
-        {name:'pistol attack bonus', formula: '1 + [ranged attack bonus]' },
-        {name:'base attack bonus', formula: '[fighter level] + ([wizard level] / 2)' },
+      statistics: [
+        { name: 'fighter level', formula: '5' },
+        { name: 'wizard level', formula: '3' },
+        { name: 'total level', formula: '[wizard level] + [fighter level]' },
+        { name: 'constitution', formula: '18' },
+        { name: 'constitution modifier', formula: '5' },
+        { name: 'favored class bonus', formula: '[fighter level]' },
+        { name: 'ranged attack bonus', formula: '[base attack bonus] + [dexterity modifier]' },
+        { name: 'pistol attack bonus', formula: '1 + [ranged attack bonus]' },
+        { name: 'base attack bonus', formula: '[fighter level] + ([wizard level] / 2)' },
       ],
-      resources:[
-        {name:'hit points', current: '15', formula:'([constitution modifier] * [total level]) + (([fighter level] - 1) * 5.5 + 10) + ([wizard level] * 3.5) + [favored class bonus]'},
+      resources: [
+        { name: 'hit points', current: '15', formula: 
+        '([constitution modifier] * [total level]) + (([fighter level] - 1) * 5.5 + 10)'
+        + ' + ([wizard level] * 3.5) + [favored class bonus]' },
       ],
-      logs:[
-        {timestamp:'today', text:'i made this'}
+      logs: [
+        { timestamp: 'today', text: 'i made this' }
       ],
-      conditions:[
-        {name:'within 30 feet of target', effects:[
-          {target:'ranged attack bonus', formula:'+1'}
-        ]}
+      conditions: [
+        {
+          name: 'within 30 feet of target', effects: [
+            { target: 'ranged attack bonus', formula: '+1' }
+          ]
+        }
       ],
-      inventory:[
+      inventory: [
         {
           name: 'Big Irons with the Sandalwood Grips',
           stock: 2,
@@ -58,7 +62,7 @@ export class MockSheetApi implements SheetApi {
         something something something something something something something something something ` },
         {
           name: 'Grow Bag', stock: 1, description: `A magical bag that has the ability to generate coins.
-                Given to Roland by his father, Steven Deschain.` 
+                Given to Roland by his father, Steven Deschain.`
         }
       ],
       abilities: [
