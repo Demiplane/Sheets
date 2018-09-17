@@ -1,8 +1,7 @@
 import * as React from 'react';
-import Sheet, { Statistic, nextId } from '../sheet/SheetModel';
+import Sheet, { Statistic, ResolvedStatistic } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
-import StatisticForm from './StatisticForm';
-import StatisticsPanelRow from './StatisticsPanelRow';
+import Flashy from '../controls/Flashy';
 
 type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
@@ -16,11 +15,11 @@ type StatisticsPanelProps = {
   sheet: Sheet
 };
 
-export class StatisticsPanel extends React.Component<StatisticsPanelProps, { expandedStatistic: number }> {
+export class StatisticsPanel extends React.Component<StatisticsPanelProps, { expandedStatistic: string }> {
   constructor(props: StatisticsPanelProps) {
     super(props);
 
-    this.state = { expandedStatistic: -1 };
+    this.state = { expandedStatistic: '' };
 
     this.cancel = this.cancel.bind(this);
     this.openAddStatistic = this.openAddStatistic.bind(this);
@@ -30,21 +29,11 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   }
 
   newStatistic(): Statistic {
-    return {
-      id: nextId(this.props.sheet.statistics),
-      name: ''
-    };
+    return new Statistic({});
   }
 
   openEditStatistic(statistic: Statistic) {
-    this.props.showModal((
-      <StatisticForm
-        statistic={statistic}
-        sheet={this.props.sheet}
-        save={s => { this.props.updateStatistic(s); this.props.closeModal(); }}
-        cancel={this.cancel}
-      />
-    ));
+    console.log('implement me');
   }
 
   cancel() {
@@ -52,19 +41,32 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   }
 
   openAddStatistic() {
-    this.props.showModal((
-      <StatisticForm
-        sheet={this.props.sheet}
-        statistic={this.newStatistic()}
-        save={s => { this.props.addStatistic(s); this.props.closeModal(); }}
-        cancel={this.cancel} />
-    ));
+    console.log('implement me');
   }
 
-  onExpand(statistic: Statistic) {
-    const expandedStatistic = statistic.id === this.state.expandedStatistic ? -1 : statistic.id;
+  onExpand(statistic: ResolvedStatistic) {
+    const expandedStatistic = statistic.name === this.state.expandedStatistic ? '' : statistic.name;
 
     this.setState({ expandedStatistic });
+  }
+
+  row(statistic: ResolvedStatistic): React.ReactNode {
+    
+    return [
+      (
+        <td>
+          <span>{statistic.name}</span><br/>
+          <span className="text-muted">{statistic.formula}</span>
+          {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
+          {statistic.conditional && <small className="text-muted pl-2 float-right">(conditional)</small>}
+        </td>
+      ),
+      (
+        <td className="text-center">
+          <Flashy value={statistic.value} />
+        </td>
+      )
+    ];
   }
 
   render() {
@@ -86,16 +88,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           </thead>
 
           <tbody>
-            {sheet.statistics && sheet.statistics.map(s => (
-              <StatisticsPanelRow
-                itemKey={s.id.toString()}
-                statistic={s}
-                sheet={sheet}
-                editStatistic={this.openEditStatistic}
-                deleteStatistic={this.props.deleteStatistic}
-                expand={() => this.onExpand(s)}
-                expanded={this.state.expandedStatistic === s.id} />
-            ))}
+            {sheet.resolvedStatistics.map(s => this.row(s))}
           </tbody>
 
         </table>

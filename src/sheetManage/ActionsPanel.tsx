@@ -1,6 +1,6 @@
 import * as React from 'react';
 import groupBy from '../core/groupBy';
-import Sheet, {Action} from '../sheet/SheetModel';
+import Sheet, { Action } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 
 const renderAction = (item: Action) => {
