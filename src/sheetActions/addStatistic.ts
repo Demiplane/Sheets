@@ -2,7 +2,7 @@ import { Statistic } from '../sheet/SheetModel';
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import { add } from '../sheet/sheetActions';
+import { add, executeTransition } from '../sheet/sheetActions';
 
 export const ADD_STATISTIC_SUCCESS = 'ADD_STATISTIC' + SHEET_SUCCESS_SUFFIX;
 export type AddStatisticAction = BaseAction & {
@@ -14,17 +14,9 @@ export function addStatistic(sheetIdentifier: string, statistic: Statistic): Add
 }
 export function handleAddStatistic(addStatisticAction: AddStatisticAction, state: SheetState) {
   const { sheetIdentifier, statistic } = addStatisticAction;
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.name === sheetIdentifier));
-
-  let oldStatistics = sheetToUpdate.statistics || [];
-
-  sheetToUpdate.statistics = [...oldStatistics, statistic];
-
+  
   return {
-    sheets: [
-      ...state.sheets.filter(sheet => sheet.name !== sheetIdentifier),
-      Object.assign({}, sheetToUpdate)
-    ]
+    sheets: executeTransition(sheetIdentifier, state.sheets, s => s.addStatistic(statistic))
   };
 }
 

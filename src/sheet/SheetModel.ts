@@ -1,19 +1,45 @@
 var math = require('mathjs');
 import Cache from '../core/Cache';
 
+export function executeTransition(sheetIdentifier:string, sheets:Sheet[], transition:(found:Sheet)=>Sheet) : Sheet[] {
+  const prevSheet = sheets.find(s => s.name === sheetIdentifier);
+
+  if (!prevSheet){
+    console.log('activateCondition', 'warn', 'Could not find sheet:', sheetIdentifier);
+    return sheets;
+  }
+
+  return [
+      ...sheets.filter(sheet => sheet.name !== sheetIdentifier),
+      transition()
+    ];
+}
+
 export class Sheet {
   constructor(source: any) {
     if (!source) {
       return;
     }
     this.name = source.name || '';
-    this.statistics = source.statistics ? source.statistics.map((s: any) => new Statistic(s)) : [];
-    this.abilities = source.abilities ? source.abilities.map((s: any) => new  Ability(s)) : [];
-    this.inventory = source.inventory ? source.inventory.map((s: any) => new  Item(s)) : [];
-    this.conditions = source.conditions ? source.conditions.map((s: any) => new  Condition(s)) : [];
-    this.resources = source.resources ? source.resources.map((s: any) => new  Resource(s)) : [];
-    this.logs = source.logs ? source.logs.map((s: any) => new  Log(s)) : [];
+
+    if (source instanceof Sheet) {
+      this.statistics = source.statistics;
+      this.abilities = source.abilities;
+      this.inventory = source.inventory;
+      this.conditions = source.conditions;
+      this.resources = source.resources;
+      this.logs = source.logs;
+    } else {
+      this.statistics = source.statistics ? source.statistics.map((s: any) => new Statistic(s)) : [];
+      this.abilities = source.abilities ? source.abilities.map((s: any) => new Ability(s)) : [];
+      this.inventory = source.inventory ? source.inventory.map((s: any) => new Item(s)) : [];
+      this.conditions = source.conditions ? source.conditions.map((s: any) => new Condition(s)) : [];
+      this.resources = source.resources ? source.resources.map((s: any) => new Resource(s)) : [];
+      this.logs = source.logs ? source.logs.map((s: any) => new Log(s)) : [];
+    }
   }
+
+  // fields
 
   name: string = '';
   statistics: Statistic[] = [];
@@ -22,6 +48,90 @@ export class Sheet {
   conditions: Condition[] = [];
   resources: Resource[] = [];
   logs: Log[] = [];
+
+  // state transitions
+
+
+  updateStatisticByIndex(index:number, statistic:Statistic) : Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.statistics = [...this.statistics];
+    newSheet.statistics[index] = statistic;
+    return newSheet;
+  }
+
+  updateStatistic(statistic:Statistic) : Sheet {
+    var index = this.statistics.findIndex(f => f.name === statistic.name);
+    return this.updateStatisticByIndex(index, statistic);
+  }
+
+  updateItemByIndex(index:number, item:Item) : Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.inventory = [...this.inventory];
+    newSheet.inventory[index] = item;
+    return newSheet;
+  }
+
+  updateItem(item:Item) : Sheet {
+    var index = this.inventory.findIndex(f => f.name === item.name);
+    return this.updateItemByIndex(index, item);
+  }
+
+  rename(newName: string) :Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.name = newName;
+    return newSheet;
+  }
+
+  addItem(item: Item): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.inventory = [...newSheet.inventory, item];
+    return newSheet;
+  }
+
+  addStatistic(statistic: Statistic): Sheet {
+    var newSheet = new Sheet(this);
+    newSheet.statistics = [...newSheet.statistics, statistic];
+    return newSheet;
+  }
+
+  deleteItem(name:string) {
+    var newSheet = new Sheet(this);
+    newSheet.inventory = [...newSheet.inventory.filter(i => i.name !== name)];
+    return newSheet;
+  }
+
+  deleteStatistic(name:string) {
+    var newSheet = new Sheet(this);
+    newSheet.statistics = [...newSheet.statistics.filter(i => i.name !== name)];
+    return newSheet;
+  }
+
+  activateCondition(conditionName: string): Sheet {
+    return this.setConditionActive(conditionName, true);
+  }
+
+  inactivateCondition(conditionName: string): Sheet {
+    return this.setConditionActive(conditionName, false);
+  }
+
+  private setConditionActive(conditionName: string, active: boolean): Sheet {
+    const index = this.conditions.findIndex(c => c.name === conditionName);
+    const oldCondition = this.conditions[index];
+    if (oldCondition.active === active) {
+      return this;
+    }
+
+    const newSheet = new Sheet(this);
+    newSheet.conditions = [...newSheet.conditions];
+    const newCondition = new Condition(oldCondition);
+    newCondition.active = active;
+
+    newSheet.conditions[index] = newCondition;
+
+    return newSheet;
+  }
+
+  // views / calculated
 
   get actions(): Action[] {
     return this.abilities
@@ -57,7 +167,9 @@ export class Sheet {
     return this.innerCalculateFormula(cache, formula);
   }
 
-  private getActionsFromAbility(ability: Ability) : Action[] {
+  // private methods
+
+  private getActionsFromAbility(ability: Ability): Action[] {
     return ability.actions.map(a => {
       var action = new Action();
       action.name = ability.name;
@@ -162,8 +274,13 @@ export class Condition {
     }
 
     this.name = source.name || '';
-    this.effects = source.effects ? source.effects.map((s: any) => new  Effect(s)) : [];
     this.active = source.active || false;
+
+    if (source instanceof Condition) {
+      this.effects = source.effects;
+    } else {
+      this.effects = source.effects ? source.effects.map((s: any) => new Effect(s)) : [];
+    }
   }
 
   name: string = '';
@@ -172,7 +289,7 @@ export class Condition {
 }
 
 export class Item {
-  constructor (source: any) {
+  constructor(source: any) {
     if (!source) {
       return;
     }
@@ -211,7 +328,7 @@ export class Action {
 }
 
 export class Statistic {
-  constructor (source: any) {
+  constructor(source: any) {
     if (!source) {
       return;
     }

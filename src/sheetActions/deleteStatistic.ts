@@ -1,7 +1,7 @@
 import { BaseAction } from '../core/BaseAction';
 import SheetState from '../sheet/SheetState';
 import { SHEET_SUCCESS_SUFFIX } from '../sheet/sheetActions';
-import { add } from '../sheet/sheetActions';
+import { add, executeTransition } from '../sheet/sheetActions';
 import { Statistic } from '../sheet/SheetModel';
 
 export const DELETE_STATISTIC_SUCCESS = 'DELETE_STATISTIC' + SHEET_SUCCESS_SUFFIX;
@@ -14,17 +14,9 @@ export function deleteStatistic(sheetIdentifier: string, statistic: Statistic): 
 }
 export function handleDeleteStatistic(deleteStatisticAction: DeleteStatisticAction, state: SheetState) {
   const { sheetIdentifier, statistic } = deleteStatisticAction;
-  const sheetToUpdate = Object.assign({}, state.sheets.find(s => s.name === sheetIdentifier));
-
-  let oldStatistics = sheetToUpdate.statistics || [];
-
-  sheetToUpdate.statistics = oldStatistics.filter(o => o.name !== statistic.name);
-
+  
   return {
-    sheets: [
-      ...state.sheets.filter(sheet => sheet.name !== sheetIdentifier),
-      Object.assign({}, sheetToUpdate)
-    ]
+    sheets: executeTransition(sheetIdentifier, state.sheets, s => s.deleteStatistic(statistic.name))
   };
 }
 
