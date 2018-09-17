@@ -51,22 +51,19 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   }
 
   row(statistic: ResolvedStatistic): React.ReactNode {
-    
-    return [
-      (
+
+    return (
+      <tr>
         <td>
-          <span>{statistic.name}</span><br/>
+          <span>{statistic.name}</span><br />
           <span className="text-muted">{statistic.formula}</span>
           {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
           {statistic.conditional && <small className="text-muted pl-2 float-right">(conditional)</small>}
         </td>
-      ),
-      (
         <td className="text-center">
           <Flashy value={statistic.value} />
         </td>
-      )
-    ];
+      </tr>);
   }
 
   render() {
