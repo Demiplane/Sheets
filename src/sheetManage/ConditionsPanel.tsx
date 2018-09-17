@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sheet, { getConditions, conditionIsActive } from '../sheet/SheetModel';
+import Sheet, { Condition } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 
 type ConditionsPanelProps = {
@@ -14,18 +14,18 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
     super(props);
   }
 
-  toRowPair = (sheet: Sheet, condition: string) => {
-    const isActive = conditionIsActive(sheet, condition);
+  toRowPair = (sheet: Sheet, condition: Condition) => {
+    const isActive = condition.active;
 
     return (
-      <tr key={condition}>
+      <tr key={condition.name}>
         <td>{condition}</td>
         <td className="text-center">
           <button
             className={'btn btn-small ' + (isActive ? 'btn-primary' : '')}
             onClick={event => {
               event.preventDefault();
-              isActive ? this.props.inactivateCondition(condition) : this.props.activateCondition(condition);
+              isActive ? this.props.inactivateCondition(condition.name) : this.props.activateCondition(condition.name);
             }}>
             {isActive ? 'ACTIVE' : 'INACTIVE'}
           </button>
@@ -36,7 +36,7 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
 
   render() {
     const { sheet, className } = this.props;
-    const conditions = getConditions(sheet);
+    const conditions = sheet.conditions;
 
     return (
       <SheetPanel

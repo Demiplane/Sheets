@@ -1,16 +1,15 @@
 import * as React from 'react';
 import groupBy from '../core/groupBy';
-import Sheet, { selectActions } from '../sheet/SheetModel';
+import Sheet, {Action} from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
-import DetailBox from '../controls/DetailBox';
 
-const renderAction = (item: { name?: string, description?: string }) => {
+const renderAction = (item: Action) => {
   return (
-    <DetailBox name={item.name!} description={item.description} />
+    <p>{item.name}</p>
   );
 };
 
-const toActionTable = (group: { key: string, items: { name?: string, description?: string }[] }) => {
+const toActionTable = (group: { key: string, items: Action[] }) => {
   return (
     <div key={group.key}>
       <h2>{group.key}</h2>
@@ -25,11 +24,8 @@ const toActionTable = (group: { key: string, items: { name?: string, description
 
 const ActionsPanel: React.StatelessComponent<{ className?: string, sheet: Sheet }> =
   ({ className, sheet }) => {
-    const actions = selectActions(sheet);
-    const flattenedByCost = actions
-      .map(a => a.actionCost!.map(c => ({ cost: c, name: a.name, description: a.description })))
-      .reduce((l, r) => l.concat(r), []);
-    const costGroups = groupBy(flattenedByCost, a => a.cost);
+    const actions = sheet.actions;
+    const costGroups = groupBy(actions, a => a.cost);
 
     return (
       <SheetPanel

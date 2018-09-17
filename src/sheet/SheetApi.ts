@@ -1,145 +1,82 @@
 import * as Model from './SheetModel';
 
 export interface SheetApi {
-  createSheet(sheet: Model.Sheet): Promise<number>;
+  createSheet(sheet: Model.Sheet): Promise<string>;
   getAllSheets(): Promise<Model.Sheet[]>;
   updateSheet(sheet: Model.Sheet): Promise<void>;
-  deleteSheet(sheetIdentifier: number): Promise<void>;
+  deleteSheet(sheetIdentifier: string): Promise<void>;
 }
 
 export class MockSheetApi implements SheetApi {
   private timeout = 1500;
 
   private sheets: Model.Sheet[] = [
-    {
-      id: 1,
+    new Model.Sheet({
       name: 'Roland of Gilead',
-      statistics: [
-        { id: 1, name: 'fighter level', modifiers: [{ id: 1, formula: '5' }] },
-        {
-          id: 2,
-          name: 'example base with conditional',
-          modifiers: [
-            { id: 1, formula: '5' },
-            { id: 2, source: 'example', condition: 'long is kranky', formula: '5' }
-          ]
-        },
-        {
-          id: 3,
-          name: 'example base with conditional two',
-          modifiers: [
-            { id: 1, formula: '7' },
-            { id: 2, source: 'example', condition: 'long is kranky', formula: '5' }
-          ]
-        },
-        { id: 4, name: 'wizard level', modifiers: [{ id: 1, formula: '3' }] },
-        { id: 5, name: 'favored class bonus', modifiers: [{ id: 1, source: 'race', formula: '[fighter level]' }] },
-        { id: 6, name: 'total level', modifiers: [{ id: 1, formula: '[fighter level] + [wizard level]' }] },
-        {
-          id: 7, name: 'base attack bonus', modifiers: [
-            { id: 1, formula: '[fighter level]' },
-            { id: 2, formula: '[wizard level] / 2' }
-          ]
-        },
-        {
-          id: 8,
-          name: 'hit point maximum',
-          modifiers: [
-            { id: 1, source: 'constitution', formula: '[constitution modifier] * [total level]' },
-            { id: 2, formula: '([fighter level] - 1) * 5.5 + 10' },
-            { id: 3, formula: '[wizard level] * 3.5' },
-            { id: 4, formula: '[favored class bonus]' },
-          ],
-          resource: {
-            name: 'hit points',
-            current: 63,
-            recharge: [{ id: 1, name: 'rest', restorationFormulae: [{ id: 1, value: '[hit point maximum]' }] }]
-          }
-        },
-        { id: 9, name: 'constitution', modifiers: [{ id: 1, formula: '14' }] },
-        {
-          id: 10,
-          name: 'constitution modifier', modifiers: [
-            { id: 1, source: 'constitution', formula: '([constitution] - 10) / 2' }]
-        },
-        { id: 11, name: 'example', modifiers: [{ id: 1, formula: 'min(-1, 1)' }] },
-        { id: 12, name: 'dexterity', modifiers: [{ id: 1, formula: '14' }] },
-        {
-          id: 13,
-          name: 'dexterity modifier',
-          modifiers: [{ id: 1, source: 'dexterity', formula: '([dexterity] - 10) / 2' }]
-        },
-        {
-          id: 14,
-          name: 'gun attack bonus', modifiers: [
-            { id: 1, source: 'weapon focus', formula: '1' },
-            { id: 2, formula: '[base attack bonus]' },
-            { id: 3, formula: '[dexterity modifier]' },
-            { id: 4, source: 'point blank shot', condition: 'target is within 30ft.', formula: '1' },
-            { id: 5, condition: 'target is behind cover', formula: '-2' }
-          ]
-        }
+      statistics:[
+        {name:'fighter level', formula:'5'},
+        {name:'wizard level', formula:'3'},
+        {name:'total level', formula:'[wizard level] + [fighter level]'},
+        {name:'constitution', formula:'18'},
+        {name:'constitution modifier', formula:'5'},
+        {name:'favored class bonus', formula:'[fighter level]'},
+        {name:'ranged attack bonus', formula: '[base attack bonus] + [dexterity modifier]'},
+        {name:'pistol attack bonus', formula: '1 + [ranged attack bonus]' },
+        {name:'base attack bonus', formula: '[fighter level] + ([wizard level] / 2)' },
       ],
-      inventory: [
+      resources:[
+        {name:'hit points', current: '15', formula:'([constitution modifier] * [total level]) + (([fighter level] - 1) * 5.5 + 10) + ([wizard level] * 3.5) + [favored class bonus]'},
+      ],
+      logs:[
+        {timestamp:'today', text:'i made this'}
+      ],
+      conditions:[
+        {name:'within 30 feet of target', effects:[
+          {target:'ranged attack bonus', formula:'+1'}
+        ]}
+      ],
+      inventory:[
         {
-          id: 1,
           name: 'Big Irons with the Sandalwood Grips',
           stock: 2,
           description: 'The Sandalwood Guns are the guns of a true gunslinger.'
         },
         {
-          id: 2, name: 'Horn of Eld', stock: 1, description: 'The Horn of Eld is the personal horn of Arthur Eld.'
+          name: 'Horn of Eld', stock: 1, description: 'The Horn of Eld is the personal horn of Arthur Eld.'
         },
         {
-          id: 3,
           name: 'Old Cowboy\'s Boots', stock: 2,
           description: 'These old worn leather boots are made of deerhide. They probably need to be replaced.'
         },
-        { id: 4, name: 'Traveler\'s Clothes', stock: 1 },
+        { name: 'Traveler\'s Clothes', stock: 1 },
         {
-          id: 5, name: 'Gunna', stock: 1, description: `In his bag he always seems to have what he needs.
+          name: 'Gunna', stock: 1, description: `In his bag he always seems to have what he needs.
         Something something something something something something something something something something 
         something something something something something something something something something 
         something something something something something something something something something 
         something something something something something something something something something 
         something something something something something something something something something ` },
         {
-          id: 6, name: 'Grow Bag', stock: 1, description: `A magical bag that has the ability to generate coins.
-                Given to Roland by his father, Steven Deschain.` },
+          name: 'Grow Bag', stock: 1, description: `A magical bag that has the ability to generate coins.
+                Given to Roland by his father, Steven Deschain.` 
+        }
       ],
       abilities: [
         {
-          id: 1,
           name: 'Weapon Training (firearms)',
           source: 'fighter 5',
           description: 'https://www.d20pfsrd.com/classes/core-classes/fighter/#TOC-Weapon-Training'
         },
         {
-          id: 2,
           name: 'Second Wind',
           source: 'fighter 1',
-          actionCost: ['bonus action'],
+          actions: ['bonus action'],
           description: `You have a limited well of stamina that you can draw on to protect yourself from harm.
                     On Your Turn, you can use a Bonus Action to regain hit points equal to 1d10 + your fighter level.
                     Once you use this feature, you must finish a short or Long Rest before you can use it again.`
         }
-      ],
-      actions: [
-        { id: 1, name: 'Dash', actionCost: ['action'] },
-        { id: 2, name: 'Dodge', actionCost: ['action'] },
-        { id: 3, name: 'Disengage', actionCost: ['action'] },
-        { id: 4, name: 'Help', actionCost: ['action'] }
-      ],
-      conditions: ['long is kranky']
-    },
-    {
-      id: 2,
-      name: 'Steven Deschain',
-      statistics: [],
-      inventory: [],
-      abilities: [],
-      conditions: []
-    }
+      ]
+    })
   ];
 
   getAllSheets() {
@@ -150,12 +87,12 @@ export class MockSheetApi implements SheetApi {
     });
   }
 
-  createSheet(sheet: Model.Sheet): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
+  createSheet(sheet: Model.Sheet): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
       setTimeout(() => {
         var newSheet = Object.assign({}, { identifier: this.uuidv4() }, sheet);
         this.sheets = [...this.sheets, newSheet];
-        resolve(newSheet.id);
+        resolve(newSheet.name);
       }, this.timeout);
     });
   }
@@ -163,16 +100,16 @@ export class MockSheetApi implements SheetApi {
   updateSheet(sheet: Model.Sheet): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        this.sheets = [...this.sheets.filter(s => s.id !== sheet.id), sheet];
+        this.sheets = [...this.sheets.filter(s => s.name !== sheet.name), sheet];
         resolve();
       }, this.timeout);
     });
   }
 
-  deleteSheet(sheetIdentifier: number): Promise<void> {
+  deleteSheet(sheetIdentifier: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        this.sheets = [...this.sheets.filter(sheet => sheet.id !== sheetIdentifier)];
+        this.sheets = [...this.sheets.filter(sheet => sheet.name !== sheetIdentifier)];
         resolve();
       }, this.timeout);
     });

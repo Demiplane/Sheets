@@ -11,7 +11,7 @@ import FluidPage from '../controls/FluidPage';
 type ManageSheetPageProps = ConnectedSheetProps & {
   sheet?: Sheet;
   loading: boolean;
-} & RouteComponentProps<{ id: number }>;
+} & RouteComponentProps<{ id: string }>;
 
 type ManageSheetPageState = {
   modal?: JSX.Element;
@@ -55,18 +55,18 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
         <div>
           <SheetForm
 
-            addStatistic={s => this.props.addStatistic!(sheet.id, s)}
-            updateStatistic={s => this.props.updateStatistic!(sheet.id, s)}
-            deleteStatistic={s => this.props.deleteStatistic!(sheet.id, s)}
+            addStatistic={s => this.props.addStatistic!(sheet.name, s)}
+            updateStatistic={s => this.props.updateStatistic!(sheet.name, s)}
+            deleteStatistic={s => this.props.deleteStatistic!(sheet.name, s)}
 
-            updateSheetName={n => this.props.renameSheet!(sheet.id, n)}
+            updateSheetName={n => this.props.renameSheet!(sheet.name, n)}
 
-            addItem={i => this.props.addItem!(sheet.id, i)}
-            updateItem={i => this.props.updateItem!(sheet.id, i)}
-            deleteItem={i => this.props.deleteItem!(sheet.id, i)}
+            addItem={i => this.props.addItem!(sheet.name, i)}
+            updateItem={i => this.props.updateItem!(sheet.name, i)}
+            deleteItem={i => this.props.deleteItem!(sheet.name, i)}
 
-            activateCondition={c => this.props.activateCondition!(sheet.id, c)}
-            inactivateCondition={c => this.props.inactivateCondition!(sheet.id, c)}
+            activateCondition={c => this.props.activateCondition!(sheet.name, c)}
+            inactivateCondition={c => this.props.inactivateCondition!(sheet.name, c)}
 
             sheet={sheet}
             showModal={this.openModal}
@@ -82,8 +82,9 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
 }
 
 const mapStateToProps = (state: RootState, ownProps: ManageSheetPageProps): ManageSheetPageProps => {
-  let sheetIdentifier = Number(ownProps.match.params.id);
-  let sheet = state.sheetState.sheets.find(s => s.id === sheetIdentifier);
+  console.log('ManageSheetPage', 'debug', 'targeting sheet to load', ownProps.match.params);
+  let sheetIdentifier = ownProps.match.params.id;
+  let sheet = state.sheetState.sheets.find(s => s.name === sheetIdentifier);
 
   return Object.assign({}, ownProps, { sheet, loading: state.loading });
 };
