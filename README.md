@@ -1,2 +1,2 @@
-[Go](/build)
+[Go](/Sheets/build)
 1
