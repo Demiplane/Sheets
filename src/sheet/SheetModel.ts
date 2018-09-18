@@ -328,15 +328,16 @@ export class Sheet {
     });
   }
 
-  private effectsTargetingStatistic(statistic: Statistic): Effect[] {
+  private effectsTargetingStatistic(statistic: Statistic, force: boolean = false): Effect[] {
     return this.conditions
+      .filter(c => c.active || force)
       .map(c => c.effects)
-      .reduce((acc, cur) => acc.concat(cur))
+      .reduce((acc, cur) => acc.concat(cur), [])
       .filter(c => c.target === statistic.name);
   }
 
   private isConditional(statistic: Statistic): boolean {
-    return this.effectsTargetingStatistic(statistic).length > 0;
+    return this.effectsTargetingStatistic(statistic, true).length > 0;
   }
 
   private conditionalModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
@@ -354,7 +355,7 @@ export class Sheet {
     matches.forEach(m => {
       const statisticName = m.replace('[', '').replace(']', '');
       const statistic = this.findStatistic(statisticName);
-      var statisticValue = statistic ? this.innerResolveStatistic(cache, statistic) : NaN;
+      var statisticValue = statistic ? this.innerResolveStatistic(cache, statistic).value : NaN;
 
       expression = expression.replace(m, statisticValue.toString());
     });

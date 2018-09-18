@@ -82,7 +82,6 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
 }
 
 const mapStateToProps = (state: RootState, ownProps: ManageSheetPageProps): ManageSheetPageProps => {
-  console.log('ManageSheetPage', 'debug', 'targeting sheet to load', ownProps.match.params);
   let sheetIdentifier = ownProps.match.params.id;
   let sheet = state.sheetState.sheets.find(s => s.name === sheetIdentifier);
 

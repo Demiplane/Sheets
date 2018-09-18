@@ -13,6 +13,9 @@ type InventoryPanelRowProps = DetailRowPairProps & {
 export default class InventoryPanelRow extends React.Component<InventoryPanelRowProps> {
   constructor(props: InventoryPanelRowProps) {
     super(props);
+
+    this.row = this.row.bind(this);
+    this.detail = this.detail.bind(this);
   }
 
   render() {
@@ -41,6 +44,8 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
 
   detail(props: InventoryPanelRowProps): React.ReactNode {
     const { item, deleteItem, showUpdateItem } = props;
+
+    console.log(item);
 
     return (
       <td colSpan={2} className="p-2 pb-4">
