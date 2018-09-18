@@ -78,13 +78,13 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
             {sheet.inventory && sheet.inventory.map(i =>
               (
                 <InventoryPanelRow
+                  item={i}
+                  itemKey={i.name}
                   deleteItem={deleteItem}
                   expand={() => this.onExpand(i)}
                   expanded={this.state.expanded === i.name}
-                  item={i}
                   updateItem={updateItem}
                   showUpdateItem={this.showEditModal}
-                  itemKey={i.name}
                 />
               ))}
           </tbody>

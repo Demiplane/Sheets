@@ -15,11 +15,13 @@ export default function toDetailRowPair<TProps extends DetailRowPairProps>(
 ) {
   const { itemKey, expanded, expand } = props;
 
+  console.log(props);
+
   return [(
     <tr
+      key={itemKey}
       className={'clickable' + (expanded ? ' selected' : '')}
       onClick={event => { event.preventDefault(); expand(); }}
-      key={itemKey}
     >
       {row(props)}
     </tr>

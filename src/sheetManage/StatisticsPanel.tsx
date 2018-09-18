@@ -53,7 +53,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
   row(statistic: ResolvedStatistic): React.ReactNode {
 
     return (
-      <tr>
+      <tr key={statistic.name}>
         <td>
           <span>{statistic.name}</span><br />
           <span className="text-muted">{statistic.formula}</span>
