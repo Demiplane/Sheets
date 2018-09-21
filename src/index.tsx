@@ -26,7 +26,7 @@ sheetApi.getAllSheets()
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename="/Sheets">
+    <BrowserRouter>
       <App>
         <Switch>
           <Route exact={true} path="/" component={HomePage} />
