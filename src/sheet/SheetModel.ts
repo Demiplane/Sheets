@@ -89,6 +89,12 @@ export class Statistic {
     this.name = source.name || '';
     this.formula = source.formula || '0';
   }
+
+  updateFormula(formula: string): Statistic {
+    var updatedStatistic = new Statistic(this);
+    updatedStatistic.formula = formula;
+    return updatedStatistic;
+  }
 }
 
 export class Resource {
@@ -229,6 +235,24 @@ export class Sheet {
     return this.setConditionActive(conditionName, false);
   }
 
+  // creators
+
+  createCandidateStatistic(): Statistic {
+    var candidateName = 'New Statistic';
+
+    if (this.statisticExists(candidateName)) {
+      let append = 0;
+      let incrementName = candidateName + ' ' + append;
+      while (this.statisticExists(incrementName)) {
+        append++;
+        incrementName = candidateName + ' ' + append;
+      }
+      candidateName = incrementName;
+    }
+
+    return new Statistic({ name: candidateName });
+  }
+
   // views / calculated
 
   get actions(): Action[] {
@@ -251,7 +275,7 @@ export class Sheet {
   }
 
   findStatistic(statisticName: string): Statistic | undefined {
-    return this.statistics.find(s => s.name === statisticName);
+    return this.statistics.find(s => s.name.toLowerCase() === statisticName.toLowerCase());
   }
 
   resolveStatistic(statisticName: string): ResolvedStatistic | undefined {
@@ -266,6 +290,11 @@ export class Sheet {
   }
 
   // private methods
+
+  private statisticExists(name: string): boolean {
+    return this.findStatistic(name)
+      ? true : false;
+  }
 
   private setConditionActive(conditionName: string, active: boolean): Sheet {
     const index = this.conditions.findIndex(c => c.name === conditionName);
