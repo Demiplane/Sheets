@@ -29,7 +29,7 @@ export default class FormulaInlineEdit
         this.onKeyUp = this.onKeyUp.bind(this);
     }
 
-    goToEditMode(event: React.FormEvent<HTMLParagraphElement>) {
+    goToEditMode(event: React.FormEvent<HTMLSpanElement>) {
         console.log('focus');
         this.setState({ focus: true, editValue: this.props.priorFormula });
     }
@@ -66,13 +66,14 @@ export default class FormulaInlineEdit
 
     render() {
 
-        const classes = combineClases(this.props.className);
+        const inputClasses = combineClases('form-control', this.props.className);
+        const spanClasses = combineClases('clickable', this.props.className);
 
         var dom = (
             this.state.focus ?
                 (
                     <input
-                        className={classes}
+                        className={inputClasses}
                         ref={this.textInput}
                         onBlur={this.onBlur}
                         value={this.state.editValue}
@@ -80,9 +81,9 @@ export default class FormulaInlineEdit
                         onKeyUp={this.onKeyUp}
                         onFocus={this.handleFocus} />) :
                 (
-                    <p
-                        className={classes}
-                        onClick={this.goToEditMode}>{this.state.editValue}</p>)
+                    <span
+                        className={spanClasses}
+                        onClick={this.goToEditMode}>{this.state.editValue}</span>)
         );
 
         return dom;
