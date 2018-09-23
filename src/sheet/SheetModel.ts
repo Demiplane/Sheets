@@ -116,7 +116,7 @@ export class Log {
       return;
     }
 
-    this.timestamp = source.timestamp || '';
+    this.timestamp = source.timestamp || new Date().toLocaleString();
     this.text = source.text || '';
   }
 }
@@ -166,6 +166,18 @@ export class Sheet {
   }
 
   // state transitions
+
+  addLog(log: Log) {
+    var newSheet = new Sheet(this);
+    newSheet.logs = [...this.logs, log];
+    return newSheet;
+  }
+
+  deleteLog(timestamp: string) {
+    var newSheet = new Sheet(this);
+    newSheet.logs = this.logs.filter(l => l.timestamp === timestamp);
+    return newSheet;
+  }
 
   updateStatisticByIndex(index: number, statistic: Statistic): Sheet {
     var newSheet = new Sheet(this);

@@ -1,5 +1,5 @@
 import { Dispatch, AnyAction } from 'redux';
-import Sheet, { Statistic, Item } from '../sheet/SheetModel';
+import Sheet, { Statistic, Item, Log } from '../sheet/SheetModel';
 import { activateCondition } from '../sheetActions/activateCondition';
 import { inactivateCondition } from '../sheetActions/inactivateCondition';
 import { updateStatistic } from '../sheetActions/updateStatistic';
@@ -13,6 +13,8 @@ import { renameSheet } from '../sheetActions/renameSheet';
 import { addItem } from '../sheetActions/addItem';
 import { updateItem } from '../sheetActions/updateItem';
 import { deleteItem } from '../sheetActions/deleteItem';
+import { addLog } from '../sheetActions/addLog';
+import { deleteLog } from '../sheetActions/deleteLog';
 
 export type ConnectedSheetProps = {
   activateCondition?: (sheetIdentifier: string, condition: string) => void;
@@ -31,6 +33,9 @@ export type ConnectedSheetProps = {
   deleteSheet?: (sheetIdentifier: string) => void;
   loadSheets?: (sheets: Sheet[]) => void;
   renameSheet?: (sheetIdentifier: string, name: string) => void;
+
+  addLog?: (sheetIdentifier: string, log: Log) => void;
+  deleteLog?: (sheetIdentifier: string, timestamp: string) => void;
 };
 
 export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetProps {
@@ -63,6 +68,11 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
     updateItem: (sheetIdentifier: string, item: Item) =>
       dispatch(updateItem(sheetIdentifier, item)),
     deleteItem: (sheetIdentifier: string, itemIdentifier: string) =>
-      dispatch(deleteItem(sheetIdentifier, itemIdentifier))
+      dispatch(deleteItem(sheetIdentifier, itemIdentifier)),
+
+    addLog: (sheetIdentifier: string, log: Log) =>
+      dispatch(addLog(sheetIdentifier, log)),
+    deleteLog: (sheetIdentifier: string, timestamp: string) =>
+      dispatch(deleteLog(sheetIdentifier, timestamp))
   };
 }

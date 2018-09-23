@@ -45,8 +45,6 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
   detail(props: InventoryPanelRowProps): React.ReactNode {
     const { item, deleteItem, showUpdateItem } = props;
 
-    console.log(item);
-
     return (
       <td colSpan={2} className="p-2 pb-4">
         {item.description ? <p>{item.description}</p> : null}

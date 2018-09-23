@@ -1,4 +1,4 @@
-import { Sheet, Statistic, Item } from '../sheet/SheetModel';
+import { Sheet, Statistic, Item, Log } from '../sheet/SheetModel';
 import * as React from 'react';
 import AbilitiesPanel from './AbilitiesPanel';
 import FluidPage from '../controls/FluidPage';
@@ -7,6 +7,7 @@ import ResourcesPanel from './ResourcesPanel';
 import StatisticsPanel from './StatisticsPanel';
 import ActionsPanel from './ActionsPanel';
 import ConditionsPanel from './ConditionsPanel';
+import LogPanel from './LogPanel';
 import { RenameForm } from './RenameForm';
 
 type SheetFormProps = {
@@ -26,6 +27,9 @@ type SheetFormProps = {
   updateStatistic: (statistic: Statistic) => void;
   addStatistic: (statistic: Statistic) => void;
   deleteStatistic: (statistic: Statistic) => void;
+
+  addLog: (log: Log) => void;
+  deleteLog: (timestamp: string) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
@@ -33,6 +37,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
     addStatistic, updateStatistic, deleteStatistic,
     updateSheetName,
     updateItem, addItem, deleteItem,
+    addLog, deleteLog,
     activateCondition, inactivateCondition } = props;
 
   return (
@@ -96,6 +101,11 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
             />
             <ActionsPanel sheet={sheet} />
             <AbilitiesPanel sheet={sheet} />
+            <LogPanel
+              sheet={sheet}
+              addLog={addLog}
+              deleteLog={deleteLog}
+              updateLog={l => { ''.toString(); }} />
           </div>
         </div>
       </FluidPage>
