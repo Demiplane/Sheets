@@ -1,9 +1,15 @@
 import * as React from 'react';
-import Sheet from '../sheet/SheetModel';
+import Sheet, { Resource } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
+import InlineEdit from '../controls/InlineEdit';
+import NumberInput from '../controls/NumberInput';
 
-const ResourcesPanel: React.StatelessComponent<{ className?: string, sheet: Sheet }> =
-  ({ className, sheet }) => {
+const ResourcesPanel: React.StatelessComponent<{
+  className?: string,
+  sheet: Sheet,
+  updateResource: (index: number, resource: Resource) => void
+}> =
+  ({ className, sheet, updateResource }) => {
     return (
       <SheetPanel
         title="Resources"
@@ -20,11 +26,19 @@ const ResourcesPanel: React.StatelessComponent<{ className?: string, sheet: Shee
           </thead>
 
           <tbody>
-            {sheet.resolvedResources.map(i => (
-              <tr key={i.name}>
-                <td>{i.name}</td>
-                <td className="text-center">{i.value.toString()}</td>
-                <td className="text-center">{i.current}</td>
+            {sheet.resolvedResources.map((resource, index) => (
+              <tr key={resource.name}>
+                <td>
+                  <InlineEdit
+                    priorValue={resource.name}
+                    onChange={n => updateResource(index, resource.updateName(n))} />
+                </td>
+                <td className="text-center">{resource.value.toString()}</td>
+                <td className="text-center">
+                  <NumberInput 
+                    value={resource.current} 
+                    onChange={c => updateResource(index, resource.updateCurrent(c))} />
+                </td>
               </tr>
             ))}
           </tbody>

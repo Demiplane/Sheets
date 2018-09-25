@@ -117,6 +117,18 @@ export class Resource {
     this.current = source.current || 0;
     this.formula = source.formula || '0';
   }
+
+  updateName(name: string) {
+    const newResource = new Resource(this);
+    newResource.name = name;
+    return newResource;
+  }
+
+  updateFormula(formula: string) {
+    const newResource = new Resource(this);
+    newResource.formula = formula;
+    return newResource;
+  }
 }
 
 export class Log {
@@ -147,6 +159,12 @@ export class ResolvedStatistic extends Statistic {
 
 export class ResolvedResource extends Resource {
   value: number = 0;
+  
+  updateCurrent(current: number) {
+    const newResource = new Resource(this);
+    newResource.current = current > this.value ? this.value : current;
+    return newResource;
+  }
 }
 
 export class Sheet {
@@ -288,6 +306,13 @@ export class Sheet {
 
   inactivateCondition(condition: Condition): Sheet {
     return this.setConditionActive(condition.name, false);
+  }
+
+  updateResource(index: number, resource: Resource) {
+    const newSheet = new Sheet(this);
+    newSheet.resources = [...this.resources];
+    newSheet.resources[index] = resource;
+    return newSheet;
   }
 
   // creators

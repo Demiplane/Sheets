@@ -75,7 +75,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
           </div>
 
           <div className="col-6">
-            <ResourcesPanel sheet={sheet} />
+            <ResourcesPanel sheet={sheet} updateResource={(i, r) => updateSheet(sheet.updateResource(i, r))} />
             <ConditionsPanel
               activateCondition={c => updateSheet(sheet.activateCondition(c))}
               inactivateCondition={c => updateSheet(sheet.inactivateCondition(c))}
