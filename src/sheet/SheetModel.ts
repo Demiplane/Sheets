@@ -1,4 +1,4 @@
-var math = require('mathjs');
+const math = require('mathjs');
 import Cache from '../core/Cache';
 
 /* tslint:disable no-any */
@@ -91,7 +91,7 @@ export class Statistic {
   }
 
   updateFormula(formula: string): Statistic {
-    var updatedStatistic = new Statistic(this);
+    const updatedStatistic = new Statistic(this);
     updatedStatistic.formula = formula;
     return updatedStatistic;
   }
@@ -124,6 +124,12 @@ export class Log {
 
     this.timestamp = source.timestamp || new Date().toLocaleString();
     this.text = source.text || '';
+  }
+
+  updateText(text: string): Log {
+    const newLog = new Log(this);
+    newLog.text = text;
+    return newLog;
   }
 }
 
@@ -173,68 +179,76 @@ export class Sheet {
 
   // state transitions
 
-  addLog(log: Log) {
-    var newSheet = new Sheet(this);
+  addLog(log: Log): Sheet {
+    const newSheet = new Sheet(this);
     newSheet.logs = [...this.logs, log];
     return newSheet;
   }
 
-  deleteLog(log: Log) {
-    var newSheet = new Sheet(this);
+  deleteLog(log: Log): Sheet {
+    const newSheet = new Sheet(this);
     newSheet.logs = this.logs.filter(l => l.timestamp === log.timestamp);
     return newSheet;
   }
 
+  updateLog(log: Log): Sheet {
+    const newSheet = new Sheet(this);
+    newSheet.logs = [...this.logs];
+    const index = this.logs.findIndex(l => l.timestamp === log.timestamp);
+    newSheet.logs[index] = log;
+    return newSheet;
+  }
+
   updateStatisticByIndex(index: number, statistic: Statistic): Sheet {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.statistics = [...this.statistics];
     newSheet.statistics[index] = statistic;
     return newSheet;
   }
 
   updateStatistic(statistic: Statistic): Sheet {
-    var index = this.statistics.findIndex(f => f.name === statistic.name);
+    const index = this.statistics.findIndex(f => f.name === statistic.name);
     return this.updateStatisticByIndex(index, statistic);
   }
 
   updateItemByIndex(index: number, item: Item): Sheet {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.inventory = [...this.inventory];
     newSheet.inventory[index] = item;
     return newSheet;
   }
 
   updateItem(item: Item): Sheet {
-    var index = this.inventory.findIndex(f => f.name === item.name);
+    const index = this.inventory.findIndex(f => f.name === item.name);
     return this.updateItemByIndex(index, item);
   }
 
   rename(newName: string): Sheet {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.name = newName;
     return newSheet;
   }
 
   addItem(item: Item): Sheet {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.inventory = [...newSheet.inventory, item];
     return newSheet;
   }
 
   addStatistic(statistic: Statistic): Sheet {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.statistics = [...newSheet.statistics, statistic];
     return newSheet;
   }
 
   deleteItem(item: Item) {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.inventory = [...newSheet.inventory.filter(i => i.name !== item.name)];
     return newSheet;
   }
 
   deleteStatistic(statistic: Statistic) {
-    var newSheet = new Sheet(this);
+    const newSheet = new Sheet(this);
     newSheet.statistics = [...newSheet.statistics.filter(i => i.name !== statistic.name)];
     return newSheet;
   }
@@ -274,14 +288,14 @@ export class Sheet {
   }
 
   get resolvedResources(): ResolvedResource[] {
-    var cache = new Cache<ResolvedStatistic>();
+    const cache = new Cache<ResolvedStatistic>();
 
     return this.resources.map(r => this.resolveResource(cache, r));
   }
 
   get resolvedStatistics(): ResolvedStatistic[] {
     // use lookup cache so we only calculate each statistic once, even if multiple statistics refer to them
-    var cache = new Cache<ResolvedStatistic>();
+    const cache = new Cache<ResolvedStatistic>();
 
     return this.statistics.map(statistic => this.innerResolveStatistic(cache, statistic));
   }
@@ -291,12 +305,12 @@ export class Sheet {
   }
 
   resolveStatistic(statisticName: string): ResolvedStatistic | undefined {
-    var statistic = this.findStatistic(statisticName);
+    const statistic = this.findStatistic(statisticName);
     return statistic ? this.innerResolveStatistic(new Cache<ResolvedStatistic>(), statistic) : statistic;
   }
 
   previewFormulaValue(formula: string) {
-    var cache = new Cache<ResolvedStatistic>();
+    const cache = new Cache<ResolvedStatistic>();
 
     return this.innerCalculateFormula(cache, formula);
   }
@@ -327,7 +341,7 @@ export class Sheet {
 
   private getActionsFromAbility(ability: Ability): Action[] {
     return ability.actions.map(a => {
-      var action = new Action();
+      const action = new Action();
       action.name = ability.name;
       action.cost = a;
       return action;
@@ -335,7 +349,7 @@ export class Sheet {
   }
 
   private resolveResource(cache: Cache<ResolvedStatistic>, r: Resource): ResolvedResource {
-    var resource = new ResolvedResource(r);
+    const resource = new ResolvedResource(r);
 
     resource.formula = r.formula;
     resource.current = r.current;
@@ -357,7 +371,7 @@ export class Sheet {
       const conditional = this.isConditional(statistic);
       const base = this.statisticIsBase(statistic);
 
-      var resolvedStatistic = new ResolvedStatistic(statistic);
+      const resolvedStatistic = new ResolvedStatistic(statistic);
 
       resolvedStatistic.value = value + modified;
       resolvedStatistic.name = key;
@@ -396,7 +410,7 @@ export class Sheet {
     matches.forEach(m => {
       const statisticName = m.replace('[', '').replace(']', '');
       const statistic = this.findStatistic(statisticName);
-      var statisticValue = statistic ? this.innerResolveStatistic(cache, statistic).value : NaN;
+      const statisticValue = statistic ? this.innerResolveStatistic(cache, statistic).value : NaN;
 
       expression = expression.replace(m, statisticValue.toString());
     });

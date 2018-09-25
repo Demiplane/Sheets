@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Sheet, { Log } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
+import InlineEdit from '../controls/InlineEdit';
 
 type LogPanelProps = {
   className?: string,
@@ -50,6 +51,10 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
     event.stopPropagation();
   }
 
+  updateLogText(log: Log, text: string) {
+    this.props.updateLog(log.updateText(text));
+  }
+
   render() {
     const { className, sheet } = this.props;
 
@@ -65,7 +70,7 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
                 <div className="float-left">
                   <span className="text-muted">{l.timestamp}</span>
                   <br />
-                  <span>{l.text}</span>
+                  <InlineEdit priorValue={l.text} onChange={text => this.updateLogText(l, text)} />
                 </div>
                 <button
                   className="btn btn-outline-danger float-right align-middle"

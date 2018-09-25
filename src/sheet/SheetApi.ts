@@ -8,7 +8,7 @@ export interface SheetApi {
 }
 
 export class MockSheetApi implements SheetApi {
-  private timeout = 1500;
+  private timeout = 500;
 
   private sheets: Model.Sheet[] = [
     new Model.Sheet({

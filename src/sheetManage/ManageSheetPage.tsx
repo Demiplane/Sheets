@@ -70,12 +70,13 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
 
             sheet={sheet}
             showModal={this.openModal}
-            closeModal={this.closeModal} 
-            
+            closeModal={this.closeModal}
+
             addLog={l => this.props.updateSheet!(sheet.addLog(l))}
             deleteLog={l => this.props.updateSheet!(sheet.deleteLog(l))}
-            
-            />
+            updateLog={l => this.props.updateSheet!(sheet.updateLog(l))}
+
+          />
 
           {this.state.modal}
         </div>

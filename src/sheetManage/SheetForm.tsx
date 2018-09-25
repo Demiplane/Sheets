@@ -30,6 +30,7 @@ type SheetFormProps = {
 
   addLog: (log: Log) => void;
   deleteLog: (log: Log) => void;
+  updateLog: (log: Log) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
@@ -37,7 +38,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
     addStatistic, updateStatistic, deleteStatistic,
     updateSheetName,
     updateItem, addItem, deleteItem,
-    addLog, deleteLog,
+    addLog, deleteLog, updateLog,
     activateCondition, inactivateCondition } = props;
 
   return (
@@ -105,7 +106,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               sheet={sheet}
               addLog={addLog}
               deleteLog={deleteLog}
-              updateLog={l => { ''.toString(); }} />
+              updateLog={updateLog} />
           </div>
         </div>
       </FluidPage>
