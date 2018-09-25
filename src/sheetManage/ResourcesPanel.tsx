@@ -3,6 +3,7 @@ import Sheet, { Resource } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import InlineEdit from '../controls/InlineEdit';
 import NumberInput from '../controls/NumberInput';
+import FormulaInlineEdit from '../controls/FormulaInlineEdit';
 
 const ResourcesPanel: React.StatelessComponent<{
   className?: string,
@@ -28,15 +29,21 @@ const ResourcesPanel: React.StatelessComponent<{
           <tbody>
             {sheet.resolvedResources.map((resource, index) => (
               <tr key={resource.name}>
-                <td>
+                <td style={{ width: '99%' }}>
                   <InlineEdit
                     priorValue={resource.name}
                     onChange={n => updateResource(index, resource.updateName(n))} />
+                  <br />
+                  <FormulaInlineEdit
+                    priorFormula={resource.formula}
+                    sheet={sheet}
+                    className={'text-muted small'}
+                    onChange={f => updateResource(index, resource.updateFormula(f))} />
                 </td>
                 <td className="text-center">{resource.value.toString()}</td>
                 <td className="text-center">
-                  <NumberInput 
-                    value={resource.current} 
+                  <NumberInput
+                    value={resource.current}
                     onChange={c => updateResource(index, resource.updateCurrent(c))} />
                 </td>
               </tr>

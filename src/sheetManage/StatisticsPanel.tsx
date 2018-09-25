@@ -70,7 +70,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           <br />
           <FormulaInlineEdit
             sheet={this.props.sheet}
-            className="text-muted"
+            className="text-muted small"
             onChange={f => this.updateFormula(index, statistic, f)}
             priorFormula={statistic.formula} />
           {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
