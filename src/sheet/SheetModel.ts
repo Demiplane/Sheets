@@ -214,29 +214,31 @@ export class Sheet {
     const oldName = this.statistics[index].name;
     const newName = statistic.name;
 
-    const target = '[' + oldName + ']';
-    const newTarget = '[' + newName + ']';
+    if (oldName !== newName) {
+      const target = '[' + oldName + ']';
+      const newTarget = '[' + newName + ']';
 
-    newSheet.statistics.forEach((s, i) => {
+      newSheet.statistics.forEach((s, i) => {
 
-      if (s.formula.indexOf(target) >= 0) {
-        const newStatistic = new Statistic(s);
-        newStatistic.formula = s.formula.replace(target, newTarget);
-        newSheet.statistics[i] = newStatistic;
-      }
-    });
+        if (s.formula.indexOf(target) >= 0) {
+          const newStatistic = new Statistic(s);
+          newStatistic.formula = s.formula.replace(target, newTarget);
+          newSheet.statistics[i] = newStatistic;
+        }
+      });
 
-    const resourcesToUpdate = newSheet.resources
-      .map((resource, resourceIndex) => ({ resource, resourceIndex }))
-      .filter(d => d.resource.formula.indexOf(target) >= 0);
+      const resourcesToUpdate = newSheet.resources
+        .map((resource, resourceIndex) => ({ resource, resourceIndex }))
+        .filter(d => d.resource.formula.indexOf(target) >= 0);
 
-    if (resourcesToUpdate.length) {
-      newSheet.resources = [...this.resources];
+      if (resourcesToUpdate.length) {
+        newSheet.resources = [...this.resources];
 
-      for (var rp of resourcesToUpdate) {
-        const newResource = new Resource(rp.resource);
-        newResource.formula = newResource.formula.replace(target, newTarget);
-        newSheet.resources[rp.resourceIndex] = newResource;
+        for (var rp of resourcesToUpdate) {
+          const newResource = new Resource(rp.resource);
+          newResource.formula = newResource.formula.replace(target, newTarget);
+          newSheet.resources[rp.resourceIndex] = newResource;
+        }
       }
     }
 
