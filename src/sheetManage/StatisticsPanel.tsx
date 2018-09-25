@@ -2,6 +2,7 @@ import * as React from 'react';
 import Sheet, { Statistic, ResolvedStatistic } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import Flashy from '../controls/Flashy';
+import FormulaInlineEdit from '../controls/FormulaInlineEdit';
 
 type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
@@ -22,17 +23,18 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.state = { expandedStatistic: '' };
 
     this.cancel = this.cancel.bind(this);
-    this.openAddStatistic = this.openAddStatistic.bind(this);
-    this.openEditStatistic = this.openEditStatistic.bind(this);
+    this.addStatistic = this.addStatistic.bind(this);
+    this.editStatistic = this.editStatistic.bind(this);
     this.onExpand = this.onExpand.bind(this);
     this.newStatistic = this.newStatistic.bind(this);
+    this.updateFormula = this.updateFormula.bind(this);
   }
 
   newStatistic(): Statistic {
-    return new Statistic({});
+    return this.props.sheet.createCandidateStatistic();
   }
 
-  openEditStatistic(statistic: Statistic) {
+  editStatistic(statistic: Statistic) {
     console.log('implement me');
   }
 
@@ -40,7 +42,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.closeModal();
   }
 
-  openAddStatistic() {
+  addStatistic() {
     console.log('implement me');
   }
 
@@ -50,13 +52,21 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.setState({ expandedStatistic });
   }
 
+  updateFormula(statistic: Statistic, formula: string) {
+    this.props.updateStatistic(statistic.updateFormula(formula));
+  }
+
   row(statistic: ResolvedStatistic): React.ReactNode {
 
     return (
       <tr key={statistic.name}>
         <td>
           <span>{statistic.name}</span><br />
-          <span className="text-muted">{statistic.formula}</span>
+          <FormulaInlineEdit 
+            sheet={this.props.sheet} 
+            className="text-muted" 
+            onChange={f => this.updateFormula(statistic, f)} 
+            priorFormula={statistic.formula}/>
           {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
           {statistic.conditional && <small className="text-muted pl-2 float-right">(conditional)</small>}
         </td>
@@ -71,7 +81,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     return (
       <SheetPanel
-        onAdd={this.openAddStatistic}
+        onAdd={this.addStatistic}
         title="Statistics"
         className={className}>
 
