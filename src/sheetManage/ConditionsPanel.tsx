@@ -5,8 +5,8 @@ import SheetPanel from './SheetPanel';
 type ConditionsPanelProps = {
   className?: string,
   sheet: Sheet,
-  activateCondition: (condition: string) => void;
-  inactivateCondition: (condition: string) => void;
+  activateCondition: (condition: Condition) => void;
+  inactivateCondition: (condition: Condition) => void;
 };
 
 class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: string[] }> {
@@ -25,7 +25,7 @@ class ConditionsPanel extends React.Component<ConditionsPanelProps, { expanded: 
             className={'btn btn-small ' + (isActive ? 'btn-primary' : '')}
             onClick={event => {
               event.preventDefault();
-              isActive ? this.props.inactivateCondition(condition.name) : this.props.activateCondition(condition.name);
+              isActive ? this.props.inactivateCondition(condition) : this.props.activateCondition(condition);
             }}>
             {isActive ? 'ACTIVE' : 'INACTIVE'}
           </button>

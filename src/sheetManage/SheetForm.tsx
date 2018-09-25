@@ -1,4 +1,4 @@
-import { Sheet, Statistic, Item, Log } from '../sheet/SheetModel';
+import { Sheet, Statistic, Item, Log, Condition } from '../sheet/SheetModel';
 import * as React from 'react';
 import AbilitiesPanel from './AbilitiesPanel';
 import FluidPage from '../controls/FluidPage';
@@ -15,21 +15,21 @@ type SheetFormProps = {
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
 
-  activateCondition: (condition: string) => void;
-  inactivateCondition: (condition: string) => void;
+  activateCondition: (condition: Condition) => void;
+  inactivateCondition: (condition: Condition) => void;
 
   updateSheetName: (name: string) => void;
 
   addItem: (item: Item) => void;
   updateItem: (item: Item) => void;
-  deleteItem: (itemIdentifier: string) => void;
+  deleteItem: (item: Item) => void;
 
   updateStatistic: (statistic: Statistic) => void;
   addStatistic: (statistic: Statistic) => void;
   deleteStatistic: (statistic: Statistic) => void;
 
   addLog: (log: Log) => void;
-  deleteLog: (timestamp: string) => void;
+  deleteLog: (log: Log) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {

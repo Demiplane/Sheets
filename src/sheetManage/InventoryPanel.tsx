@@ -11,7 +11,7 @@ type InventoryPanelProps = {
   closeModal: () => void,
   updateItem: (item: Item) => void,
   addItem: (item: Item) => void,
-  deleteItem: (itemIdentifier: string) => void
+  deleteItem: (item: Item) => void
 };
 
 export default class InventoryPanel extends React.Component<InventoryPanelProps, { expanded: string }> {

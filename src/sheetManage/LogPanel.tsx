@@ -7,7 +7,7 @@ type LogPanelProps = {
   sheet: Sheet,
   addLog: (log: Log) => void,
   updateLog: (log: Log) => void,
-  deleteLog: (timestamp: string) => void
+  deleteLog: (log: Log) => void
 };
 
 export default class LogPanel extends React.Component<LogPanelProps, { editValue: string }> {
@@ -24,7 +24,7 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
 
   onDeleteLog(event: React.FormEvent<HTMLButtonElement>, log: Log) {
     event.preventDefault();
-    this.props.deleteLog(log.timestamp);
+    this.props.deleteLog(log);
   }
 
   onInputKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {

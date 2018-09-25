@@ -55,25 +55,25 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
         <div>
           <SheetForm
 
-            addStatistic={s => this.props.addStatistic!(sheet.name, s)}
-            updateStatistic={s => this.props.updateStatistic!(sheet.name, s)}
-            deleteStatistic={s => this.props.deleteStatistic!(sheet.name, s)}
+            addStatistic={s => this.props.updateSheet!(sheet.addStatistic(s))}
+            updateStatistic={s => this.props.updateSheet!(sheet.updateStatistic(s))}
+            deleteStatistic={s => this.props.updateSheet!(sheet.deleteStatistic(s))}
 
             updateSheetName={n => this.props.renameSheet!(sheet.name, n)}
 
-            addItem={i => this.props.addItem!(sheet.name, i)}
-            updateItem={i => this.props.updateItem!(sheet.name, i)}
-            deleteItem={i => this.props.deleteItem!(sheet.name, i)}
+            addItem={i => this.props.updateSheet!(sheet.addItem(i))}
+            updateItem={i => this.props.updateSheet!(sheet.updateItem(i))}
+            deleteItem={i => this.props.updateSheet!(sheet.deleteItem(i))}
 
-            activateCondition={c => this.props.activateCondition!(sheet.name, c)}
-            inactivateCondition={c => this.props.inactivateCondition!(sheet.name, c)}
+            activateCondition={c => this.props.updateSheet!(sheet.activateCondition(c))}
+            inactivateCondition={c => this.props.updateSheet!(sheet.inactivateCondition(c))}
 
             sheet={sheet}
             showModal={this.openModal}
             closeModal={this.closeModal} 
             
-            addLog={l => this.props.addLog!(sheet.name, l)}
-            deleteLog={l => this.props.deleteLog!(sheet.name, l)}
+            addLog={l => this.props.updateSheet!(sheet.addLog(l))}
+            deleteLog={l => this.props.updateSheet!(sheet.deleteLog(l))}
             
             />
 

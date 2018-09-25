@@ -15,7 +15,7 @@ export function handleUpdateSheet(updateAction: UpdateSheetAction, state: SheetS
   return {
     sheets: [
       ...state.sheets.filter(sheet => sheet.name !== updateAction.sheet.name),
-      Object.assign({}, updateAction.sheet)
+      updateAction.sheet
     ]
   };
 }

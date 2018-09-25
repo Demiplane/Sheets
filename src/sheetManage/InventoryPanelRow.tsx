@@ -6,7 +6,7 @@ import toDetailRowPair, { DetailRowPairProps } from '../controls/toDetailRowPair
 type InventoryPanelRowProps = DetailRowPairProps & {
   updateItem: (item: Item) => void;
   showUpdateItem: (item: Item) => void;
-  deleteItem: (itemIdentifier: string) => void;
+  deleteItem: (item: Item) => void;
   item: Item
 };
 
@@ -49,7 +49,7 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
       <td colSpan={2} className="p-2 pb-4">
         {item.description ? <p>{item.description}</p> : null}
         <button
-          onClick={event => { event.preventDefault(); deleteItem(item.name); }}
+          onClick={event => { event.preventDefault(); deleteItem(item); }}
           className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
         <button
           onClick={event => { event.preventDefault(); showUpdateItem(item); }}

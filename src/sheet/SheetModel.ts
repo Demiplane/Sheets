@@ -179,9 +179,9 @@ export class Sheet {
     return newSheet;
   }
 
-  deleteLog(timestamp: string) {
+  deleteLog(log: Log) {
     var newSheet = new Sheet(this);
-    newSheet.logs = this.logs.filter(l => l.timestamp === timestamp);
+    newSheet.logs = this.logs.filter(l => l.timestamp === log.timestamp);
     return newSheet;
   }
 
@@ -227,24 +227,24 @@ export class Sheet {
     return newSheet;
   }
 
-  deleteItem(name: string) {
+  deleteItem(item: Item) {
     var newSheet = new Sheet(this);
-    newSheet.inventory = [...newSheet.inventory.filter(i => i.name !== name)];
+    newSheet.inventory = [...newSheet.inventory.filter(i => i.name !== item.name)];
     return newSheet;
   }
 
-  deleteStatistic(name: string) {
+  deleteStatistic(statistic: Statistic) {
     var newSheet = new Sheet(this);
-    newSheet.statistics = [...newSheet.statistics.filter(i => i.name !== name)];
+    newSheet.statistics = [...newSheet.statistics.filter(i => i.name !== statistic.name)];
     return newSheet;
   }
 
-  activateCondition(conditionName: string): Sheet {
-    return this.setConditionActive(conditionName, true);
+  activateCondition(condition: Condition): Sheet {
+    return this.setConditionActive(condition.name, true);
   }
 
-  inactivateCondition(conditionName: string): Sheet {
-    return this.setConditionActive(conditionName, false);
+  inactivateCondition(condition: Condition): Sheet {
+    return this.setConditionActive(condition.name, false);
   }
 
   // creators
