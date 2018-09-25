@@ -199,28 +199,18 @@ export class Sheet {
     return newSheet;
   }
 
-  updateStatisticByIndex(index: number, statistic: Statistic): Sheet {
+  updateStatistic(index: number, statistic: Statistic): Sheet {
     const newSheet = new Sheet(this);
     newSheet.statistics = [...this.statistics];
     newSheet.statistics[index] = statistic;
     return newSheet;
   }
 
-  updateStatistic(statistic: Statistic): Sheet {
-    const index = this.statistics.findIndex(f => f.name === statistic.name);
-    return this.updateStatisticByIndex(index, statistic);
-  }
-
-  updateItemByIndex(index: number, item: Item): Sheet {
+  updateItem(index: number, item: Item): Sheet {
     const newSheet = new Sheet(this);
     newSheet.inventory = [...this.inventory];
     newSheet.inventory[index] = item;
     return newSheet;
-  }
-
-  updateItem(item: Item): Sheet {
-    const index = this.inventory.findIndex(f => f.name === item.name);
-    return this.updateItemByIndex(index, item);
   }
 
   rename(newName: string): Sheet {

@@ -55,26 +55,12 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
         <div>
           <SheetForm
 
-            addStatistic={s => this.props.updateSheet!(sheet.addStatistic(s))}
-            updateStatistic={s => this.props.updateSheet!(sheet.updateStatistic(s))}
-            deleteStatistic={s => this.props.updateSheet!(sheet.deleteStatistic(s))}
-
             updateSheetName={n => this.props.renameSheet!(sheet.name, n)}
-
-            addItem={i => this.props.updateSheet!(sheet.addItem(i))}
-            updateItem={i => this.props.updateSheet!(sheet.updateItem(i))}
-            deleteItem={i => this.props.updateSheet!(sheet.deleteItem(i))}
-
-            activateCondition={c => this.props.updateSheet!(sheet.activateCondition(c))}
-            inactivateCondition={c => this.props.updateSheet!(sheet.inactivateCondition(c))}
+            updateSheet={s => this.props.updateSheet!(s)}
 
             sheet={sheet}
             showModal={this.openModal}
             closeModal={this.closeModal}
-
-            addLog={l => this.props.updateSheet!(sheet.addLog(l))}
-            deleteLog={l => this.props.updateSheet!(sheet.deleteLog(l))}
-            updateLog={l => this.props.updateSheet!(sheet.updateLog(l))}
 
           />
 

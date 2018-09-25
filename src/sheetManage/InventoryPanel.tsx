@@ -9,7 +9,7 @@ type InventoryPanelProps = {
   sheet: Sheet,
   showModal: (modalElement: JSX.Element) => void,
   closeModal: () => void,
-  updateItem: (item: Item) => void,
+  updateItem: (index: number, item: Item) => void,
   addItem: (item: Item) => void,
   deleteItem: (item: Item) => void
 };
@@ -20,22 +20,8 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
 
     this.state = { expanded: '' };
 
-    this.showAddModal = this.showAddModal.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
     this.showModal = this.showModal.bind(this);
     this.onExpand = this.onExpand.bind(this);
-  }
-
-  showAddModal() {
-    const { addItem } = this.props;
-
-    this.showModal(new Item({}), addItem);
-  }
-
-  showEditModal(item: Item) {
-    const { updateItem } = this.props;
-
-    this.showModal(item, updateItem);
   }
 
   showModal(item: Item, save: (item: Item) => void) {
@@ -62,7 +48,6 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
     return (
       <SheetPanel
         title="Inventory"
-        onAdd={this.showAddModal}
         className={className}>
 
         <table className="table table-bordered table-hover">
@@ -75,16 +60,16 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
           </thead>
 
           <tbody>
-            {sheet.inventory && sheet.inventory.map(i =>
+            {sheet.inventory && sheet.inventory.map((i, ii) =>
               (
                 <InventoryPanelRow
+                  index={ii}
                   item={i}
                   itemKey={i.name}
                   deleteItem={deleteItem}
                   expand={() => this.onExpand(i)}
                   expanded={this.state.expanded === i.name}
-                  updateItem={updateItem}
-                  showUpdateItem={this.showEditModal}
+                  updateItem={(index, item) => updateItem(index, item)}
                 />
               ))}
           </tbody>

@@ -8,7 +8,7 @@ type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
 
-  updateStatistic: (statistic: Statistic) => void;
+  updateStatistic: (index: number, statistic: Statistic) => void;
   addStatistic: (statistic: Statistic) => void;
   deleteStatistic: (statistic: Statistic) => void;
 
@@ -52,21 +52,21 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.setState({ expandedStatistic });
   }
 
-  updateFormula(statistic: Statistic, formula: string) {
-    this.props.updateStatistic(statistic.updateFormula(formula));
+  updateFormula(index: number, statistic: Statistic, formula: string) {
+    this.props.updateStatistic(index, statistic.updateFormula(formula));
   }
 
-  row(statistic: ResolvedStatistic): React.ReactNode {
+  row(index: number, statistic: ResolvedStatistic): React.ReactNode {
 
     return (
       <tr key={statistic.name}>
         <td>
           <span>{statistic.name}</span><br />
-          <FormulaInlineEdit 
-            sheet={this.props.sheet} 
-            className="text-muted" 
-            onChange={f => this.updateFormula(statistic, f)} 
-            priorFormula={statistic.formula}/>
+          <FormulaInlineEdit
+            sheet={this.props.sheet}
+            className="text-muted"
+            onChange={f => this.updateFormula(index, statistic, f)}
+            priorFormula={statistic.formula} />
           {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
           {statistic.conditional && <small className="text-muted pl-2 float-right">(conditional)</small>}
         </td>
@@ -95,7 +95,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
           </thead>
 
           <tbody>
-            {sheet.resolvedStatistics.map(s => this.row(s))}
+            {sheet.resolvedStatistics.map((s, i) => this.row(i, s))}
           </tbody>
 
         </table>

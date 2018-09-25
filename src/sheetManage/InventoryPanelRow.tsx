@@ -4,8 +4,8 @@ import NumberInput from '../controls/NumberInput';
 import toDetailRowPair, { DetailRowPairProps } from '../controls/toDetailRowPair';
 
 type InventoryPanelRowProps = DetailRowPairProps & {
-  updateItem: (item: Item) => void;
-  showUpdateItem: (item: Item) => void;
+  index: number,
+  updateItem: (index: number, item: Item) => void;
   deleteItem: (item: Item) => void;
   item: Item
 };
@@ -23,7 +23,7 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
   }
 
   row(props: InventoryPanelRowProps): React.ReactNode {
-    const { item, updateItem } = props;
+    const { item, updateItem, index } = props;
 
     return [
       (<td>{item.name}</td>),
@@ -33,7 +33,7 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
             min={0}
             onChange={s => {
               const newItem = Object.assign({}, item, { stock: s });
-              updateItem(newItem);
+              updateItem(index, newItem);
             }}
             value={item.stock}
           />
@@ -43,7 +43,7 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
   }
 
   detail(props: InventoryPanelRowProps): React.ReactNode {
-    const { item, deleteItem, showUpdateItem } = props;
+    const { item, deleteItem } = props;
 
     return (
       <td colSpan={2} className="p-2 pb-4">
@@ -51,9 +51,6 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
         <button
           onClick={event => { event.preventDefault(); deleteItem(item); }}
           className="btn btn-outline-danger float-right btn-small d-inline mt-2">Delete</button>
-        <button
-          onClick={event => { event.preventDefault(); showUpdateItem(item); }}
-          className="btn btn-outline-primary float-right btn-small d-inline mt-2">Edit</button>
       </td>
     );
   }

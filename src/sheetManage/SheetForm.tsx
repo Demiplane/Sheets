@@ -1,4 +1,4 @@
-import { Sheet, Statistic, Item, Log, Condition } from '../sheet/SheetModel';
+import { Sheet } from '../sheet/SheetModel';
 import * as React from 'react';
 import AbilitiesPanel from './AbilitiesPanel';
 import FluidPage from '../controls/FluidPage';
@@ -15,31 +15,13 @@ type SheetFormProps = {
   showModal: (modalElement: JSX.Element) => void;
   closeModal: () => void;
 
-  activateCondition: (condition: Condition) => void;
-  inactivateCondition: (condition: Condition) => void;
-
+  updateSheet: (sheet: Sheet) => void;
   updateSheetName: (name: string) => void;
 
-  addItem: (item: Item) => void;
-  updateItem: (item: Item) => void;
-  deleteItem: (item: Item) => void;
-
-  updateStatistic: (statistic: Statistic) => void;
-  addStatistic: (statistic: Statistic) => void;
-  deleteStatistic: (statistic: Statistic) => void;
-
-  addLog: (log: Log) => void;
-  deleteLog: (log: Log) => void;
-  updateLog: (log: Log) => void;
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
-  const { sheet, showModal, closeModal,
-    addStatistic, updateStatistic, deleteStatistic,
-    updateSheetName,
-    updateItem, addItem, deleteItem,
-    addLog, deleteLog, updateLog,
-    activateCondition, inactivateCondition } = props;
+  const { sheet, showModal, closeModal, updateSheet, updateSheetName } = props;
 
   return (
     <div>
@@ -70,9 +52,9 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
         <div className="row mb-4">
           <div className="col-6">
             <StatisticsPanel
-              addStatistic={addStatistic}
-              updateStatistic={updateStatistic}
-              deleteStatistic={deleteStatistic}
+              addStatistic={s => updateSheet(sheet.addStatistic(s))}
+              updateStatistic={(i, s) => updateSheet(sheet.updateStatistic(i, s))}
+              deleteStatistic={s => updateSheet(sheet.deleteStatistic(s))}
 
               sheet={sheet}
 
@@ -80,9 +62,9 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               closeModal={closeModal}
             />
             <InventoryPanel
-              addItem={addItem}
-              deleteItem={deleteItem}
-              updateItem={updateItem}
+              addItem={i => updateSheet(sheet.addItem(i))}
+              deleteItem={i => updateSheet(sheet.deleteItem(i))}
+              updateItem={(index, i) => updateSheet(sheet.updateItem(index, i))}
 
               showModal={showModal}
               closeModal={closeModal}
@@ -95,8 +77,8 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
           <div className="col-6">
             <ResourcesPanel sheet={sheet} />
             <ConditionsPanel
-              activateCondition={activateCondition}
-              inactivateCondition={inactivateCondition}
+              activateCondition={c => updateSheet(sheet.activateCondition(c))}
+              inactivateCondition={c => updateSheet(sheet.inactivateCondition(c))}
 
               sheet={sheet}
             />
@@ -104,9 +86,9 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
             <AbilitiesPanel sheet={sheet} />
             <LogPanel
               sheet={sheet}
-              addLog={addLog}
-              deleteLog={deleteLog}
-              updateLog={updateLog} />
+              addLog={l => updateSheet(sheet.addLog(l))}
+              deleteLog={l => updateSheet(sheet.deleteLog(l))}
+              updateLog={l => updateSheet(sheet.updateLog(l))} />
           </div>
         </div>
       </FluidPage>
