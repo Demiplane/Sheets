@@ -88,7 +88,7 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
             onChange={this.onChangeNewLogText}
             onKeyUp={this.onInputKeyUp} />
           <div className="input-group-append">
-            <button className="btn btn-secondary" onClick={this.onAddLog} type="button">Add</button>
+            <button className="btn btn-outline-primary" onClick={this.onAddLog} type="button">Add</button>
           </div>
         </div>
       </SheetPanel>

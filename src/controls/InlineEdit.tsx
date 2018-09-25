@@ -114,6 +114,7 @@ export default class InlineEdit
                             <button className="btn btn-outline-success" onClick={this.commit} type="button">✓</button>
                             <button className="btn btn-outline-danger" onClick={this.cancel} type="button">‎X</button>
                         </div>
+                        {this.props.children ? <div> {this.props.children} </div> : undefined}
                     </div>) :
                 (
                     <span
