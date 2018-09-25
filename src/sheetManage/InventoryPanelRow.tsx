@@ -26,9 +26,9 @@ export default class InventoryPanelRow extends React.Component<InventoryPanelRow
     const { item, updateItem, index } = props;
 
     return [
-      (<td>{item.name}</td>),
+      (<td key={item.name + 'a'}>{item.name}</td>),
       (
-        <td className="text-center">
+        <td key={item.name + 'b'} className="text-center">
           <NumberInput
             min={0}
             onChange={s => {

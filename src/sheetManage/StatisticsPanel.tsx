@@ -3,6 +3,7 @@ import Sheet, { Statistic, ResolvedStatistic } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import Flashy from '../controls/Flashy';
 import FormulaInlineEdit from '../controls/FormulaInlineEdit';
+import InlineEdit from '../controls/InlineEdit';
 
 type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
@@ -56,12 +57,17 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.updateStatistic(index, statistic.updateFormula(formula));
   }
 
+  updateName(index: number, statistic: Statistic, name: string) {
+    this.props.updateStatistic(index, statistic.updateName(name));
+  }
+
   row(index: number, statistic: ResolvedStatistic): React.ReactNode {
 
     return (
       <tr key={statistic.name}>
         <td>
-          <span>{statistic.name}</span><br />
+          <InlineEdit priorValue={statistic.name} onChange={c => this.updateName(index, statistic, c)} />
+          <br />
           <FormulaInlineEdit
             sheet={this.props.sheet}
             className="text-muted"
