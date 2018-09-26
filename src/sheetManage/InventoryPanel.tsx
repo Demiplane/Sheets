@@ -2,7 +2,6 @@ import * as React from 'react';
 import Sheet, { Item } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import InventoryPanelRow from './InventoryPanelRow';
-import { ItemForm } from './ItemForm';
 
 type InventoryPanelProps = {
   className?: string,
@@ -20,20 +19,7 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
 
     this.state = { expanded: '' };
 
-    this.showModal = this.showModal.bind(this);
     this.onExpand = this.onExpand.bind(this);
-  }
-
-  showModal(item: Item, save: (item: Item) => void) {
-    const { showModal, closeModal } = this.props;
-
-    showModal((
-      <ItemForm
-        cancel={closeModal}
-        item={item}
-        save={i => { save(i); closeModal(); }}
-      />
-    ));
   }
 
   onExpand(item: Item) {

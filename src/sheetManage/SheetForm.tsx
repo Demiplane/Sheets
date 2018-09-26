@@ -8,7 +8,7 @@ import StatisticsPanel from './StatisticsPanel';
 import ActionsPanel from './ActionsPanel';
 import ConditionsPanel from './ConditionsPanel';
 import LogPanel from './LogPanel';
-import { RenameForm } from './RenameForm';
+import InlineEdit from '../controls/InlineEdit';
 
 type SheetFormProps = {
   sheet: Sheet;
@@ -27,21 +27,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
     <div>
       <FluidPage>
         <div className="pl-2 pr-2 d-flex align-items-center">
-          <h1>{sheet.name}</h1>
-          <button
-            className="btn btn-link btn-small text-muted mr-auto"
-            onClick={event => {
-              event.preventDefault();
-              showModal((
-                <RenameForm
-                  name={sheet.name}
-                  header="Rename Sheet"
-                  save={s => { updateSheetName(s); closeModal(); }}
-                  cancel={closeModal}
-                />
-              ));
-            }}
-          >(rename)</button>
+          <h1><InlineEdit priorValue={sheet.name} onChange={v => updateSheetName(v)} /></h1>
           <div
             className="align-middle">
             <button className="btn btn-small btn-primary"
@@ -82,8 +68,11 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
 
               sheet={sheet}
             />
-            <ActionsPanel sheet={sheet} />
-            <AbilitiesPanel sheet={sheet} />
+            <ActionsPanel 
+              sheet={sheet} />
+            <AbilitiesPanel
+              updateAbility={(i, a) => updateSheet(sheet.updateAbility(i, a))} 
+              sheet={sheet} />
             <LogPanel
               sheet={sheet}
               addLog={l => updateSheet(sheet.addLog(l))}

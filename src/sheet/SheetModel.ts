@@ -56,7 +56,6 @@ export class Item {
 
 export class Ability {
   name: string = '';
-  source: string = '';
   description: string = '';
   actions: string[] = [];
 
@@ -66,9 +65,14 @@ export class Ability {
     }
 
     this.name = source.name || '';
-    this.source = source.source || '';
     this.description = source.description || '';
     this.actions = source.actions ? source.actions : [];
+  }
+
+  updateDescription(description: string) {
+    const newAbility = new Ability(this);
+    newAbility.description = description;
+    return newAbility;
   }
 }
 
@@ -159,7 +163,7 @@ export class ResolvedStatistic extends Statistic {
 
 export class ResolvedResource extends Resource {
   value: number = 0;
-  
+
   updateCurrent(current: number) {
     const newResource = new Resource(this);
     newResource.current = current > this.value ? this.value : current;
@@ -202,6 +206,25 @@ export class Sheet {
   }
 
   // state transitions
+
+  addAbility(ability: Ability) {
+    const newSheet = new Sheet(this);
+    newSheet.abilities = [...newSheet.abilities, ability];
+    return newSheet;
+  }
+
+  updateAbility(index: number, ability: Ability) {
+    const newSheet = new Sheet(this);
+    newSheet.abilities = [...newSheet.abilities];
+    newSheet.abilities[index] = ability;
+    return newSheet;
+  }
+
+  deleteAbility(ability: Ability) {
+    const newSheet = new Sheet(this);
+    newSheet.abilities = [...newSheet.abilities.filter(a => a.name !== ability.name)];
+    return newSheet;
+  }
 
   addLog(log: Log): Sheet {
     const newSheet = new Sheet(this);
