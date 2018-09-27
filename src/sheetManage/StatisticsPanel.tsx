@@ -4,6 +4,8 @@ import SheetPanel from './SheetPanel';
 import Flashy from '../controls/Flashy';
 import FormulaInlineEdit from '../controls/FormulaInlineEdit';
 import InlineEdit from '../controls/InlineEdit';
+import AddBox from '../controls/AddBox';
+import DeleteButton from '../controls/DeleteButton';
 
 type StatisticsPanelProps = {
   showModal: (modalElement: JSX.Element) => void;
@@ -43,8 +45,8 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.closeModal();
   }
 
-  addStatistic() {
-    console.log('implement me');
+  addStatistic(name: string) {
+    this.props.addStatistic(new Statistic({ name }));
   }
 
   onExpand(statistic: ResolvedStatistic) {
@@ -65,7 +67,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     return (
       <tr key={statistic.name}>
-        <td>
+        <td style={{ width: '99%' }}>
           <InlineEdit priorValue={statistic.name} onChange={c => this.updateName(index, statistic, c)} />
           <br />
           <FormulaInlineEdit
@@ -74,10 +76,13 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
             onChange={f => this.updateFormula(index, statistic, f)}
             priorFormula={statistic.formula} />
           {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
-          {statistic.conditional && <small className="text-muted pl-2 float-right">(conditional)</small>}
+          {statistic.affected && <small className="text-muted pl-2 float-right">(conditional)</small>}
         </td>
         <td className="text-center">
-          <Flashy value={statistic.value} />
+          <Flashy classes="prominent" value={statistic.value} />
+        </td>
+        <td>
+          <DeleteButton onDelete={() => this.props.deleteStatistic(statistic)} />
         </td>
       </tr>);
   }
@@ -87,24 +92,18 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     return (
       <SheetPanel
-        onAdd={this.addStatistic}
         title="Statistics"
         className={className}>
 
         <table className="table table-bordered table-hover">
-
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th className="text-center" scope="col">Value</th>
-            </tr>
-          </thead>
 
           <tbody>
             {sheet.resolvedStatistics.map((s, i) => this.row(i, s))}
           </tbody>
 
         </table>
+
+        <AddBox onAdd={this.addStatistic} />
 
       </SheetPanel>
     );

@@ -1,8 +1,10 @@
 import * as React from 'react';
+import combineClasses from './combineClasses';
 
 type FlashyProps = {
   display?: string;
   value?: number;
+  classes?: string;
 };
 
 type FlashyState = {
@@ -20,7 +22,7 @@ export default class Flashy extends React.Component<FlashyProps, FlashyState> {
 
   componentWillReceiveProps(props: FlashyProps) {
     const { oldDisplay, oldValue } = this.state;
-    const { display, value } = props;
+    const { display, value } = props; 
 
     const flash = props.display !== oldDisplay || props.value !== oldValue;
     const positive = props.value && oldValue ? props.value > oldValue : true;
@@ -37,7 +39,7 @@ export default class Flashy extends React.Component<FlashyProps, FlashyState> {
     return (
       <div
         key={id}
-        className={flash ? flashClass : ''}>
+        className={combineClasses(flash ? flashClass : '', this.props.classes)}>
         {display}
         {value}
       </div>

@@ -2,6 +2,8 @@ import * as React from 'react';
 import Sheet, { Log } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import InlineEdit from '../controls/InlineEdit';
+import AddBox from '../controls/AddBox';
+import DeleteButton from '../controls/DeleteButton';
 
 type LogPanelProps = {
   className?: string,
@@ -17,10 +19,7 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
     this.state = { editValue: '' };
 
     this.onDeleteLog = this.onDeleteLog.bind(this);
-    this.onInputKeyUp = this.onInputKeyUp.bind(this);
-    this.onAddLog = this.onAddLog.bind(this);
     this.addLog = this.addLog.bind(this);
-    this.onChangeNewLogText = this.onChangeNewLogText.bind(this);
   }
 
   onDeleteLog(event: React.FormEvent<HTMLButtonElement>, log: Log) {
@@ -28,27 +27,9 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
     this.props.deleteLog(log);
   }
 
-  onInputKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-    event.preventDefault();
-    if (event.key === 'Enter') {
-      this.addLog(this.state.editValue);
-    }
-  }
-
   addLog(text: string) {
     this.props.addLog(new Log({ text }));
     this.setState({ editValue: '' });
-  }
-
-  onAddLog(event: React.FormEvent<HTMLButtonElement> | React.FormEvent<HTMLInputElement>) {
-    event.preventDefault();
-    this.addLog(this.state.editValue);
-  }
-
-  onChangeNewLogText(event: React.FormEvent<HTMLInputElement>) {
-    event.preventDefault();
-    this.setState({ editValue: event.currentTarget.value });
-    event.stopPropagation();
   }
 
   updateLogText(log: Log, text: string) {
@@ -72,25 +53,13 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
                   <br />
                   <InlineEdit priorValue={l.text} onChange={text => this.updateLogText(l, text)} />
                 </div>
-                <button
-                  className="btn btn-outline-danger float-right align-middle"
-                  onClick={evt => this.onDeleteLog(evt, l)}
-                  type="button">X</button>
+                <DeleteButton onDelete={() => this.props.deleteLog(l)} />
               </li>
             ))}
         </ul>
 
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.editValue}
-            onChange={this.onChangeNewLogText}
-            onKeyUp={this.onInputKeyUp} />
-          <div className="input-group-append">
-            <button className="btn btn-outline-primary" onClick={this.onAddLog} type="button">Add</button>
-          </div>
-        </div>
+        <AddBox onAdd={this.addLog} />
+
       </SheetPanel>
     );
   }

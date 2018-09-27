@@ -3,8 +3,8 @@ import Cache from '../core/Cache';
 
 /* tslint:disable no-any */
 
-export class Effect {
-  target: string = '';
+export class Target {
+  statisticName: string = '';
   formula: string = '0';
 
   constructor(source: any) {
@@ -12,14 +12,14 @@ export class Effect {
       return;
     }
 
-    this.target = source.target || '';
+    this.statisticName = source.statisticName || '';
     this.formula = source.formula || '0';
   }
 }
 
-export class Condition {
+export class Effect {
   name: string = '';
-  effects: Effect[] = [];
+  targets: Target[] = [];
   active: boolean = false;
 
   constructor(source: any) {
@@ -30,10 +30,10 @@ export class Condition {
     this.name = source.name || '';
     this.active = source.active || false;
 
-    if (source instanceof Condition) {
-      this.effects = source.effects;
+    if (source instanceof Effect) {
+      this.targets = source.targets;
     } else {
-      this.effects = source.effects ? source.effects.map((s: any) => new Effect(s)) : [];
+      this.targets = source.targets ? source.targets.map((t: any) => new Target(t)) : [];
     }
   }
 }
@@ -51,6 +51,24 @@ export class Item {
     this.name = source.name || '';
     this.description = source.description || '';
     this.stock = source.stock || 0;
+  }
+
+  updateName(name: string) {
+    const newItem = new Item(this);
+    newItem.name = name;
+    return newItem;
+  }
+
+  updateDescription(description: string) {
+    const newItem = new Item(this);
+    newItem.description = description;
+    return newItem;
+  }
+
+  updateStock(stock: number) {
+    const newItem = new Item(this);
+    newItem.stock = stock;
+    return newItem;
   }
 }
 
@@ -156,7 +174,7 @@ export class Log {
 }
 
 export class ResolvedStatistic extends Statistic {
-  conditional: boolean = false;
+  affected: boolean = false;
   base: boolean = false;
   value: number = 0;
 }
@@ -178,7 +196,7 @@ export class Sheet {
   statistics: Statistic[] = [];
   abilities: Ability[] = [];
   inventory: Item[] = [];
-  conditions: Condition[] = [];
+  effects: Effect[] = [];
   resources: Resource[] = [];
   logs: Log[] = [];
 
@@ -192,14 +210,14 @@ export class Sheet {
       this.statistics = source.statistics;
       this.abilities = source.abilities;
       this.inventory = source.inventory;
-      this.conditions = source.conditions;
+      this.effects = source.effects;
       this.resources = source.resources;
       this.logs = source.logs;
     } else {
       this.statistics = source.statistics ? source.statistics.map((s: any) => new Statistic(s)) : [];
       this.abilities = source.abilities ? source.abilities.map((s: any) => new Ability(s)) : [];
       this.inventory = source.inventory ? source.inventory.map((s: any) => new Item(s)) : [];
-      this.conditions = source.conditions ? source.conditions.map((s: any) => new Condition(s)) : [];
+      this.effects = source.effects ? source.effects.map((s: any) => new Effect(s)) : [];
       this.resources = source.resources ? source.resources.map((s: any) => new Resource(s)) : [];
       this.logs = source.logs ? source.logs.map((s: any) => new Log(s)) : [];
     }
@@ -323,18 +341,30 @@ export class Sheet {
     return newSheet;
   }
 
-  activateCondition(condition: Condition): Sheet {
-    return this.setConditionActive(condition.name, true);
+  activateEffect(effect: Effect): Sheet {
+    return this.setEffectActive(effect.name, true);
   }
 
-  inactivateCondition(condition: Condition): Sheet {
-    return this.setConditionActive(condition.name, false);
+  inactivateEffect(effect: Effect): Sheet {
+    return this.setEffectActive(effect.name, false);
   }
 
   updateResource(index: number, resource: Resource) {
     const newSheet = new Sheet(this);
     newSheet.resources = [...this.resources];
     newSheet.resources[index] = resource;
+    return newSheet;
+  }
+
+  addResource(resource: Resource) {
+    const newSheet = new Sheet(this);
+    newSheet.resources = [...this.resources, resource];
+    return newSheet;
+  }
+
+  deleteResource(resource: Resource) {
+    const newSheet = new Sheet(this);
+    newSheet.resources = this.resources.filter(r => r.name !== resource.name);
     return newSheet;
   }
 
@@ -399,19 +429,19 @@ export class Sheet {
       ? true : false;
   }
 
-  private setConditionActive(conditionName: string, active: boolean): Sheet {
-    const index = this.conditions.findIndex(c => c.name === conditionName);
-    const oldCondition = this.conditions[index];
-    if (oldCondition.active === active) {
+  private setEffectActive(effectName: string, active: boolean): Sheet {
+    const index = this.effects.findIndex(c => c.name === effectName);
+    const oldEffect = this.effects[index];
+    if (oldEffect.active === active) {
       return this;
     }
 
     const newSheet = new Sheet(this);
-    newSheet.conditions = [...newSheet.conditions];
-    const newCondition = new Condition(oldCondition);
-    newCondition.active = active;
+    newSheet.effects = [...newSheet.effects];
+    const newEffect = new Effect(oldEffect);
+    newEffect.active = active;
 
-    newSheet.conditions[index] = newCondition;
+    newSheet.effects[index] = newEffect;
 
     return newSheet;
   }
@@ -444,8 +474,8 @@ export class Sheet {
     return cache.getFromCache(statistic.name, key => {
 
       const value = this.innerCalculateFormula(cache, statistic.formula);
-      const modified = this.conditionalModifier(cache, statistic);
-      const conditional = this.isConditional(statistic);
+      const modified = this.affectedModifier(cache, statistic);
+      const affected = this.isAffected(statistic);
       const base = this.statisticIsBase(statistic);
 
       const resolvedStatistic = new ResolvedStatistic(statistic);
@@ -453,26 +483,26 @@ export class Sheet {
       resolvedStatistic.value = value + modified;
       resolvedStatistic.name = key;
       resolvedStatistic.formula = statistic.formula;
-      resolvedStatistic.conditional = conditional;
+      resolvedStatistic.affected = affected;
       resolvedStatistic.base = base;
 
       return resolvedStatistic;
     });
   }
 
-  private effectsTargetingStatistic(statistic: Statistic, force: boolean = false): Effect[] {
-    return this.conditions
+  private effectsTargetingStatistic(statistic: Statistic, force: boolean = false): Target[] {
+    return this.effects
       .filter(c => c.active || force)
-      .map(c => c.effects)
+      .map(c => c.targets)
       .reduce((acc, cur) => acc.concat(cur), [])
-      .filter(c => c.target === statistic.name);
+      .filter(c => c.statisticName === statistic.name);
   }
 
-  private isConditional(statistic: Statistic): boolean {
+  private isAffected(statistic: Statistic): boolean {
     return this.effectsTargetingStatistic(statistic, true).length > 0;
   }
 
-  private conditionalModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
+  private affectedModifier(cache: Cache<ResolvedStatistic>, statistic: Statistic): number {
     return this.effectsTargetingStatistic(statistic)
       .map(c => this.innerCalculateFormula(cache, c.formula))
       .reduce((acc, cur) => acc + cur, 0);

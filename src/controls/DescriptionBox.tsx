@@ -6,6 +6,7 @@ const tooBigDescriptionLimit = 30;
 type DescriptionBoxProps = {
   className?: string,
   description: string,
+  placeholder?: string,
   onChange?: (newValue: string) => void
 };
 
@@ -125,7 +126,9 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
       <div className={combineClasses(this.props.className, '')}>
         <p
           onClick={this.edit}
-          className="d-inline pr-2 d-inline clickable">{this.smallify(tooBigDescriptionLimit, description)}</p>
+          className="d-inline pr-2 d-inline clickable">
+          {description ? this.smallify(tooBigDescriptionLimit, description) : this.props.placeholder}
+        </p>
         {needsCollapse ?
           <button className="btn btn-link d-inline float-right" onClick={this.show}>Show</button> : undefined}
       </div>
@@ -148,6 +151,7 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
         {
           this.props.onChange ?
             <textarea
+              placeholder={this.props.placeholder}
               ref={this.textInput}
               className="form-control"
               value={this.state.editValue}
@@ -168,10 +172,6 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
           undefined}
       </div>
     );
-  }
-
-  renderStandard(description: string) {
-    return <p className={this.props.className}>{description}</p>;
   }
 
   render() {

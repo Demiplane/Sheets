@@ -6,7 +6,7 @@ import InventoryPanel from './InventoryPanel';
 import ResourcesPanel from './ResourcesPanel';
 import StatisticsPanel from './StatisticsPanel';
 import ActionsPanel from './ActionsPanel';
-import ConditionsPanel from './ConditionsPanel';
+import EffectsPanel from './EffectsPanel';
 import LogPanel from './LogPanel';
 import InlineEdit from '../controls/InlineEdit';
 
@@ -61,10 +61,15 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
           </div>
 
           <div className="col-6">
-            <ResourcesPanel sheet={sheet} updateResource={(i, r) => updateSheet(sheet.updateResource(i, r))} />
-            <ConditionsPanel
-              activateCondition={c => updateSheet(sheet.activateCondition(c))}
-              inactivateCondition={c => updateSheet(sheet.inactivateCondition(c))}
+            <ResourcesPanel 
+            sheet={sheet} 
+            updateResource={(i, r) => updateSheet(sheet.updateResource(i, r))}
+            addResource={r => updateSheet(sheet.addResource(r))}
+            deleteResource={r => updateSheet(sheet.deleteResource(r))}
+            />
+            <EffectsPanel
+              activateEffect={c => updateSheet(sheet.activateEffect(c))}
+              inactivateEffect={c => updateSheet(sheet.inactivateEffect(c))}
 
               sheet={sheet}
             />
@@ -72,6 +77,8 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               sheet={sheet} />
             <AbilitiesPanel
               updateAbility={(i, a) => updateSheet(sheet.updateAbility(i, a))} 
+              addAbility={a => updateSheet(sheet.addAbility(a))}
+              deleteAbility={a => updateSheet(sheet.deleteAbility(a))}
               sheet={sheet} />
             <LogPanel
               sheet={sheet}
