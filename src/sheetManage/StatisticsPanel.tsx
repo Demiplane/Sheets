@@ -76,7 +76,7 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
             onChange={f => this.updateFormula(index, statistic, f)}
             priorFormula={statistic.formula} />
           {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
-          {statistic.affected && <small className="text-muted pl-2 float-right">(conditional)</small>}
+          {statistic.affected && <small className="text-muted pl-2 float-right">(affected)</small>}
         </td>
         <td className="text-center">
           <Flashy classes="prominent" value={statistic.value} />

@@ -53,7 +53,7 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
                   <br />
                   <InlineEdit priorValue={l.text} onChange={text => this.updateLogText(l, text)} />
                 </div>
-                <DeleteButton onDelete={() => this.props.deleteLog(l)} />
+                <DeleteButton className="float-right" onDelete={() => this.props.deleteLog(l)} />
               </li>
             ))}
         </ul>

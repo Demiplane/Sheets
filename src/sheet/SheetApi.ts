@@ -34,10 +34,10 @@ export class MockSheetApi implements SheetApi {
       logs: [
         { timestamp: 'today', text: 'i made this' }
       ],
-      conditions: [
+      effects: [
         {
-          name: 'within 30 feet of target', effects: [
-            { target: 'ranged attack bonus', formula: '+1' }
+          name: 'within 30 feet of target', targets: [
+            { statisticName: 'ranged attack bonus', formula: '+1' }
           ]
         }
       ],
