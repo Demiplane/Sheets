@@ -11,6 +11,7 @@ type DescriptionBoxProps = {
 
 export class DescriptionBox extends React.Component<DescriptionBoxProps, {
   collapsed: boolean,
+  editing: boolean,
   editValue: string,
   dirty: boolean,
   resizeTextArea: boolean
@@ -27,8 +28,13 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
     this.hide = this.hide.bind(this);
     this.cancel = this.cancel.bind(this);
     this.commit = this.commit.bind(this);
+    this.edit = this.edit.bind(this);
 
-    this.state = { collapsed: true, editValue: props.description!, dirty: false, resizeTextArea: false };
+    this.state = {
+      editing: false,
+      collapsed: true, editValue: props.description!,
+      dirty: false, resizeTextArea: false
+    };
   }
 
   needsCollapse(): boolean {
@@ -40,6 +46,9 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
   smallify(limit: number, description?: string) {
     if (!description) {
       return '';
+    }
+    if (limit >= description.length) {
+      return description;
     }
 
     let small = '';
@@ -85,9 +94,14 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
     return words;
   }
 
-  show(event: React.FormEvent<HTMLButtonElement> | React.FormEvent<HTMLParagraphElement>) {
+  show(event: React.FormEvent<HTMLButtonElement>) {
     event.preventDefault();
     this.setState({ collapsed: false, resizeTextArea: true });
+  }
+
+  edit(event: React.FormEvent<HTMLParagraphElement>) {
+    event.preventDefault();
+    this.setState({ editing: true, resizeTextArea: true });
   }
 
   hide(event: React.FormEvent<HTMLButtonElement>) {
@@ -98,33 +112,37 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
   commit(event: React.FormEvent<HTMLButtonElement>) {
     event.preventDefault();
     this.props.onChange!(this.state.editValue);
-    this.setState({ dirty: false });
+    this.setState({ dirty: false, editing: false });
   }
 
   cancel(event: React.FormEvent<HTMLButtonElement>) {
     event.preventDefault();
-    this.setState({ editValue: this.props.description, dirty: false });
+    this.setState({ editValue: this.props.description, dirty: false, editing: false });
   }
 
-  renderCollapsed(description: string) {
+  renderCollapsed(description: string, needsCollapse: boolean) {
     return (
       <div className={combineClasses(this.props.className, '')}>
         <p
-          onClick={this.show}
+          onClick={this.edit}
           className="d-inline pr-2 d-inline clickable">{this.smallify(tooBigDescriptionLimit, description)}</p>
-        <button className="btn btn-link d-inline float-right" onClick={this.show}>Show</button>
+        {needsCollapse ?
+          <button className="btn btn-link d-inline float-right" onClick={this.show}>Show</button> : undefined}
       </div>
     );
   }
 
   componentDidUpdate() {
-    if (this.state.resizeTextArea) {
+    if (this.state.resizeTextArea && this.textInput.current) {
       this.textInput.current!.style.height = this.textInput.current!.scrollHeight + 'px';
       this.setState({ resizeTextArea: false });
     }
   }
 
-  renderExpanded(description: string) {
+  renderExpanded(description: string, needsCollapse: boolean) {
+
+    const showEdit = this.state.editing || this.state.dirty;
+
     return (
       <div className={this.props.className}>
         {
@@ -140,11 +158,12 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
             <p>{description}</p>
         }
 
-        {this.state.dirty ? undefined : <button className="btn btn-link float-right" onClick={this.hide}>Hide</button>}
-        {this.state.dirty ?
+        {showEdit ? undefined : needsCollapse ?
+          <button className="btn btn-link float-right" onClick={this.hide}>Hide</button> : undefined}
+        {showEdit ?
           <button className="btn btn-outline-danger float-right" onClick={this.cancel} type="button">‎X</button> :
           undefined}
-        {this.state.dirty ?
+        {showEdit ?
           <button className="btn btn-outline-success float-right" onClick={this.commit} type="button">✓</button> :
           undefined}
       </div>
@@ -158,12 +177,13 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
   render() {
     const needsCollapse = this.needsCollapse();
     const description = this.props.description || '';
-    const collapsed = this.state.collapsed;
+    const collapsed = this.state.collapsed && !this.state.editing;
 
-    return needsCollapse ? collapsed
-      ? this.renderCollapsed(description)
-      : this.renderExpanded(description)
-      : this.renderStandard(description);
+    console.log(this.state);
+
+    return collapsed
+      ? this.renderCollapsed(description, needsCollapse)
+      : this.renderExpanded(description, needsCollapse);
   }
 }
 

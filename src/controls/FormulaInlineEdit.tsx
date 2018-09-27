@@ -26,9 +26,8 @@ export default class FormulaInlineEdit
                 priorValue={this.props.priorFormula}
                 onChange={this.props.onChange}
                 className={this.props.className}
-                validate={this.props.validate}>
-                <p>sample</p>
-            </InlineEdit>
+                validate={this.props.validate} />
+
         );
 
         return dom;
