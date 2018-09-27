@@ -161,10 +161,10 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
         {showEdit ? undefined : needsCollapse ?
           <button className="btn btn-link float-right" onClick={this.hide}>Hide</button> : undefined}
         {showEdit ?
-          <button className="btn btn-outline-danger float-right" onClick={this.cancel} type="button">‎X</button> :
-          undefined}
-        {showEdit ?
-          <button className="btn btn-outline-success float-right" onClick={this.commit} type="button">✓</button> :
+          <div className="btn-group float-right" role="group">
+            <button className="btn btn-outline-danger" onClick={this.cancel} type="button">‎X</button>
+            <button className="btn btn-outline-success" onClick={this.commit} type="button">✓</button>
+          </div> :
           undefined}
       </div>
     );
