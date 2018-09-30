@@ -87,9 +87,21 @@ export class Ability {
     this.actions = source.actions ? source.actions : [];
   }
 
+  updateName(name: string) {
+    const newAbility = new Ability(this);
+    newAbility.name = name;
+    return newAbility;
+  }
+
   updateDescription(description: string) {
     const newAbility = new Ability(this);
     newAbility.description = description;
+    return newAbility;
+  }
+
+  updateActions(actions: string[]) {
+    const newAbility = new Ability(this);
+    newAbility.actions = actions;
     return newAbility;
   }
 }
