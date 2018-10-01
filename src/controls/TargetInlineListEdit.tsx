@@ -156,6 +156,7 @@ export default class TargetInlineListEdit
                                     className="input-group input-group-sm">
                                     <td>
                                         <InlineEdit
+                                            placeholder="target name"
                                             priorValue={v.statisticName}
                                             onChange={e => this.onChange(i, v.updateName(e))}
                                         />
