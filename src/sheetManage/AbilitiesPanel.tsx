@@ -35,6 +35,7 @@ const AbilitiesPanel: React.StatelessComponent<{
                 </td>
                 <td>
                   <SimpleInlineListEdit
+                    placeholder="add action"
                     priorValue={a.actions}
                     onChange={actions => updateAbility(i, a.updateActions(actions))} />
                   </td>

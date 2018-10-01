@@ -5,6 +5,7 @@ type InlineEditProps = {
     priorValue: string,
     onChange: (newValue: string) => void,
     validate?: (checkValue: string) => string[],
+    placeholder?: string,
     className?: string
 };
 
@@ -99,11 +100,14 @@ export default class InlineEdit
         const inputClasses = combineClases('input-group', this.props.className);
         const spanClasses = combineClases('clickable', this.props.className);
 
+        console.log('inline edit', this.props.priorValue, this.props.placeholder);
+
         var dom = (
             this.state.focus ?
                 (
                     <div className={inputClasses} onBlur={this.onBlur}>
                         <input
+                            placeholder={this.props.placeholder}
                             className="form-control"
                             ref={this.textInput}
                             value={this.state.editValue}
@@ -115,11 +119,15 @@ export default class InlineEdit
                             <button className="btn btn-outline-danger" onClick={this.cancel} type="button">‎X</button>
                         </div>
                         {this.props.children ? <div> {this.props.children} </div> : undefined}
-                    </div>) :
-                (
+                    </div>
+                ) : (
                     <span
                         className={spanClasses}
-                        onClick={this.goToEditMode}>{this.props.priorValue}</span>)
+                        onClick={this.goToEditMode}>
+
+                        {this.props.priorValue ? this.props.priorValue : this.props.placeholder}
+                    </span>
+                )
         );
 
         return dom;

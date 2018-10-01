@@ -15,6 +15,18 @@ export class Target {
     this.statisticName = source.statisticName || '';
     this.formula = source.formula || '0';
   }
+
+  updateName(name: string) {
+    const newTarget = new Target(this);
+    newTarget.statisticName = name;
+    return newTarget;
+  }
+
+  updateFormula(formula: string) {
+    const newTarget = new Target(this);
+    newTarget.formula = formula;
+    return newTarget;
+  }
 }
 
 export class Effect {
@@ -35,6 +47,18 @@ export class Effect {
     } else {
       this.targets = source.targets ? source.targets.map((t: any) => new Target(t)) : [];
     }
+  }
+
+  updateName(name: string) {
+    const newEffect = new Effect(this);
+    newEffect.name = name;
+    return newEffect;
+  }
+
+  updateTargets(targets: Target[]) {
+    const newEffect = new Effect(this);
+    newEffect.targets = targets;
+    return newEffect;
   }
 }
 
@@ -359,6 +383,25 @@ export class Sheet {
 
   inactivateEffect(effect: Effect): Sheet {
     return this.setEffectActive(effect.name, false);
+  }
+
+  updateEffect(index: number, effect: Effect) {
+    const newSheet = new Sheet(this);
+    newSheet.effects = [...this.effects];
+    newSheet.effects[index] = effect;
+    return newSheet;
+  }
+
+  addEffect(effect: Effect) {
+    const newSheet = new Sheet(this);
+    newSheet.effects = [...this.effects, effect];
+    return newSheet;
+  }
+
+  deleteEffect(effect: Effect) {
+    const newSheet = new Sheet(this);
+    newSheet.effects = this.effects.filter(e => e.name !== effect.name);
+    return newSheet;
   }
 
   updateResource(index: number, resource: Resource) {

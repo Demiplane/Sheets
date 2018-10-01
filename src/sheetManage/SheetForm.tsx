@@ -61,22 +61,26 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
           </div>
 
           <div className="col-6">
-            <ResourcesPanel 
-            sheet={sheet} 
-            updateResource={(i, r) => updateSheet(sheet.updateResource(i, r))}
-            addResource={r => updateSheet(sheet.addResource(r))}
-            deleteResource={r => updateSheet(sheet.deleteResource(r))}
+            <ResourcesPanel
+              sheet={sheet}
+              updateResource={(i, r) => updateSheet(sheet.updateResource(i, r))}
+              addResource={r => updateSheet(sheet.addResource(r))}
+              deleteResource={r => updateSheet(sheet.deleteResource(r))}
             />
             <EffectsPanel
               activateEffect={c => updateSheet(sheet.activateEffect(c))}
               inactivateEffect={c => updateSheet(sheet.inactivateEffect(c))}
 
+              updateEffect={(i, c) => updateSheet(sheet.updateEffect(i, c))}
+              addEffect={c => updateSheet(sheet.addEffect(c))}
+              deleteEffect={c => updateSheet(sheet.deleteEffect(c))}
+
               sheet={sheet}
             />
-            <ActionsPanel 
+            <ActionsPanel
               sheet={sheet} />
             <AbilitiesPanel
-              updateAbility={(i, a) => updateSheet(sheet.updateAbility(i, a))} 
+              updateAbility={(i, a) => updateSheet(sheet.updateAbility(i, a))}
               addAbility={a => updateSheet(sheet.addAbility(a))}
               deleteAbility={a => updateSheet(sheet.deleteAbility(a))}
               sheet={sheet} />

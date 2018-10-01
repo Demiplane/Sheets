@@ -1,23 +1,27 @@
 import * as React from 'react';
 import combineClases from './combineClasses';
+import Sheet, { Target } from '../sheet/SheetModel';
+import InlineEdit from './InlineEdit';
+import FormulaInlineEdit from './FormulaInlineEdit';
 
-type SimpleInlineListEditProps = {
-    priorValue: string[],
-    onChange: (newValue: string[]) => void,
+type TargetInlineListEditProps = {
+    priorValue: Target[],
+    onChange: (newValue: Target[]) => void,
     placeholder?: string,
-    className?: string
+    className?: string,
+    sheet: Sheet
 };
 
-export default class SimpleInlineListEdit
-    extends React.Component<SimpleInlineListEditProps, {
+export default class TargetInlineListEdit
+    extends React.Component<TargetInlineListEditProps, {
         focus: boolean,
-        editValue: string[],
+        editValue: Target[],
         focusedIndex: number
     }> {
 
     inputTable: React.RefObject<HTMLTableElement>;
 
-    constructor(props: SimpleInlineListEditProps) {
+    constructor(props: TargetInlineListEditProps) {
         super(props);
 
         this.state = { focus: false, editValue: props.priorValue, focusedIndex: 0 };
@@ -49,17 +53,17 @@ export default class SimpleInlineListEdit
 
     goToEditMode(event: React.FormEvent<HTMLSpanElement>, index: number) {
 
-        const newEditValue = this.props.priorValue.length > 0 ? this.props.priorValue : [''];
+        const newEditValue = this.props.priorValue.length > 0 ? this.props.priorValue : [new Target({})];
 
         this.setState({ focus: true, editValue: newEditValue, focusedIndex: index });
     }
 
-    onChange(event: React.FormEvent<HTMLInputElement>, index: number) {
+    onChange(index: number, target: Target) {
 
         console.log('changing');
 
         const newData = this.state.editValue;
-        newData[index] = event.currentTarget.value;
+        newData[index] = target;
 
         this.setState({ editValue: newData });
     }
@@ -68,7 +72,7 @@ export default class SimpleInlineListEdit
         event.preventDefault();
 
         const newData = this.state.editValue;
-        newData.push('');
+        newData.push(new Target({}));
 
         this.setState({ editValue: newData });
     }
@@ -123,7 +127,7 @@ export default class SimpleInlineListEdit
         }
     }
 
-    commitChanges(newValue: string[]) {
+    commitChanges(newValue: Target[]) {
         this.setState({ focus: false });
         this.props.onChange(newValue);
     }
@@ -143,28 +147,38 @@ export default class SimpleInlineListEdit
 
             return (
                 <div className={inputClasses} onBlur={this.onBlur}>
-                    {this.state.editValue.map((v, i) =>
-                        <div
-                            key={i}
-                            style={{ minWidth: '200px' }}
-                            className="input-group input-group-sm">
-                            <input
-                                className="form-control"
-                                value={v}
-                                onChange={e => this.onChange(e, i)}
-                                onKeyUp={this.onKeyUp}
-                                onFocus={this.handleFocus} />
-                            <div className="input-group-append">
-                                <button
-                                    className="btn btn-sm btn-outline-danger"
-                                    onClick={e => {
-                                        e.preventDefault();
-                                        this.removeRow(i);
-                                    }}
-                                    type="button">🗙</button>
-                            </div>
-                        </div>
-                    )}
+                    <table>
+                        <tbody>
+                            {this.state.editValue.map((v, i) =>
+                                <tr
+                                    key={i}
+                                    style={{ minWidth: '200px' }}
+                                    className="input-group input-group-sm">
+                                    <td>
+                                        <InlineEdit
+                                            priorValue={v.statisticName}
+                                            onChange={e => this.onChange(i, v.updateName(e))}
+                                        />
+                                        <br />
+                                        <FormulaInlineEdit
+                                            className="text-muted small"
+                                            priorFormula={v.formula}
+                                            sheet={this.props.sheet}
+                                            onChange={e => this.onChange(i, v.updateFormula(e))} />
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="btn btn-sm btn-outline-danger float-right"
+                                            onClick={e => {
+                                                e.preventDefault();
+                                                this.removeRow(i);
+                                            }}
+                                            type="button">🗙</button>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
 
                     <div className="btn-group float-right">
                         <button
@@ -182,16 +196,16 @@ export default class SimpleInlineListEdit
                 </div >);
         } else if (this.props.priorValue.length > 0) {
 
-            const spanClasses = combineClases('clickable list-group', this.props.className);
+            const spanClasses = combineClases('clickable', this.props.className);
 
             return (
-                <ul className={spanClasses}>
+                <div className={spanClasses}>
                     {this.props.priorValue.map((v, i) =>
-                        <li
-                            className="list-group-item"
-                            key={v}
-                            onClick={e => this.goToEditMode(e, i)}>{v}</li>)}
-                </ul>
+                        <span
+                            className="text-muted small"
+                            key={v.statisticName}
+                            onClick={e => this.goToEditMode(e, i)}>{v.statisticName}</span>)}
+                </div>
             );
         } else {
 
