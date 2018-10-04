@@ -21,6 +21,7 @@ const store = configureStore();
 
 sheetApi.getAllSheets()
   .then(sheets => {
+    console.log(store);
     store.dispatch(loadSheets(sheets));
   });
 

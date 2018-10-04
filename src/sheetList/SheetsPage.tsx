@@ -1,30 +1,63 @@
 import { connect } from 'react-redux';
 import { History } from 'history';
-import * as Model from '../sheet/SheetModel';
+import Sheet, * as Model from '../sheet/SheetModel';
 import * as React from 'react';
 import RootState from '../core/RootState';
 import SheetRow from './SheetRow';
 import Page from '../controls/Page';
+import { ConnectedSheetProps } from '../sheet/sheetConnection';
+import { loadSheet } from '../sheetActions/loadSheet';
 
 type SheetsPageProps = {
   sheets: Model.Sheet[];
   history: History;
 };
 
-export class SheetsPage extends React.Component<SheetsPageProps> {
+export class SheetsPage extends React.Component<ConnectedSheetProps & SheetsPageProps> {
   constructor(props: SheetsPageProps) {
     super(props);
 
     this.onSelect = this.onSelect.bind(this);
+    this.loadSheet = this.loadSheet.bind(this);
   }
 
   onSelect = (identifier: string) => this.props.history.push('sheet/' + identifier);
 
+  loadSheet(sheet: Sheet) {
+    this.props.loadSheet!(sheet);
+  }
+
   render() {
+
     return (
       <Page>
-        <header>
-          <h1>Your Sheets</h1>
+        <header className="d-flex">
+          <h1 className="flex-grow-1">Your Sheets</h1>
+
+          <div>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="basic-addon1">Load</span>
+              </div>
+              <input type="file" className="form-control" onChange={evt => {
+
+                var input = evt.target;
+
+                var reader = new FileReader();
+                reader.onload = function () {
+                  var text = reader.result || '';
+                  
+                  var sheet = new Sheet(JSON.parse(text.toString()));
+
+                  console.log('loading', sheet);
+
+                  loadSheet(sheet);
+                };
+                reader.readAsText(input.files![0]);
+
+              }} />
+            </div>
+          </div>
         </header>
         <table className="table table-hover">
           <thead>
