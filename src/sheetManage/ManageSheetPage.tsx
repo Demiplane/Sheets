@@ -55,7 +55,10 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
         <div>
           <SheetForm
 
-            updateSheetName={n => this.props.renameSheet!(sheet.name, n)}
+            updateSheetName={n => {
+              this.props.renameSheet!(sheet.name, n);
+              this.props.history.push('/sheet/' + n);
+            }}
             updateSheet={s => this.props.updateSheet!(s)}
 
             sheet={sheet}

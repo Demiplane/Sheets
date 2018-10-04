@@ -63,30 +63,6 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
     this.props.updateStatistic(index, statistic.updateName(name));
   }
 
-  row(index: number, statistic: ResolvedStatistic): React.ReactNode {
-
-    return (
-      <tr key={statistic.name}>
-        <td style={{ width: '99%' }}>
-          <InlineEdit priorValue={statistic.name} onChange={c => this.updateName(index, statistic, c)} />
-          <br />
-          <FormulaInlineEdit
-            sheet={this.props.sheet}
-            className="text-muted small"
-            onChange={f => this.updateFormula(index, statistic, f)}
-            priorFormula={statistic.formula} />
-          {statistic.base && <small className="text-muted pl-2 float-right">(base)</small>}
-          {statistic.affected && <small className="text-muted pl-2 float-right">(affected)</small>}
-        </td>
-        <td className="text-center">
-          <Flashy classes="prominent" value={statistic.value} />
-        </td>
-        <td>
-          <DeleteButton onDelete={() => this.props.deleteStatistic(statistic)} />
-        </td>
-      </tr>);
-  }
-
   render() {
     const { sheet, className } = this.props;
 
@@ -98,12 +74,34 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
         <table className="table table-bordered table-hover">
 
           <tbody>
-            {sheet.resolvedStatistics.map((s, i) => this.row(i, s))}
+            {sheet.resolvedStatistics.map((statistic, index) => (
+              <tr key={statistic.name} className="align-center">
+                <td style={{ width: '99%', verticalAlign: 'middle' }}>
+                  <InlineEdit priorValue={statistic.name} onChange={c => this.updateName(index, statistic, c)} />
+                  <br />
+                  <FormulaInlineEdit
+                    sheet={this.props.sheet}
+                    className="text-muted small"
+                    onChange={f => this.updateFormula(index, statistic, f)}
+                    priorFormula={statistic.formula} />
+                </td>
+                <td className="text-center" style={{ verticalAlign: 'middle' }}>
+                  {statistic.base && <small className="text-muted">(base)</small>}
+                  {statistic.base && statistic.affected && <br />}
+                  {statistic.affected && <small className="text-muted">(affected)</small>}
+                </td>
+                <td className="text-center" style={{ verticalAlign: 'middle' }}>
+                  <Flashy classes="prominent" value={statistic.value} />
+                </td>
+                <td style={{ verticalAlign: 'middle' }}>
+                  <DeleteButton onDelete={() => this.props.deleteStatistic(statistic)} />
+                </td>
+              </tr>))}
           </tbody>
 
         </table>
 
-        <AddBox onAdd={this.addStatistic} />
+        <AddBox placeholder="add statistic" onAdd={this.addStatistic} />
 
       </SheetPanel>
     );

@@ -49,6 +49,12 @@ export class Effect {
     }
   }
 
+  addTarget(target: Target) {
+    const newEffect = new Effect(this);
+    newEffect.targets = [...newEffect.targets, target];
+    return newEffect;
+  }
+
   updateName(name: string) {
     const newEffect = new Effect(this);
     newEffect.name = name;
@@ -58,6 +64,18 @@ export class Effect {
   updateTargets(targets: Target[]) {
     const newEffect = new Effect(this);
     newEffect.targets = targets;
+    return newEffect;
+  }
+
+  updateTarget(index: number, target: Target) {
+    const newEffect = new Effect(this);
+    newEffect.targets[index] = target;
+    return newEffect;
+  }
+
+  deleteTarget(target: Target) {
+    const newEffect = new Effect(this);
+    newEffect.targets = newEffect.targets.filter(t => t.statisticName === target.statisticName);
     return newEffect;
   }
 }

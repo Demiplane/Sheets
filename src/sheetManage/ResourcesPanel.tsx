@@ -55,7 +55,7 @@ const ResourcesPanel: React.StatelessComponent<{
 
         </table>
 
-        <AddBox onAdd={name => addResource(new Resource({ name }))} />
+        <AddBox placeholder="add resource" onAdd={name => addResource(new Resource({ name }))} />
 
       </SheetPanel>
     );

@@ -71,7 +71,7 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
               ))}
           </tbody>
         </table>
-        <AddBox onAdd={s => addItem(new Item({name: s}))} />
+        <AddBox placeholder="add item" onAdd={s => addItem(new Item({name: s}))} />
       </SheetPanel>
     );
   }

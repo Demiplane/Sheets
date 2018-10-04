@@ -58,7 +58,7 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
             ))}
         </ul>
 
-        <AddBox onAdd={this.addLog} />
+        <AddBox placeholder="add log" onAdd={this.addLog} />
 
       </SheetPanel>
     );

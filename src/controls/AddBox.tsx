@@ -2,7 +2,7 @@ import * as React from 'react';
 import combineClasses from './combineClasses';
 
 class AddBox extends React.Component<
-    { onAdd: (value: string) => void, classes?: string },
+    { onAdd: (value: string) => void, classes?: string, placeholder?: string },
     { editValue: string }> {
 
     constructor(props: { onAdd: (value: string) => void, classes?: string }) {
@@ -47,6 +47,7 @@ class AddBox extends React.Component<
         return (
             <div className={classes}>
                 <input
+                    placeholder={this.props.placeholder}
                     type="text"
                     className="form-control"
                     value={this.state.editValue}

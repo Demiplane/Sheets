@@ -27,11 +27,9 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
     <div>
       <FluidPage>
         <div className="pl-2 pr-2 d-flex align-items-center">
-          <h1><InlineEdit priorValue={sheet.name} onChange={v => updateSheetName(v)} /></h1>
-          <div
-            className="align-middle">
-            <button className="btn btn-small btn-primary"
-            >Save and Close</button>
+          <h1 className="flex-grow-1"><InlineEdit priorValue={sheet.name} onChange={v => updateSheetName(v)} /></h1>
+          <div className="align-middle">
+            <button className="btn btn-primary">Save and Close</button>
           </div>
         </div>
 

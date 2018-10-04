@@ -46,7 +46,7 @@ const AbilitiesPanel: React.StatelessComponent<{
 
         </table>
 
-        <AddBox onAdd={name => addAbility(new Ability({ name }))} />
+        <AddBox placeholder="add ability" onAdd={name => addAbility(new Ability({ name }))} />
 
       </SheetPanel>
     );
