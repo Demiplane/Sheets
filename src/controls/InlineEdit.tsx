@@ -100,8 +100,6 @@ export default class InlineEdit
         const inputClasses = combineClases('input-group', this.props.className);
         const spanClasses = combineClases('clickable', this.props.className);
 
-        console.log('inline edit', this.props.priorValue, this.props.placeholder);
-
         var dom = (
             this.state.focus ?
                 (

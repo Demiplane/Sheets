@@ -39,8 +39,6 @@ export default class SimpleInlineListEdit
 
     removeRow(index: number) {
 
-        console.log('removing', index);
-
         const newData = [...this.state.editValue];
         newData.splice(index, 1);
 
@@ -55,8 +53,6 @@ export default class SimpleInlineListEdit
     }
 
     onChange(event: React.FormEvent<HTMLInputElement>, index: number) {
-
-        console.log('changing');
 
         const newData = this.state.editValue;
         newData[index] = event.currentTarget.value;
@@ -115,8 +111,6 @@ export default class SimpleInlineListEdit
 
                 element.tBodies[0].rows[this.state.focusedIndex].cells[0].focus();
 
-                console.log('focusing');
-
                 this.setState({ focusedIndex: -1 });
 
             }
@@ -138,8 +132,6 @@ export default class SimpleInlineListEdit
 
         if (this.state.focus) {
             const inputClasses = combineClases('input-group', this.props.className);
-
-            console.log(this.state);
 
             return (
                 <div className={inputClasses} onBlur={this.onBlur}>

@@ -27,7 +27,6 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
     this.cancel = this.cancel.bind(this);
     this.addStatistic = this.addStatistic.bind(this);
-    this.editStatistic = this.editStatistic.bind(this);
     this.onExpand = this.onExpand.bind(this);
     this.newStatistic = this.newStatistic.bind(this);
     this.updateFormula = this.updateFormula.bind(this);
@@ -35,10 +34,6 @@ export class StatisticsPanel extends React.Component<StatisticsPanelProps, { exp
 
   newStatistic(): Statistic {
     return this.props.sheet.createCandidateStatistic();
-  }
-
-  editStatistic(statistic: Statistic) {
-    console.log('implement me');
   }
 
   cancel() {

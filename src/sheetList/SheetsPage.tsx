@@ -5,8 +5,7 @@ import * as React from 'react';
 import RootState from '../core/RootState';
 import SheetRow from './SheetRow';
 import Page from '../controls/Page';
-import { ConnectedSheetProps } from '../sheet/sheetConnection';
-import { loadSheet } from '../sheetActions/loadSheet';
+import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
 
 type SheetsPageProps = {
   sheets: Model.Sheet[];
@@ -24,6 +23,7 @@ export class SheetsPage extends React.Component<ConnectedSheetProps & SheetsPage
   onSelect = (identifier: string) => this.props.history.push('sheet/' + identifier);
 
   loadSheet(sheet: Sheet) {
+
     this.props.loadSheet!(sheet);
   }
 
@@ -40,21 +40,22 @@ export class SheetsPage extends React.Component<ConnectedSheetProps & SheetsPage
                 <span className="input-group-text" id="basic-addon1">Load</span>
               </div>
               <input type="file" className="form-control" onChange={evt => {
-
                 var input = evt.target;
+                var file = input.files![0];
 
-                var reader = new FileReader();
-                reader.onload = function () {
-                  var text = reader.result || '';
-                  
-                  var sheet = new Sheet(JSON.parse(text.toString()));
+                if (file) {
+                  var reader = new FileReader();
+                  var ls = this.loadSheet;
 
-                  console.log('loading', sheet);
+                  reader.onload = function () {
+                    var text = reader.result || '';
 
-                  loadSheet(sheet);
-                };
-                reader.readAsText(input.files![0]);
+                    var sheet = new Sheet(JSON.parse(text.toString()));
 
+                    ls(sheet);
+                  };
+                  reader.readAsText(input.files![0]);
+                }
               }} />
             </div>
           </div>
@@ -82,4 +83,4 @@ const mapStateToProps = (state: RootState) => ({
   sheets: state.sheetState.sheets
 });
 
-export default connect(mapStateToProps)(SheetsPage);
+export default connect(mapStateToProps, mapSheetActions)(SheetsPage);

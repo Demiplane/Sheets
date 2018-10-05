@@ -464,7 +464,7 @@ export class Sheet {
   get actions(): Action[] {
     return this.abilities
       .map(ability => this.getActionsFromAbility(ability))
-      .reduce((acc, cur) => acc.concat(cur));
+      .reduce((acc, cur) => acc.concat(cur), []);
   }
 
   get resolvedResources(): ResolvedResource[] {

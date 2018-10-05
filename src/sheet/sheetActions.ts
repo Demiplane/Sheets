@@ -9,17 +9,18 @@ export const registry: { handlers: ActionHandler<RootAction, SheetState>[] } = {
 export function add<TAction extends RootAction>(
   type: string,
   actionFunction: (activateAction: TAction, state: SheetState) => SheetState) {
-  registry.handlers = [...registry.handlers, 
-    new ActionRegistry<RootAction, TAction, SheetState>(type, actionFunction)];
+
+  registry.handlers = [...registry.handlers,
+  new ActionRegistry<RootAction, TAction, SheetState>(type, actionFunction)];
 }
 
 export function executeTransition(
-  sheetIdentifier: string, 
+  sheetIdentifier: string,
   sheets: Sheet[], transition: (found: Sheet) => Sheet): Sheet[] {
+
   const prevSheet = sheets.find(s => s.name === sheetIdentifier);
 
   if (!prevSheet) {
-    console.log('activateCondition', 'warn', 'Could not find sheet:', sheetIdentifier);
     return sheets;
   }
 

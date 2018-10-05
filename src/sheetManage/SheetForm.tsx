@@ -29,7 +29,18 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
         <div className="pl-2 pr-2 d-flex align-items-center">
           <h1 className="flex-grow-1"><InlineEdit priorValue={sheet.name} onChange={v => updateSheetName(v)} /></h1>
           <div className="align-middle">
-            <button className="btn btn-primary">Save and Close</button>
+            <button className="btn btn-primary" onClick={evt => {
+              evt.preventDefault();
+
+              const content = JSON.stringify(sheet);
+
+              var a = document.createElement('a');
+              var file = new Blob([content], {type: 'application/json'});
+              a.href = URL.createObjectURL(file);
+              a.download = sheet.name + '.json';
+              a.click();
+
+            }}>Save to File</button>
           </div>
         </div>
 

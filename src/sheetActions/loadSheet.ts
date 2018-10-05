@@ -12,7 +12,6 @@ export function loadSheet(sheet: Sheet): LoadSheetAction {
   return { type: LOAD_SHEET_SUCCESS, sheet };
 }
 export function handleLoadSheet(loadAction: LoadSheetAction, state: SheetState) {
-  console.log('actiony');
   return { sheets: [...state.sheets.filter(s => s.name !== loadAction.sheet.name), loadAction.sheet] };
 }
 

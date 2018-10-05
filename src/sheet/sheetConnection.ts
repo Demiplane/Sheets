@@ -27,14 +27,10 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
       dispatch(updateSheet(sheet)),
     deleteSheet: (sheetIdentifier: string) =>
       dispatch(deleteSheet(sheetIdentifier)),
-    loadSheets: (sheets: Sheet[]) => {
-      console.log('dispatch');
-      dispatch(loadSheets(sheets));
-    },
-    loadSheet: (sheet: Sheet) => {
-      console.log('dispatch');
-      dispatch(loadSheet(sheet));
-    },
+    loadSheets: (sheets: Sheet[]) => 
+      dispatch(loadSheets(sheets)),
+    loadSheet: (sheet: Sheet) => 
+      dispatch(loadSheet(sheet)),
     renameSheet: (sheetIdentifier: string, name: string) =>
       dispatch(renameSheet(sheetIdentifier, name))
 

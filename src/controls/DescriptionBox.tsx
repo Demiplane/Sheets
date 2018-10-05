@@ -179,8 +179,6 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
     const description = this.props.description || '';
     const collapsed = this.state.collapsed && !this.state.editing;
 
-    console.log(this.state);
-
     return collapsed
       ? this.renderCollapsed(description, needsCollapse)
       : this.renderExpanded(description, needsCollapse);

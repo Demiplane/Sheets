@@ -12,7 +12,6 @@ export function updateSheet(sheet: Sheet): UpdateSheetAction {
   return { type: UPDATE_SHEET_SUCCESS, sheet };
 }
 export function handleUpdateSheet(updateAction: UpdateSheetAction, state: SheetState) {
-  console.log(updateAction.sheet);
   return {
     sheets: [
       ...state.sheets.filter(sheet => sheet.name !== updateAction.sheet.name),
