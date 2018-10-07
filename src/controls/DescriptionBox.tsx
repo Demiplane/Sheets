@@ -129,8 +129,9 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
           className="d-inline pr-2 d-inline clickable">
           {description ? this.smallify(tooBigDescriptionLimit, description) : this.props.placeholder}
         </p>
+        <br />
         {needsCollapse ?
-          <button className="btn btn-link d-inline float-right" onClick={this.show}>Show</button> : undefined}
+          <button className="btn btn-link d-inline" onClick={this.show}>Show</button> : undefined}
       </div>
     );
   }
@@ -163,7 +164,7 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, {
         }
 
         {showEdit ? undefined : needsCollapse ?
-          <button className="btn btn-link float-right" onClick={this.hide}>Hide</button> : undefined}
+          <button className="btn btn-link" onClick={this.hide}>Hide</button> : undefined}
         {showEdit ?
           <div className="btn-group float-right" role="group">
             <button className="btn btn-outline-danger" onClick={this.cancel} type="button">‎X</button>

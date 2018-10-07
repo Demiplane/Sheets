@@ -15,7 +15,7 @@ type StatisticdivelProps = {
   updateStatistic: (index: number, statistic: Statistic) => void;
   addStatistic: (statistic: Statistic) => void;
   deleteStatistic: (statistic: Statistic) => void;
-  reorderStatistics: (indexToMove: number, newLocation: number) => void;
+  reorder: (indexToMove: number, newLocation: number) => void;
 
   className?: string,
   sheet: Sheet
@@ -73,8 +73,7 @@ export class Statisticdivel extends React.Component<StatisticdivelProps, { expan
             <div 
               key={statistic.name}
               className="list-group-item d-flex align-items-center">
-              <div className="mr-auto"
-                style={{ width: '99%', verticalAlign: 'middle' }}>
+              <div style={{ width: '100%' }}>
                 <InlineEdit priorValue={statistic.name} onChange={c => this.updateName(index, statistic, c)} />
                 <br />
                 <FormulaInlineEdit
@@ -96,8 +95,8 @@ export class Statisticdivel extends React.Component<StatisticdivelProps, { expan
               </div>
               <div className="pl-2 hide-unless-hover">
                 <UpDown
-                  onUp={() => this.props.reorderStatistics(index, index - 1)}
-                  onDown={() => this.props.reorderStatistics(index, index + 1)} />
+                  onUp={() => this.props.reorder(index, index - 1)}
+                  onDown={() => this.props.reorder(index, index + 1)} />
               </div>
             </div>))}
         </div>

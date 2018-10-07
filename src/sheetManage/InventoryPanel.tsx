@@ -14,7 +14,8 @@ type InventoryPanelProps = {
   closeModal: () => void,
   updateItem: (index: number, item: Item) => void,
   addItem: (item: Item) => void,
-  deleteItem: (item: Item) => void
+  deleteItem: (item: Item) => void,
+  reorder: (from: number, to: number) => void
 };
 
 export default class InventoryPanel extends React.Component<InventoryPanelProps, { expanded: string }> {
@@ -40,38 +41,39 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
         title="Inventory"
         className={className}>
 
-        <table className="table table-bordered table-hover">
-          <tbody>
-            {sheet.inventory && sheet.inventory.map((item, index) =>
-              (
-                <tr key={item.name}>
-                  <td style={{ width: '99%' }}>
-                    <InlineEdit
-                      priorValue={item.name}
-                      onChange={name => updateItem(index, item.updateName(name))}
-                    />
-                    <br />
-                    <DescriptionBox
-                      className="text-muted small"
-                      placeholder="<enter description>"
-                      description={item.description}
-                      onChange={description => updateItem(index, item.updateDescription(description))}
-                    />
-                  </td>
-                  <td>
-                    <NumberInput
-                      value={item.stock}
-                      onChange={stock => updateItem(index, item.updateStock(stock))}
-                    />
-                  </td>
-                  <td>
-                    <DeleteButton onDelete={() => deleteItem(item)} />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <AddBox placeholder="add item" onAdd={s => addItem(new Item({name: s}))} />
+        <div className="list-group">
+          {sheet.inventory && sheet.inventory.map((item, index) =>
+            (
+              <div key={item.name}
+                className="list-group-item d-flex align-items-center">
+                <div style={{ width: '100%' }}>
+                  <InlineEdit
+                    priorValue={item.name}
+                    onChange={name => updateItem(index, item.updateName(name))}
+                  />
+                  <DescriptionBox
+                    className="text-muted small"
+                    placeholder="<enter description>"
+                    description={item.description}
+                    onChange={description => updateItem(index, item.updateDescription(description))}
+                  />
+                </div>
+                <div className="pl-2 hide-unless-hover">
+                  <NumberInput
+                    value={item.stock}
+                    onChange={stock => updateItem(index, item.updateStock(stock))}
+                  />
+                </div>
+                <div className="pl-2 hide-on-hover">
+                  <p>{item.stock}</p>
+                </div>
+                <div className="pl-2 hide-unless-hover">
+                  <DeleteButton onDelete={() => deleteItem(item)} />
+                </div>
+              </div>
+            ))}
+        </div>
+        <AddBox placeholder="add item" onAdd={s => addItem(new Item({ name: s }))} />
       </SheetPanel>
     );
   }

@@ -5,6 +5,7 @@ import InlineEdit from '../controls/InlineEdit';
 import AddBox from '../controls/AddBox';
 import DeleteButton from '../controls/DeleteButton';
 import FormulaInlineEdit from '../controls/FormulaInlineEdit';
+import UpDown from '../controls/UpDown';
 
 type EffectsPanelProps = {
   className?: string,
@@ -14,6 +15,7 @@ type EffectsPanelProps = {
   updateEffect: (index: number, effect: Effect) => void;
   addEffect: (effect: Effect) => void;
   deleteEffect: (effect: Effect) => void;
+  reorder: (from: number, to: number) => void;
 };
 
 class EffectsPanel extends React.Component<EffectsPanelProps, { expanded: string[] }> {
@@ -29,13 +31,14 @@ class EffectsPanel extends React.Component<EffectsPanelProps, { expanded: string
     const expanded = this.state.expanded.find(f => effect.name === f) ? true : false;
 
     var rows = [(
-      <tr key={effect.name}>
-        <td style={{ width: '100%' }}>
+      <div key={effect.name}
+        className="list-group-item d-flex align-items-center">
+        <div style={{ width: '100%' }}>
           <InlineEdit
             priorValue={effect.name}
             onChange={v => this.props.updateEffect(index, effect.updateName(v))} />
-        </td>
-        <td className="text-center">
+        </div>
+        <div className="pl-2">
           <button
             className={'btn btn-small ' + (isActive ? 'btn-primary' : '')}
             onClick={event => {
@@ -44,8 +47,8 @@ class EffectsPanel extends React.Component<EffectsPanelProps, { expanded: string
             }}>
             {isActive ? 'ACTIVE' : 'INACTIVE'}
           </button>
-        </td>
-        <td>
+        </div>
+        <div className="pl-2 hide-unless-hover">
           <button
             onClick={evt => {
               evt.preventDefault();
@@ -54,44 +57,54 @@ class EffectsPanel extends React.Component<EffectsPanelProps, { expanded: string
                 this.setState({ expanded: [...this.state.expanded, effect.name] });
             }}
             className="btn btn-primary">{expanded ? '↑' : '↓'}</button>
-        </td>
-        <td><DeleteButton onDelete={() => this.props.deleteEffect(effect)} /></td>
-      </tr>
+        </div>
+        <div className="pl-2 hide-unless-hover"><DeleteButton onDelete={() => this.props.deleteEffect(effect)} /></div>
+        <div className="pl-2 hide-unless-hover">
+          <UpDown
+            onUp={() => this.props.reorder(index, index - 1)}
+            onDown={() => this.props.reorder(index, index + 1)} />
+        </div>
+      </div>
     )];
 
     if (expanded) {
       rows = rows.concat(...effect.targets.map((target, targetIndex) => (
-        <tr key={effect.name + target.statisticName}>
-          <td>
-            <InlineEdit
-              priorValue={target.statisticName}
-              onChange={n => this.props.updateEffect(
-                index,
-                effect.updateTarget(targetIndex, target.updateName(n)))} />
-          </td>
-          <td colSpan={2}>
-            <FormulaInlineEdit
-              priorFormula={target.formula}
-              sheet={sheet}
-              onChange={n => this.props.updateEffect(
-                index,
-                effect.updateTarget(targetIndex, target.updateFormula(n)))} />
-          </td>
-          <td>
+        <div
+          key={effect.name + target.statisticName}
+          className="ml-4 list-group-item d-flex align-items-center">
+          <div style={{ width: '100%' }}>
+            <div>
+              <InlineEdit
+                priorValue={target.statisticName}
+                onChange={n => this.props.updateEffect(
+                  index,
+                  effect.updateTarget(targetIndex, target.updateName(n)))} />
+            </div>
+            <div>
+              <FormulaInlineEdit
+                className="text-muted small"
+                priorFormula={target.formula}
+                sheet={sheet}
+                onChange={n => this.props.updateEffect(
+                  index,
+                  effect.updateTarget(targetIndex, target.updateFormula(n)))} />
+            </div>
+          </div>
+          <div className="pl-2">
             <DeleteButton onDelete={() => this.props.updateEffect(index, effect.deleteTarget(target))} />
-          </td>
-        </tr>
+          </div>
+        </div>
       )));
       rows.push((
-        <tr key={effect.name + 'addTarget'}>
-          <td colSpan={4}>
-            <AddBox
-              placeholder="add target"
-              onAdd={statisticName => this.props.updateEffect(
-                index,
-                effect.addTarget(new Target({ statisticName })))} />
-          </td>
-        </tr>
+        <div
+          key={effect.name + 'addTarget'}
+          className="ml-4 list-group-item d-flex align-items-center">
+          <AddBox
+            placeholder="add target"
+            onAdd={statisticName => this.props.updateEffect(
+              index,
+              effect.addTarget(new Target({ statisticName })))} />
+        </div>
       ));
     }
 
@@ -107,13 +120,9 @@ class EffectsPanel extends React.Component<EffectsPanelProps, { expanded: string
         title="Effects"
         className={className}>
 
-        <table className="table table-bordered table-hover">
-
-          <tbody>
-            {effects.map((effect, index) => this.toRow(sheet, effect, index))}
-          </tbody>
-
-        </table>
+        <div className="list-group">
+          {effects.map((effect, index) => this.toRow(sheet, effect, index))}
+        </div>
 
         <AddBox placeholder="add effect" onAdd={name => addEffect(new Effect({ name }))} />
 

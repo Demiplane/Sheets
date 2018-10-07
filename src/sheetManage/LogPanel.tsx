@@ -44,19 +44,21 @@ export default class LogPanel extends React.Component<LogPanelProps, { editValue
         title="Log"
         className={className}>
 
-        <ul className="list-group">
+        <div className="list-group">
           {sheet.logs && sheet.logs.map(l =>
             (
-              <li key={l.timestamp} className="list-group-item">
-                <div className="float-left">
-                  <span className="text-muted">{l.timestamp}</span>
-                  <br />
+              <div key={l.timestamp}
+                className="list-group-item d-flex align-items-center">
+                <div style={{ width: '100%' }}>
+                  <div className="text-muted small">{l.timestamp}</div>
                   <InlineEdit priorValue={l.text} onChange={text => this.updateLogText(l, text)} />
                 </div>
-                <DeleteButton className="float-right" onDelete={() => this.props.deleteLog(l)} />
-              </li>
+                <div className="pl-2 hide-unless-hover">
+                  <DeleteButton className="float-right" onDelete={() => this.props.deleteLog(l)} />
+                </div>
+              </div>
             ))}
-        </ul>
+        </div>
 
         <AddBox placeholder="add log" onAdd={this.addLog} />
 

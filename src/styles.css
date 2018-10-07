@@ -2,6 +2,10 @@
   display:none;
 }
 
+:hover > .hide-on-hover {
+  display:none;
+}
+
 .clickable {
   cursor: pointer;
 }

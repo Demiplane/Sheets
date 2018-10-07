@@ -51,7 +51,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               updateStatistic={(i, s) => updateSheet(sheet.updateStatistic(i, s))}
               deleteStatistic={s => updateSheet(sheet.deleteStatistic(s))}
 
-              reorderStatistics={(i, ii) => updateSheet(sheet.moveStatistic(i, ii))}
+              reorder={(i, ii) => updateSheet(sheet.moveStatistic(i, ii))}
 
               sheet={sheet}
 
@@ -62,6 +62,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               addItem={i => updateSheet(sheet.addItem(i))}
               deleteItem={i => updateSheet(sheet.deleteItem(i))}
               updateItem={(index, i) => updateSheet(sheet.updateItem(index, i))}
+              reorder={(i, ii) => updateSheet(sheet.moveItem(i, ii))}
 
               showModal={showModal}
               closeModal={closeModal}
@@ -85,6 +86,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               updateEffect={(i, c) => updateSheet(sheet.updateEffect(i, c))}
               addEffect={c => updateSheet(sheet.addEffect(c))}
               deleteEffect={c => updateSheet(sheet.deleteEffect(c))}
+              reorder={(i, ii) => updateSheet(sheet.moveEffect(i, ii))}
 
               sheet={sheet}
             />

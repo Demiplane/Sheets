@@ -358,6 +358,12 @@ export class Sheet {
     return newSheet;
   }
 
+  moveItem(from: number, to: number) {
+    const newSheet = new Sheet(this);
+    newSheet.inventory = this.move(newSheet.inventory, from, to);
+    return newSheet;
+  }
+
   updateItem(index: number, item: Item): Sheet {
     const newSheet = new Sheet(this);
     newSheet.inventory = [...this.inventory];
@@ -443,6 +449,12 @@ export class Sheet {
   deleteEffect(effect: Effect) {
     const newSheet = new Sheet(this);
     newSheet.effects = this.effects.filter(e => e.name !== effect.name);
+    return newSheet;
+  }
+
+  moveEffect(from: number, to: number) {
+    const newSheet = new Sheet(this);
+    newSheet.effects = this.move(newSheet.effects, from, to);
     return newSheet;
   }
 

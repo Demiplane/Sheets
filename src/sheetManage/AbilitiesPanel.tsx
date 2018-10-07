@@ -20,31 +20,31 @@ const AbilitiesPanel: React.StatelessComponent<{
         title="Abilities"
         className={className}>
 
-        <table className="table table-bordered table-hover">
-
-          <tbody>
-            {sheet.abilities && sheet.abilities.map((a, i) => (
-              <tr key={a.name}>
-                <td style={{ width: '99%' }}>
-                  <InlineEdit priorValue={a.name} onChange={n => updateAbility(i, a.updateName(n))} />
-                  <br />
-                  <DescriptionBox
-                    className="text-muted small"
-                    onChange={c => updateAbility(i, a.updateDescription(c))}
-                    description={a.description} />
-                </td>
-                <td>
-                  <SimpleInlineListEdit
-                    placeholder="add action"
-                    priorValue={a.actions}
-                    onChange={actions => updateAbility(i, a.updateActions(actions))} />
-                  </td>
-                <td><DeleteButton onDelete={() => deleteAbility(a)} /></td>
-              </tr>
-            ))}
-          </tbody>
-
-        </table>
+        <div
+          className="list-group">
+          {sheet.abilities && sheet.abilities.map((a, i) => (
+            <div key={a.name}
+              className="list-group-item d-flex align-items-center">
+              <div style={{ width: '100%' }}>
+                <InlineEdit priorValue={a.name} onChange={n => updateAbility(i, a.updateName(n))} />
+                <br />
+                <DescriptionBox
+                  className="text-muted small"
+                  onChange={c => updateAbility(i, a.updateDescription(c))}
+                  description={a.description} />
+              </div>
+              <div className="pl-2">
+                <SimpleInlineListEdit
+                  placeholder="add action"
+                  priorValue={a.actions}
+                  onChange={actions => updateAbility(i, a.updateActions(actions))} />
+              </div>
+              <div className="pl-2 hide-unless-hover">
+                <DeleteButton onDelete={() => deleteAbility(a)} />
+              </div>
+            </div>
+          ))}
+        </div>
 
         <AddBox placeholder="add ability" onAdd={name => addAbility(new Ability({ name }))} />
 
