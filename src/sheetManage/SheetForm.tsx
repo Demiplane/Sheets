@@ -35,7 +35,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               const content = JSON.stringify(sheet);
 
               var a = document.createElement('a');
-              var file = new Blob([content], {type: 'application/json'});
+              var file = new Blob([content], { type: 'application/json' });
               a.href = URL.createObjectURL(file);
               a.download = sheet.name + '.json';
               a.click();
@@ -50,6 +50,8 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               addStatistic={s => updateSheet(sheet.addStatistic(s))}
               updateStatistic={(i, s) => updateSheet(sheet.updateStatistic(i, s))}
               deleteStatistic={s => updateSheet(sheet.deleteStatistic(s))}
+
+              reorderStatistics={(i, ii) => updateSheet(sheet.moveStatistic(i, ii))}
 
               sheet={sheet}
 

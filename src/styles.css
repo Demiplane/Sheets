@@ -1,3 +1,7 @@
+:not(:hover) > .hide-unless-hover {
+  display:none;
+}
+
 .clickable {
   cursor: pointer;
 }

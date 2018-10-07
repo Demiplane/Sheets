@@ -18,19 +18,14 @@ const rootReducer = (state: RootState, action: RootAction): RootState => {
 
   var reducedState = generalReducer(state, action);
 
-  console.log(action.type);
-
   if (action.type.endsWith(SHEET_SUCCESS_SUFFIX) && !action.type.startsWith('LOAD')) {
     reducedState.sheetHistoryState.past.push(state.sheetState);
-    console.log(reducedState.sheetHistoryState);
   } else if (action.type === UNDO_SHEET && reducedState.sheetHistoryState.past.length > 0) {
     reducedState.sheetHistoryState.future.push(reducedState.sheetState);
     reducedState.sheetState = reducedState.sheetHistoryState.past.pop()!;
-    console.log(reducedState.sheetHistoryState);
   } else if (action.type === REDO_SHEET && reducedState.sheetHistoryState.future.length > 0) {
     reducedState.sheetHistoryState.past.push(reducedState.sheetState);
     reducedState.sheetState = reducedState.sheetHistoryState.future.pop()!;
-    console.log(reducedState.sheetHistoryState);
   }
 
   return reducedState;

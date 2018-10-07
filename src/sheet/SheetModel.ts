@@ -395,6 +395,30 @@ export class Sheet {
     return newSheet;
   }
 
+  moveStatistic(indexToMove: number, newLocation: number) {
+    const newSheet = new Sheet(this);
+    newSheet.statistics = this.move(newSheet.statistics, indexToMove, newLocation);
+    return newSheet;
+  }
+
+  move<T>(array: T[], indexToMove: number, indexToMoveTo: number) {
+    if (indexToMove >= array.length || indexToMove < 0 ||
+      indexToMoveTo >= array.length || indexToMoveTo < 0) {
+      return array;
+    }
+
+    var working = [...array];
+
+    console.log(indexToMove, indexToMoveTo);
+
+    var moved = working[indexToMove];
+    working.splice(indexToMove, 1);
+    working.splice(indexToMoveTo > indexToMove ?
+      indexToMoveTo : indexToMoveTo, 0, moved);
+
+    return working;
+  }
+
   activateEffect(effect: Effect): Sheet {
     return this.setEffectActive(effect.name, true);
   }
