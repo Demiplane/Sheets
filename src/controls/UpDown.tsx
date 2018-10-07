@@ -11,11 +11,11 @@ const UpDown: React.StatelessComponent<{
   return (
     <div className={classes}>
       <button
-        className="btn btn-sm btn-secondary"
+        className="btn btn-sm btn-secondary pt-0 pb-0"
         onClick={evt => { evt.preventDefault(); onUp(); }}
         type="button">↑</button>
       <button
-        className="btn btn-sm btn-secondary"
+        className="btn btn-sm btn-secondary pt-0 pb-0"
         onClick={evt => { evt.preventDefault(); onDown(); }}
         type="button">↓</button>
     </div>
