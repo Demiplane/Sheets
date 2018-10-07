@@ -6,6 +6,8 @@ import { deleteSheet } from '../sheetActions/deleteSheet';
 import { loadSheets } from '../sheetActions/loadSheets';
 import { renameSheet } from '../sheetActions/renameSheet';
 import { loadSheet } from '../sheetActions/loadSheet';
+import { redo } from '../sheetActions/redoSheet';
+import { undo } from '../sheetActions/undoSheet';
 
 export type ConnectedSheetProps = {
 
@@ -15,6 +17,9 @@ export type ConnectedSheetProps = {
   loadSheets?: (sheets: Sheet[]) => void;
   loadSheet?: (sheet: Sheet) => void;
   renameSheet?: (sheetIdentifier: string, name: string) => void;
+
+  undo?: () => void;
+  redo?: () => void;
 
 };
 
@@ -32,7 +37,12 @@ export function mapSheetActions(dispatch: Dispatch<AnyAction>): ConnectedSheetPr
     loadSheet: (sheet: Sheet) => 
       dispatch(loadSheet(sheet)),
     renameSheet: (sheetIdentifier: string, name: string) =>
-      dispatch(renameSheet(sheetIdentifier, name))
+      dispatch(renameSheet(sheetIdentifier, name)),
+    
+    undo: () => 
+      dispatch(undo()),
+      redo: () =>
+      dispatch(redo())
 
   };
 }

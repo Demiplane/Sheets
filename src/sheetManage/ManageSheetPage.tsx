@@ -23,6 +23,7 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
 
     this.state = {};
   }
@@ -45,6 +46,16 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
     this.setState({ modal: undefined });
   }
 
+  onKeyUp(evt: React.KeyboardEvent<HTMLDivElement>) {
+    if (evt.ctrlKey) {
+      if (evt.key === 'z') {
+        this.props.undo!();
+      } else if (evt.key === 'y') {
+        this.props.redo!();
+      }
+    }
+  }
+
   render() {
     const { sheet, loading } = this.props;
 
@@ -52,7 +63,7 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
       return <FluidPage><p className="text-center">Loading...</p></FluidPage>;
     } else if (sheet) {
       return (
-        <div>
+        <div onKeyUp={this.onKeyUp}>
           <SheetForm
 
             updateSheetName={n => {

@@ -4,6 +4,10 @@ const initialState: RootState = {
   sheetState: {
     sheets: []
   },
+  sheetHistoryState: {
+    future: [],
+    past: []
+  },
   loading: true
 };
 

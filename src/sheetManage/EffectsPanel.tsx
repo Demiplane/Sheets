@@ -53,7 +53,7 @@ class EffectsPanel extends React.Component<EffectsPanelProps, { expanded: string
                 this.setState({ expanded: [...this.state.expanded.filter(f => f !== effect.name)] }) :
                 this.setState({ expanded: [...this.state.expanded, effect.name] });
             }}
-            className="btn btn-primary">{expanded ? '-' : '+'}</button>
+            className="btn btn-primary">{expanded ? '↑' : '↓'}</button>
         </td>
         <td><DeleteButton onDelete={() => this.props.deleteEffect(effect)} /></td>
       </tr>
