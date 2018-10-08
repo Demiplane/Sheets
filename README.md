@@ -1,2 +1,3 @@
-[Go](/Sheets/build)
-2
+# Sheets
+
+Sheets is a rpg character sheet tool focused on smoothing the experience during a session. 
