@@ -78,6 +78,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               updateResource={(i, r) => updateSheet(sheet.updateResource(i, r))}
               addResource={r => updateSheet(sheet.addResource(r))}
               deleteResource={r => updateSheet(sheet.deleteResource(r))}
+              reorder={(i, ii) => updateSheet(sheet.moveResource(i, ii))}
             />
             <EffectsPanel
               activateEffect={c => updateSheet(sheet.activateEffect(c))}
@@ -96,6 +97,7 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
               updateAbility={(i, a) => updateSheet(sheet.updateAbility(i, a))}
               addAbility={a => updateSheet(sheet.addAbility(a))}
               deleteAbility={a => updateSheet(sheet.deleteAbility(a))}
+              reorder={(i, ii) => updateSheet(sheet.moveAbility(i, ii))}
               sheet={sheet} />
             <LogPanel
               sheet={sheet}

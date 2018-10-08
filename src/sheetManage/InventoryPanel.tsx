@@ -6,6 +6,7 @@ import { DescriptionBox } from '../controls/DescriptionBox';
 import NumberInput from '../controls/NumberInput';
 import AddBox from '../controls/AddBox';
 import DeleteButton from '../controls/DeleteButton';
+import UpDown from '../controls/UpDown';
 
 type InventoryPanelProps = {
   className?: string,
@@ -69,6 +70,11 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
                 </div>
                 <div className="pl-2 hide-unless-hover">
                   <DeleteButton onDelete={() => deleteItem(item)} />
+                </div>
+                <div className="pl-2 hide-unless-hover">
+                  <UpDown
+                    onUp={() => this.props.reorder(index, index - 1)}
+                    onDown={() => this.props.reorder(index, index + 1)} />
                 </div>
               </div>
             ))}

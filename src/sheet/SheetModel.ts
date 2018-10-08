@@ -279,6 +279,12 @@ export class Sheet {
 
   // state transitions
 
+  moveAbility(from: number, to: number) {
+    const newSheet = new Sheet(this);
+    newSheet.abilities = this.move(newSheet.abilities, from, to);
+    return newSheet;
+  }
+
   addAbility(ability: Ability) {
     const newSheet = new Sheet(this);
     newSheet.abilities = [...newSheet.abilities, ability];
@@ -455,6 +461,12 @@ export class Sheet {
   moveEffect(from: number, to: number) {
     const newSheet = new Sheet(this);
     newSheet.effects = this.move(newSheet.effects, from, to);
+    return newSheet;
+  }
+
+  moveResource(from: number, to: number) {
+    const newSheet = new Sheet(this);
+    newSheet.resources = this.move(newSheet.resources, from, to);
     return newSheet;
   }
 

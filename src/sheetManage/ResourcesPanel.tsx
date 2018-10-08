@@ -6,15 +6,17 @@ import NumberInput from '../controls/NumberInput';
 import FormulaInlineEdit from '../controls/FormulaInlineEdit';
 import AddBox from '../controls/AddBox';
 import DeleteButton from '../controls/DeleteButton';
+import UpDown from '../controls/UpDown';
 
 const ResourcesPanel: React.StatelessComponent<{
   className?: string,
   sheet: Sheet,
   updateResource: (index: number, resource: Resource) => void,
   deleteResource: (resource: Resource) => void,
-  addResource: (resource: Resource) => void
+  addResource: (resource: Resource) => void,
+  reorder: (from: number, to: number) => void
 }> =
-  ({ className, sheet, updateResource, addResource, deleteResource }) => {
+  ({ reorder, className, sheet, updateResource, addResource, deleteResource }) => {
     return (
       <SheetPanel
         title="Resources"
@@ -48,6 +50,11 @@ const ResourcesPanel: React.StatelessComponent<{
               </div>
               <div className="pl-2 hide-unless-hover">
                 <DeleteButton onDelete={() => deleteResource(resource)} />
+              </div>
+              <div className="pl-2 hide-unless-hover">
+                <UpDown
+                  onUp={() => reorder(index, index - 1)}
+                  onDown={() => reorder(index, index + 1)} />
               </div>
             </div>
           ))}
