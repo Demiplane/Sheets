@@ -6,6 +6,7 @@ import RootState from '../core/RootState';
 import SheetRow from './SheetRow';
 import Page from '../controls/Page';
 import { ConnectedSheetProps, mapSheetActions } from '../sheet/sheetConnection';
+import AddBox from '../controls/AddBox';
 
 type SheetsPageProps = {
   sheets: Model.Sheet[];
@@ -74,6 +75,7 @@ export class SheetsPage extends React.Component<ConnectedSheetProps & SheetsPage
               ))}
           </tbody>
         </table>
+        <AddBox onAdd={name => this.loadSheet(new Sheet({name}))} />
       </Page>
     );
   }
