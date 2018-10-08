@@ -1,6 +1,6 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import ManageSheetPage from './sheetManage/ManageSheetPage';
 import { Provider } from 'react-redux';
 import { SheetApi, MockSheetApi } from './sheet/SheetApi';
