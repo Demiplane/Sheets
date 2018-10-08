@@ -1,6 +1,6 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 import ManageSheetPage from './sheetManage/ManageSheetPage';
 import { Provider } from 'react-redux';
 import { SheetApi, MockSheetApi } from './sheet/SheetApi';
@@ -24,12 +24,14 @@ sheetApi.getAllSheets()
     store.dispatch(loadSheets(sheets));
   });
 
+// console.log('base url: ', process.env.PUBLIC_URL + '/');
+
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
       <App>
         <Switch>
-          <Route exact={true} path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+          <Route exact={true} path={'/'} component={HomePage} />
           <Route path={'/about'} component={AboutPage} />
           <Route path={'/sheets'} component={SheetsPage} />
           <Route path={'/sheet/:id'} component={ManageSheetPage} />
@@ -37,8 +39,7 @@ ReactDOM.render(
           <Redirect to={'/notfound'} />
         </Switch>
       </App>
-
-    </BrowserRouter>
+    </HashRouter>
   </Provider>,
   document.getElementById('root') as HTMLElement
 );
