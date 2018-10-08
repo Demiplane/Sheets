@@ -29,7 +29,7 @@ ReactDOM.render(
     <BrowserRouter>
       <App>
         <Switch>
-          <Route exact={true} path="/Sheets" component={HomePage} />
+          <Route exact={true} path={process.env.PUBLIC_URL + '/'} component={HomePage} />
           <Route path={'/about'} component={AboutPage} />
           <Route path={'/sheets'} component={SheetsPage} />
           <Route path={'/sheet/:id'} component={ManageSheetPage} />
