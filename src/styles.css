@@ -1,5 +1,18 @@
+:not(:hover) > .hide-unless-hover {
+  display:none;
+}
+
+:hover > .hide-on-hover {
+  display:none;
+}
+
 .clickable {
   cursor: pointer;
+}
+
+.prominent {
+  font-size: 1.5em;
+  padding: 5px;
 }
 
 .sheet-page {

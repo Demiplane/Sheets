@@ -8,11 +8,12 @@ type TextInputProps = {
   placeholder?: string,
   value?: string,
   error?: string,
-  className?: string
+  className?: string,
+  focus?: boolean
 };
 
 const TextInput: React.StatelessComponent<TextInputProps> =
-  ({ name, label, onChange, placeholder, value, error, className }) => {
+  ({ name, label, onChange, placeholder, value, error, className, focus }) => {
     let wrapperClass = label ? 'form-group' : '';
     if (error && error.length > 0) {
       wrapperClass += ' ' + 'has-error';

@@ -23,6 +23,7 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
 
     this.state = {};
   }
@@ -45,6 +46,24 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
     this.setState({ modal: undefined });
   }
 
+  onKeyUp(evt: KeyboardEvent) {
+    if (evt.ctrlKey) {
+      if (evt.key === 'z') {
+        this.props.undo!();
+      } else if (evt.key === 'y') {
+        this.props.redo!();
+      }
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keyup', this.onKeyUp, false);
+  }
+  
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.onKeyUp, false);
+  }
+
   render() {
     const { sheet, loading } = this.props;
 
@@ -55,22 +74,17 @@ export class ManageSheetPage extends React.Component<ManageSheetPageProps, Manag
         <div>
           <SheetForm
 
-            addStatistic={s => this.props.addStatistic!(sheet.name, s)}
-            updateStatistic={s => this.props.updateStatistic!(sheet.name, s)}
-            deleteStatistic={s => this.props.deleteStatistic!(sheet.name, s)}
-
-            updateSheetName={n => this.props.renameSheet!(sheet.name, n)}
-
-            addItem={i => this.props.addItem!(sheet.name, i)}
-            updateItem={i => this.props.updateItem!(sheet.name, i)}
-            deleteItem={i => this.props.deleteItem!(sheet.name, i)}
-
-            activateCondition={c => this.props.activateCondition!(sheet.name, c)}
-            inactivateCondition={c => this.props.inactivateCondition!(sheet.name, c)}
+            updateSheetName={n => {
+              this.props.renameSheet!(sheet.name, n);
+              this.props.history.push('/sheet/' + n);
+            }}
+            updateSheet={s => this.props.updateSheet!(s)}
 
             sheet={sheet}
             showModal={this.openModal}
-            closeModal={this.closeModal} />
+            closeModal={this.closeModal}
+
+          />
 
           {this.state.modal}
         </div>

@@ -14,7 +14,7 @@ export function createSheet(sheet: Sheet): CreateSheetAction {
 export function handleCreateSheet(createAction: CreateSheetAction, state: SheetState) {
   return {
     sheets: [...state.sheets,
-    Object.assign({}, createAction.sheet)
+    createAction.sheet
     ]
   };
 }

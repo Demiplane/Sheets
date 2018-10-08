@@ -5,17 +5,37 @@ const tooBigDescriptionLimit = 30;
 
 type DescriptionBoxProps = {
   className?: string,
-  description?: string
+  description: string,
+  placeholder?: string,
+  onChange?: (newValue: string) => void
 };
 
-export class DescriptionBox extends React.Component<DescriptionBoxProps, { collapsed: boolean }> {
+export class DescriptionBox extends React.Component<DescriptionBoxProps, {
+  collapsed: boolean,
+  editing: boolean,
+  editValue: string,
+  dirty: boolean,
+  resizeTextArea: boolean
+}> {
+
+  textInput: React.RefObject<HTMLTextAreaElement>;
+
   constructor(props: DescriptionBoxProps) {
     super(props);
 
+    this.textInput = React.createRef();
+
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
+    this.cancel = this.cancel.bind(this);
+    this.commit = this.commit.bind(this);
+    this.edit = this.edit.bind(this);
 
-    this.state = { collapsed: true };
+    this.state = {
+      editing: false,
+      collapsed: true, editValue: props.description!,
+      dirty: false, resizeTextArea: false
+    };
   }
 
   needsCollapse(): boolean {
@@ -27,6 +47,9 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
   smallify(limit: number, description?: string) {
     if (!description) {
       return '';
+    }
+    if (limit >= description.length) {
+      return description;
     }
 
     let small = '';
@@ -53,15 +76,15 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
       cache += character;
     }
 
-    small += 
-      small.length > 0 
-      ? small.endsWith('...') 
-        ? '' 
-        : small.endsWith('..') 
-          ? '.' 
-          : small.endsWith('.') 
-            ? '..' 
-          : '...' 
+    small +=
+      small.length > 0
+        ? small.endsWith('...')
+          ? ''
+          : small.endsWith('..')
+            ? '.'
+            : small.endsWith('.')
+              ? '..'
+              : '...'
         : '';
 
     return small;
@@ -74,7 +97,12 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
 
   show(event: React.FormEvent<HTMLButtonElement>) {
     event.preventDefault();
-    this.setState({ collapsed: false });
+    this.setState({ collapsed: false, resizeTextArea: true });
+  }
+
+  edit(event: React.FormEvent<HTMLParagraphElement>) {
+    event.preventDefault();
+    this.setState({ editing: true, resizeTextArea: true });
   }
 
   hide(event: React.FormEvent<HTMLButtonElement>) {
@@ -82,37 +110,79 @@ export class DescriptionBox extends React.Component<DescriptionBoxProps, { colla
     this.setState({ collapsed: true });
   }
 
-  renderCollapsed(description: string) {
+  commit(event: React.FormEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    this.props.onChange!(this.state.editValue);
+    this.setState({ dirty: false, editing: false });
+  }
+
+  cancel(event: React.FormEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    this.setState({ editValue: this.props.description, dirty: false, editing: false });
+  }
+
+  renderCollapsed(description: string, needsCollapse: boolean) {
     return (
       <div className={combineClasses(this.props.className, '')}>
-        <p className="d-inline pr-2 d-inline">{this.smallify(tooBigDescriptionLimit, description)}</p>
-        <button className="btn btn-link d-inline float-right" onClick={this.show}>Show</button>
+        <p
+          onClick={this.edit}
+          className="d-inline pr-2 d-inline clickable">
+          {description ? this.smallify(tooBigDescriptionLimit, description) : this.props.placeholder}
+        </p>
+        <br />
+        {needsCollapse ?
+          <button className="btn btn-link d-inline" onClick={this.show}>Show</button> : undefined}
       </div>
     );
   }
 
-  renderExpanded(description: string) {
+  componentDidUpdate() {
+    if (this.state.resizeTextArea && this.textInput.current) {
+      this.textInput.current!.style.height = this.textInput.current!.scrollHeight + 'px';
+      this.setState({ resizeTextArea: false });
+    }
+  }
+
+  renderExpanded(description: string, needsCollapse: boolean) {
+
+    const showEdit = this.state.editing || this.state.dirty;
+
     return (
       <div className={this.props.className}>
-        <p>{description}</p>
-        <button className="btn btn-link float-right" onClick={this.hide}>Hide</button>
+        {
+          this.props.onChange ?
+            <textarea
+              placeholder={this.props.placeholder}
+              ref={this.textInput}
+              className="form-control"
+              value={this.state.editValue}
+              onChange={e => {
+                e.preventDefault();
+                this.setState({ editValue: e.target.value, dirty: true });
+              }} /> :
+            <p>{description}</p>
+        }
+
+        {showEdit ? undefined : needsCollapse ?
+          <button className="btn btn-link" onClick={this.hide}>Hide</button> : undefined}
+        {showEdit ?
+          <div className="btn-group float-right" role="group">
+            <button className="btn btn-outline-danger" onClick={this.cancel} type="button">‎X</button>
+            <button className="btn btn-outline-success" onClick={this.commit} type="button">✓</button>
+          </div> :
+          undefined}
       </div>
     );
-  }
-
-  renderStandard(description: string) {
-    return <p className={this.props.className}>{description}</p>;
   }
 
   render() {
     const needsCollapse = this.needsCollapse();
     const description = this.props.description || '';
-    const collapsed = this.state.collapsed;
+    const collapsed = this.state.collapsed && !this.state.editing;
 
-    return needsCollapse ? collapsed
-      ? this.renderCollapsed(description)
-      : this.renderExpanded(description)
-      : this.renderStandard(description);
+    return collapsed
+      ? this.renderCollapsed(description, needsCollapse)
+      : this.renderExpanded(description, needsCollapse);
   }
 }
 

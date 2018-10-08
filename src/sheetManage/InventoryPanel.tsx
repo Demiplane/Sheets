@@ -1,17 +1,21 @@
 import * as React from 'react';
 import Sheet, { Item } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
-import InventoryPanelRow from './InventoryPanelRow';
-import { ItemForm } from './ItemForm';
+import InlineEdit from '../controls/InlineEdit';
+import { DescriptionBox } from '../controls/DescriptionBox';
+import NumberInput from '../controls/NumberInput';
+import AddBox from '../controls/AddBox';
+import DeleteButton from '../controls/DeleteButton';
 
 type InventoryPanelProps = {
   className?: string,
   sheet: Sheet,
   showModal: (modalElement: JSX.Element) => void,
   closeModal: () => void,
-  updateItem: (item: Item) => void,
+  updateItem: (index: number, item: Item) => void,
   addItem: (item: Item) => void,
-  deleteItem: (itemIdentifier: string) => void
+  deleteItem: (item: Item) => void,
+  reorder: (from: number, to: number) => void
 };
 
 export default class InventoryPanel extends React.Component<InventoryPanelProps, { expanded: string }> {
@@ -20,34 +24,7 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
 
     this.state = { expanded: '' };
 
-    this.showAddModal = this.showAddModal.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
-    this.showModal = this.showModal.bind(this);
     this.onExpand = this.onExpand.bind(this);
-  }
-
-  showAddModal() {
-    const { addItem } = this.props;
-
-    this.showModal(new Item({}), addItem);
-  }
-
-  showEditModal(item: Item) {
-    const { updateItem } = this.props;
-
-    this.showModal(item, updateItem);
-  }
-
-  showModal(item: Item, save: (item: Item) => void) {
-    const { showModal, closeModal } = this.props;
-
-    showModal((
-      <ItemForm
-        cancel={closeModal}
-        item={item}
-        save={i => { save(i); closeModal(); }}
-      />
-    ));
   }
 
   onExpand(item: Item) {
@@ -57,38 +34,46 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps,
   }
 
   render() {
-    const { className, sheet, updateItem, deleteItem } = this.props;
+    const { className, sheet, addItem, updateItem, deleteItem } = this.props;
 
     return (
       <SheetPanel
         title="Inventory"
-        onAdd={this.showAddModal}
         className={className}>
 
-        <table className="table table-bordered table-hover">
-
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th className="text-center" scope="col">Stock</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {sheet.inventory && sheet.inventory.map(i =>
-              (
-                <InventoryPanelRow
-                  item={i}
-                  itemKey={i.name}
-                  deleteItem={deleteItem}
-                  expand={() => this.onExpand(i)}
-                  expanded={this.state.expanded === i.name}
-                  updateItem={updateItem}
-                  showUpdateItem={this.showEditModal}
-                />
-              ))}
-          </tbody>
-        </table>
+        <div className="list-group">
+          {sheet.inventory && sheet.inventory.map((item, index) =>
+            (
+              <div key={item.name}
+                className="list-group-item d-flex align-items-center">
+                <div style={{ width: '100%' }}>
+                  <InlineEdit
+                    priorValue={item.name}
+                    onChange={name => updateItem(index, item.updateName(name))}
+                  />
+                  <DescriptionBox
+                    className="text-muted small"
+                    placeholder="<enter description>"
+                    description={item.description}
+                    onChange={description => updateItem(index, item.updateDescription(description))}
+                  />
+                </div>
+                <div className="pl-2 hide-unless-hover">
+                  <NumberInput
+                    value={item.stock}
+                    onChange={stock => updateItem(index, item.updateStock(stock))}
+                  />
+                </div>
+                <div className="pl-2 hide-on-hover">
+                  <p>{item.stock}</p>
+                </div>
+                <div className="pl-2 hide-unless-hover">
+                  <DeleteButton onDelete={() => deleteItem(item)} />
+                </div>
+              </div>
+            ))}
+        </div>
+        <AddBox placeholder="add item" onAdd={s => addItem(new Item({ name: s }))} />
       </SheetPanel>
     );
   }

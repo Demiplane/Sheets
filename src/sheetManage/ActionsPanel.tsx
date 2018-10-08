@@ -3,21 +3,13 @@ import groupBy from '../core/groupBy';
 import Sheet, { Action } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 
-const renderAction = (item: Action) => {
-  return (
-    <p>{item.name}</p>
-  );
-};
-
 const toActionTable = (group: { key: string, items: Action[] }) => {
   return (
-    <div key={group.key}>
+    <div key={group.key} className="card p-4 mt-2">
       <h2>{group.key}</h2>
-      <table className="table table-bordered table-hover">
-        <tbody>
-          {group.items.map(i => <tr key={i.name}><td>{renderAction(i)}</td></tr>)}
-        </tbody>
-      </table>
+      <div className="list-group">
+        {group.items.map(i => <p key={i.name} className="list-group-item">{i.name}</p>)}
+      </div>
     </div>
   );
 };
