@@ -2,11 +2,11 @@ import * as React from 'react';
 import Sheet, { Ability } from '../sheet/SheetModel';
 import SheetPanel from './SheetPanel';
 import DescriptionBox from '../controls/DescriptionBox';
-import AddBox from '../controls/AddBox';
-import DeleteButton from '../controls/DeleteButton';
 import SimpleInlineListEdit from '../controls/SimpleInlineListEdit';
 import InlineEdit from '../controls/InlineEdit';
-import UpDown from '../controls/UpDown';
+import MegaTable from '../controls/MegaTable';
+
+class Table extends MegaTable<Ability> {}
 
 const AbilitiesPanel: React.StatelessComponent<{
   className?: string,
@@ -17,16 +17,20 @@ const AbilitiesPanel: React.StatelessComponent<{
   reorder: (from: number, to: number) => void
 }> =
   ({ reorder, className, sheet, deleteAbility, updateAbility, addAbility }) => {
+    
     return (
       <SheetPanel
         title="Abilities"
         className={className}>
 
-        <div
-          className="list-group">
-          {sheet.abilities && sheet.abilities.map((a, index) => (
-            <div key={a.name}
-              className="list-group-item d-flex align-items-center">
+        <Table
+          items={sheet.abilities}
+          add={name => addAbility(new Ability({ name }))}
+          remove={item => deleteAbility(item)}
+          keySelector={a => a.name}
+          move={(from, to) => reorder(from, to)}
+          render={(index, a) =>
+            [(
               <div style={{ width: '100%' }}>
                 <InlineEdit priorValue={a.name} onChange={n => updateAbility(index, a.updateName(n))} />
                 <br />
@@ -35,26 +39,15 @@ const AbilitiesPanel: React.StatelessComponent<{
                   onChange={c => updateAbility(index, a.updateDescription(c))}
                   description={a.description} />
               </div>
+            ), (
               <div className="pl-2">
                 <SimpleInlineListEdit
                   placeholder="add action"
                   priorValue={a.actions}
                   onChange={actions => updateAbility(index, a.updateActions(actions))} />
               </div>
-              <div className="pl-2 hide-unless-hover">
-                <DeleteButton onDelete={() => deleteAbility(a)} />
-              </div>
-              <div className="pl-2 hide-unless-hover">
-                <UpDown
-                  onUp={() => reorder(index, index - 1)}
-                  onDown={() => reorder(index, index + 1)} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <AddBox placeholder="add ability" onAdd={name => addAbility(new Ability({ name }))} />
-
+            )]}
+        />
       </SheetPanel>
     );
   };

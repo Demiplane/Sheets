@@ -421,8 +421,6 @@ export class Sheet {
 
     var working = [...array];
 
-    console.log(indexToMove, indexToMoveTo);
-
     var moved = working[indexToMove];
     working.splice(indexToMove, 1);
     working.splice(indexToMoveTo > indexToMove ?
