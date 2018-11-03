@@ -26,7 +26,7 @@ class MegaTable<T> extends React.Component<MegaTableProps<T>> {
           className="list-group">
           {items && items.map((item, index) => (
             <div key={keySelector(item)}
-              style={{ zIndex: 5 }}
+              style={{ zIndex: 5 + items.length - index }}
               className="list-group-item d-flex align-items-center">
 
               {render(index, item)}
