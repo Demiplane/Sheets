@@ -35,7 +35,10 @@ class EffectsPanel extends React.Component<EffectsPanelProps> {
 
         <EffectTable
           addPlaceholder="add effect"
-
+          searchTerms={effect => [
+            effect.name,
+            effect.active ? 'active' : 'inactive',
+            ...effect.targets.map(t => t.statisticName)]}
           items={effects}
           keySelector={e => e.name}
           add={name => this.props.addEffect(new Effect({ name }))}
@@ -43,14 +46,14 @@ class EffectsPanel extends React.Component<EffectsPanelProps> {
           move={(from, to) => this.props.reorder(from, to)}
           render={(index, effect) => [
             (
-              <div style={{ width: '100%' }}>
+              <div key={effect.name + 'name'} style={{ width: '100%' }}>
                 <InlineEdit
                   priorValue={effect.name}
                   onChange={v => this.props.updateEffect(index, effect.updateName(v))} />
               </div>
             ),
             (
-              <div className="pl-2">
+              <div key={effect.name + 'active'} className="pl-2">
                 <button
                   className={'btn btn-small ' + (effect.active ? 'btn-primary' : '')}
                   onClick={event => {
@@ -65,7 +68,7 @@ class EffectsPanel extends React.Component<EffectsPanelProps> {
           expand={effect => (
             <TargetTable
               addPlaceholder="add target"
-  
+
               key={effect.name + 'expando'}
               items={effect.targets}
               add={name => effect.addTarget(new Target({ name }))}

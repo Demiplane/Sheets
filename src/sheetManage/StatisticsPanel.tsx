@@ -32,6 +32,7 @@ export class Statisticdivel extends React.Component<StatisticdivelProps> {
         className={className}>
 
         <Table
+          searchTerms={statistic => [statistic.name]}
           items={sheet.resolvedStatistics}
           add={name => addStatistic(sheet.createCandidateStatistic(name))}
           addPlaceholder="add statistic"
@@ -40,8 +41,8 @@ export class Statisticdivel extends React.Component<StatisticdivelProps> {
           remove={statistic => deleteStatistic(statistic)}
           render={(index, statistic) => [
             (
-              <div style={{ width: '100%' }}>
-                <InlineEdit priorValue={statistic.name} 
+              <div key={statistic.name + 'name'} style={{ width: '100%' }}>
+                <InlineEdit priorValue={statistic.name}
                   onChange={c => updateStatistic(index, statistic.updateName(c))} />
                 <br />
                 <FormulaInlineEdit
@@ -51,13 +52,13 @@ export class Statisticdivel extends React.Component<StatisticdivelProps> {
                   priorFormula={statistic.formula} />
               </div>
             ), (
-              <div className="pl-2">
+              <div key={statistic.name + 'cat'} className="pl-2">
                 {statistic.base && <small className="text-muted">(base)</small>}
                 {statistic.base && statistic.affected && <br />}
                 {statistic.affected && <small className="text-muted">(affected)</small>}
               </div>
             ), (
-              <div className="pl-2">
+              <div key={statistic.name + 'value'} className="pl-2">
                 <Flashy classes="prominent" value={statistic.value} />
               </div>
             )

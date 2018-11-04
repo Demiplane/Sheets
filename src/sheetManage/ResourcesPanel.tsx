@@ -23,6 +23,7 @@ const ResourcesPanel: React.StatelessComponent<{
         className={className}>
 
         <Table
+          searchTerms={resource => [resource.name]}
           items={sheet.resolvedResources}
           add={name => addResource(new Resource({ name }))}
           addPlaceholder="add resource"
@@ -31,7 +32,7 @@ const ResourcesPanel: React.StatelessComponent<{
           remove={resource => deleteResource(resource)}
           render={(index, resource) => [
             (
-              <div style={{ width: '100%' }}>
+              <div key={resource.name + 'name'} style={{ width: '100%' }}>
                 <InlineEdit
                   priorValue={resource.name}
                   onChange={n => updateResource(index, resource.updateName(n))} />
@@ -43,13 +44,13 @@ const ResourcesPanel: React.StatelessComponent<{
                   onChange={f => updateResource(index, resource.updateFormula(f))} />
               </div>
             ), (
-              <div className="pl-2 text-center">
+              <div key={resource.name + 'max'} className="pl-2 text-center">
                 <span className="text-muted small">max</span>
                 <br />
                 {resource.value.toString()}
               </div>
             ), (
-              <div className="pl-2">
+              <div key={resource.name + 'current'} className="pl-2">
                 <NumberInput
                   value={resource.current}
                   onChange={c => updateResource(index, resource.updateCurrent(c))} />

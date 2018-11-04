@@ -31,8 +31,8 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps>
         className={className}>
 
         <Table
-
-          add={name => addItem(new Item({name}))}
+          searchTerms={item => [item.name]}
+          add={name => addItem(new Item({ name }))}
           move={(from, to) => reorder(from, to)}
           remove={item => deleteItem(item)}
 
@@ -41,7 +41,7 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps>
           keySelector={item => item.name}
           items={sheet.inventory}
           render={(index, item) => [(
-            <div style={{ width: '100%' }}>
+            <div key={item.name + 'name'} style={{ width: '100%' }}>
               <InlineEdit
                 priorValue={item.name}
                 onChange={name => updateItem(index, item.updateName(name))}
@@ -54,15 +54,11 @@ export default class InventoryPanel extends React.Component<InventoryPanelProps>
               />
             </div>
           ), (
-            <div className="pl-2 hide-unless-hover">
+            <div key={item.name + 'stock'} className="pl-2">
               <NumberInput
                 value={item.stock}
                 onChange={stock => updateItem(index, item.updateStock(stock))}
               />
-            </div>
-          ), (
-            <div className="pl-2 hide-on-hover">
-              <p>{item.stock}</p>
             </div>
           )]}
 

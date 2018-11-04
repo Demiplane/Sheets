@@ -6,7 +6,7 @@ import SimpleInlineListEdit from '../controls/SimpleInlineListEdit';
 import InlineEdit from '../controls/InlineEdit';
 import MegaTable from '../controls/MegaTable';
 
-class Table extends MegaTable<Ability> {}
+class Table extends MegaTable<Ability> { }
 
 const AbilitiesPanel: React.StatelessComponent<{
   className?: string,
@@ -17,7 +17,7 @@ const AbilitiesPanel: React.StatelessComponent<{
   reorder: (from: number, to: number) => void
 }> =
   ({ reorder, className, sheet, deleteAbility, updateAbility, addAbility }) => {
-    
+
     return (
       <SheetPanel
         title="Abilities"
@@ -25,7 +25,7 @@ const AbilitiesPanel: React.StatelessComponent<{
 
         <Table
           addPlaceholder="add ability"
-
+          searchTerms={ability => [ability.name, ...ability.actions]}
           items={sheet.abilities}
           add={name => addAbility(new Ability({ name }))}
           remove={item => deleteAbility(item)}
@@ -33,7 +33,7 @@ const AbilitiesPanel: React.StatelessComponent<{
           move={(from, to) => reorder(from, to)}
           render={(index, a) =>
             [(
-              <div style={{ width: '100%' }}>
+              <div key={a.name + 'name'} style={{ width: '100%' }}>
                 <InlineEdit priorValue={a.name} onChange={n => updateAbility(index, a.updateName(n))} />
                 <br />
                 <DescriptionBox
@@ -42,7 +42,7 @@ const AbilitiesPanel: React.StatelessComponent<{
                   description={a.description} />
               </div>
             ), (
-              <div className="pl-2">
+              <div key={a.name + 'actions'} className="pl-2">
                 <SimpleInlineListEdit
                   placeholder="add action"
                   priorValue={a.actions}
