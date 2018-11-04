@@ -489,8 +489,8 @@ export class Sheet {
 
   // creators
 
-  createCandidateStatistic(): Statistic {
-    var candidateName = 'New Statistic';
+  createCandidateStatistic(name: string): Statistic {
+    var candidateName = name;
 
     if (this.statisticExists(candidateName)) {
       let append = 0;

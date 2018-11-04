@@ -24,6 +24,8 @@ const AbilitiesPanel: React.StatelessComponent<{
         className={className}>
 
         <Table
+          addPlaceholder="add ability"
+
           items={sheet.abilities}
           add={name => addAbility(new Ability({ name }))}
           remove={item => deleteAbility(item)}

@@ -12,8 +12,6 @@ import InlineEdit from '../controls/InlineEdit';
 
 type SheetFormProps = {
   sheet: Sheet;
-  showModal: (modalElement: JSX.Element) => void;
-  closeModal: () => void;
 
   updateSheet: (sheet: Sheet) => void;
   updateSheetName: (name: string) => void;
@@ -21,7 +19,7 @@ type SheetFormProps = {
 };
 
 const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
-  const { sheet, showModal, closeModal, updateSheet, updateSheetName } = props;
+  const { sheet, updateSheet, updateSheetName } = props;
 
   return (
     <div>
@@ -55,17 +53,12 @@ const SheetForm: React.StatelessComponent<SheetFormProps> = (props) => {
 
               sheet={sheet}
 
-              showModal={showModal}
-              closeModal={closeModal}
             />
             <InventoryPanel
               addItem={i => updateSheet(sheet.addItem(i))}
               deleteItem={i => updateSheet(sheet.deleteItem(i))}
               updateItem={(index, i) => updateSheet(sheet.updateItem(index, i))}
               reorder={(i, ii) => updateSheet(sheet.moveItem(i, ii))}
-
-              showModal={showModal}
-              closeModal={closeModal}
 
               sheet={sheet}
 

@@ -33,13 +33,9 @@ class EffectsPanel extends React.Component<EffectsPanelProps> {
         title="Effects"
         className={className}>
 
-        {/* <div className="list-group">
-          {effects.map((effect, index) => this.toRow(sheet, effect, index))}
-        </div>
-
-        <AddBox placeholder="add effect" onAdd={name => addEffect(new Effect({ name }))} /> */}
-
         <EffectTable
+          addPlaceholder="add effect"
+
           items={effects}
           keySelector={e => e.name}
           add={name => this.props.addEffect(new Effect({ name }))}
@@ -68,8 +64,12 @@ class EffectsPanel extends React.Component<EffectsPanelProps> {
           ]}
           expand={effect => (
             <TargetTable
+              addPlaceholder="add target"
+  
               key={effect.name + 'expando'}
               items={effect.targets}
+              add={name => effect.addTarget(new Target({ name }))}
+              remove={target => effect.deleteTarget(target)}
               render={(index, target) => [
                 (
                   <div>

@@ -3,9 +3,10 @@ import AddBox from '../controls/AddBox';
 
 type MegaTableProps<T> = {
   items: T[],
+  addPlaceholder?: string,
   render: (index: number, item: T) => JSX.Element[],
   keySelector?: (item: T) => string,
-  add?: (value: String) => void,
+  add?: (value: string) => void,
   more?: (item: T) => void,
   expand?: (item: T) => JSX.Element,
   remove?: (removed: T) => void,
@@ -26,13 +27,13 @@ class MegaTable<T> extends React.Component<MegaTableProps<T>, { expanded: string
 
     const expanded = this.state.expanded.indexOf(key) >= 0;
 
-    this.setState(expanded ? 
-      { expanded: this.state.expanded.filter(e => e !== key) } : 
+    this.setState(expanded ?
+      { expanded: this.state.expanded.filter(e => e !== key) } :
       { expanded: [...this.state.expanded, key] });
   }
 
   render() {
-    const { items, add, remove, more, expand, move, className, render, keySelector } = this.props;
+    const { items, addPlaceholder, add, remove, more, expand, move, className, render, keySelector } = this.props;
 
     return (
       <div className={className}>
@@ -43,22 +44,19 @@ class MegaTable<T> extends React.Component<MegaTableProps<T>, { expanded: string
             const key = keySelector ? keySelector(item) : index.toString();
             const expanded = this.state.expanded.indexOf(key) >= 0;
 
-            return (
+            return [(
               <div key={key}
                 style={{ zIndex: 5 + items.length - index }}
                 className="list-group-item d-flex align-items-center">
 
                 {render(index, item)}
-
-                {expand && expanded ? expand(item) : undefined}
-
                 <div className="pr-2 position-absolute hide-unless-hover"
-                  style={{ right: '0', bottom: '-20px', zIndex: 99 }}>
+                  style={{ right: '0', bottom: '-23px', zIndex: 99 }}>
                   <div className="m-2 btn-group">
                     {expand ? <button className="btn btn-info btn-sm" onClick={evt => {
                       evt.preventDefault();
                       this.toggleExpansion(key);
-                    }}>+</button> : undefined}
+                    }}>＋</button> : undefined}
                     {more ? <button className="btn btn-info btn-sm" onClick={evt => {
                       evt.preventDefault();
                       more(item);
@@ -78,16 +76,26 @@ class MegaTable<T> extends React.Component<MegaTableProps<T>, { expanded: string
                   </div>
                 </div>
               </div>
-            );
+            ), (
+              (expand && expanded) ?
+                (<div className="card bg-light p-4">
+                  {expand(item)}
+                </div>
+                ) :
+                undefined
+            )];
           })}
         </div>
 
-        {add ? <AddBox placeholder="add ability" onAdd={value => add(value)} /> : undefined}
+        {add ? (
+          <AddBox
+            placeholder={addPlaceholder ? addPlaceholder : 'add item'}
+            onAdd={value => add(value)} />
+        ) : undefined}
       </div>);
   }
 }
 
-// <button className="btn btn-primary btn-sm">＋</button>
 // <button className="btn btn-success btn-sm">✓</button>
 
 export default MegaTable;
